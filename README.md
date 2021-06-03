@@ -19,7 +19,9 @@ we will find all villains
 ````
  Node - 12.13.0
  react - 17.0.2
+ react-router-dom - ^5.2.0
  dotenv - ^10.0.0
+ axios - ^0.21.1,
  node-sass - ^6.0.0
 ````
 
