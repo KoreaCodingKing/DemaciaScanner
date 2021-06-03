@@ -6,7 +6,7 @@ we will find all villains
 1. React
 2. React-Router
 3. axios
-4. sass
+4. scss
 5. styledComponent
 6. dotenv
 7. firebase
@@ -20,6 +20,7 @@ we will find all villains
  Node - 12.13.0
  react - 17.0.2
  dotenv - ^10.0.0
+ node-sass - ^6.0.0
 ````
 
 
@@ -31,3 +32,9 @@ we will find all villains
    - import dotenv from 'dotenv';
    - {process.env.REACT_APP_TEST_API}
 ````
+
+# style - scss
+````
+src/assets/scss/*.scss로 사용
+````
+
