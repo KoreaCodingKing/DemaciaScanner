@@ -10,4 +10,5 @@ we will find all villains
 5. styledComponent
 6. dotenv
 7. firebase
+8. node - 12.13.0
 
