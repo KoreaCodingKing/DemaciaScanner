@@ -16,5 +16,6 @@ we will find all villains
 
 # Dev setting
 
-## Node - 12.13.0.
-
+### Node - 12.13.0
+### react - 17.0.2
+### dotenv - ^10.0.0
