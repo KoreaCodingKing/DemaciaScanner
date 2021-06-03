@@ -16,6 +16,18 @@ we will find all villains
 
 # Dev setting
 
-### Node - 12.13.0
-### react - 17.0.2
-### dotenv - ^10.0.0
+````
+ Node - 12.13.0
+ react - 17.0.2
+ dotenv - ^10.0.0
+````
+
+
+# dotenv 
+````
+1. .env파일 생성
+2. .env에 REACT_APP_TEST_API=TEST123TEST123 삽입
+3. 사용할 페이지에 아래와 같이 작성
+   - import dotenv from 'dotenv';
+   - {process.env.REACT_APP_TEST_API}
+````
