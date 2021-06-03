@@ -1,0 +1,10 @@
+$blue: #228be6;
+
+body {
+  color: $blue;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+}
