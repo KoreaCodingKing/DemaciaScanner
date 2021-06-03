@@ -40,3 +40,13 @@ we will find all villains
 src/assets/scss/*.scss로 사용
 ````
 
+# Riot API
+````
+소환사의 상태를 알기 위해선 특정 소환사의 id 값이 필요함.
+아래 request를 이용해 "id"="value" value값을 얻는다.
+/lol/summoner/v4/summoners/by-name/{summonerName}
+
+얻은 value를 아래 request를 태우면 특정 소환사의 게임중인 정보를 얻을 수 있다
+/lol/spectator/v4/active-games/by-summoner/{encryptedSummonerId}
+````
+
