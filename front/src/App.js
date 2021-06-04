@@ -17,7 +17,6 @@ function App() {
       <Route path="/" exact component={Home} />
       <Route path="/about" component={About} />
       <h1>test</h1>
-      {process.env.REACT_APP_TEST_API_KEY}
     </div>
   );
 }
