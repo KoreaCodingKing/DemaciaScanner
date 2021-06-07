@@ -40,7 +40,7 @@ we will find all villains
 src/assets/scss/*.scss로 사용
 ````
 
-### axios
+# axios
 ```
 참고용)
 axios는 fetch와 달리, .then(res=> res.json())
