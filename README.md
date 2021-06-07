@@ -42,6 +42,18 @@ src/assets/scss/*.scss로 사용
 
 # Riot API
 ````
+
+중요)
+open API의 경우 CROS 정책 오류가 많이 발생함.
+Riot api의 경우, 프론트(웹)에서 요청해서 그랬음
+
+1. express서버에서 Riot api에게 값 요청
+2. 해당 값을 받아 서버에서 endPoint 지정
+3. 프론트에서 해당 값을 useEffect()로 받아옴
+(!). 여기서도 승인되지 않은 도메인으로부터 값을 받는 요청이기 때문에 CROS 정책 오류뜸.
+     해당 이슈는 yarn add cros로 일단 해결.
+
+
 소환사의 상태를 알기 위해선 특정 소환사의 id 값이 필요함.
 아래 request를 이용해 "id"="value" value값을 얻는다.
 /lol/summoner/v4/summoners/by-name/{summonerName}
@@ -49,4 +61,3 @@ src/assets/scss/*.scss로 사용
 얻은 value를 아래 request를 태우면 특정 소환사의 게임중인 정보를 얻을 수 있다
 /lol/spectator/v4/active-games/by-summoner/{encryptedSummonerId}
 ````
-
