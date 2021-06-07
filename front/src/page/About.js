@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import dotenv from "dotenv";
+import axios from "axios";
 
-const About = () => {
-  return <h1>About</h1>;
-};
+function About() {
+  const [asd, setAsd] = useState("test");
+  axios
+    .get("https://jsonplaceholder.typicode.com/todos/1")
+    .then((res) => res.data)
+    .then((res) => {
+      const test = () => {
+        setAsd(res.userId);
+      };
+      test();
+    });
+
+  return (
+    <>
+      {/* <h1>about</h1> */}
+      {asd}
+    </>
+  );
+}
 
 export default About;
