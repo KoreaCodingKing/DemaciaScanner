@@ -64,6 +64,9 @@ Riot api의 경우, 프론트(웹)에서 요청해서 그랬음
 (!). 여기서도 승인되지 않은 도메인으로부터 값을 받는 요청이기 때문에 CROS 정책 오류뜸.
      해당 이슈는 yarn add cros로 일단 해결.
      
+(추가) CORS 미들웨어를 사용하여 app.use(cors())로 지정할 경우, 외부의 모든 origin을 허용하게됨. 좋지 않은 방법임(보안 이슈)
+일부 origin을 사용하고 싶다면 https://github.com/KoreaCodingKing/DemaciaScanner.git을 참고
+     
 
 
 작업 프로세스)
