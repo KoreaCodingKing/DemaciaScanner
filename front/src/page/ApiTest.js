@@ -2,18 +2,29 @@
 // CORS policy 오류 ->브라우저에서 보내서 그럼, 서버에서 보내면 됨
 
 import React, { useState, useEffect } from "react";
-import dotenv from "dotenv";
 import axios from "axios";
 
 function ApiTest() {
-  useEffect(() => {
-    console.log("useEffect임");
-    axios
-      .get("http://localhost:3001/lol")
-      .then((res) => console.log(res.data.name));
-  });
+  const [name, setName] = useState("");
+  const [load, setLoad] = useState(false);
 
-  return <>{/* <h1>about</h1> */}</>;
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoad(true);
+        const response = await axios.get("http://localhost:3001/lol");
+        setName(response.data.name);
+      } catch (e) {
+        console.log(e);
+      }
+      setLoad(false);
+    };
+    getData();
+  }, []);
+
+  if (load) return <> 로딩중...</>;
+
+  return <>소환사 아이디 : {name}</>;
 }
 
 export default ApiTest;
