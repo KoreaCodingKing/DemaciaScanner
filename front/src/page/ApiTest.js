@@ -6,6 +6,7 @@ import axios from "axios";
 
 function ApiTest() {
   const [name, setName] = useState("");
+  const [id, setId] = useState("");
   const [load, setLoad] = useState(false);
 
   useEffect(() => {
@@ -14,6 +15,7 @@ function ApiTest() {
         setLoad(true);
         const response = await axios.get("http://localhost:3001/lol");
         setName(response.data.name);
+        setId(response.data.id);
       } catch (e) {
         console.log(e);
       }
@@ -24,7 +26,13 @@ function ApiTest() {
 
   if (load) return <> 로딩중...</>;
 
-  return <>소환사 아이디 : {name}</>;
+  return (
+    <>
+      소환사 아이디 : {name}
+      <br />
+      소환사 아이디 값 : {id}
+    </>
+  );
 }
 
 export default ApiTest;
