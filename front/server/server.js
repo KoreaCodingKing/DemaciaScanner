@@ -12,7 +12,7 @@ const { response } = require("express");
 
 const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
 
-const summonerId = "DWG BeryL";
+const summonerId = "도 일";
 
 // 소환사 정보를 담는 변수
 let lolInfo = "";
@@ -525,7 +525,7 @@ app.use("/lol", (req, res) =>
     id: lolInfo.id,
     name: lolInfo.name,
     state: lolInfoState.gameType,
-    participants: lolInfoState.participants[0].championId,
+    participants: lolInfoState.gameMode,
   })
 );
 
