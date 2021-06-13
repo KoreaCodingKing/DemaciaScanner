@@ -13,11 +13,12 @@ function ApiTest() {
     const getData = async () => {
       try {
         setLoad(true);
-        const response = await axios.get("http://localhost:3001/lol");
-        setName(response.data.name);
-        setId(response.data.id);
+        const response = await axios.get("http://localhost:3001/lol3");
+        Promise.resolve(response).then((getData) => {
+          setName(getData.data[0].name);
+        });
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
       setLoad(false);
     };
@@ -26,13 +27,7 @@ function ApiTest() {
 
   if (load) return <> 로딩중...</>;
 
-  return (
-    <>
-      소환사 아이디 : {name}
-      <br />
-      소환사 아이디 값 : {id}
-    </>
-  );
+  return <>아이디 : {name}</>;
 }
 
 export default ApiTest;
