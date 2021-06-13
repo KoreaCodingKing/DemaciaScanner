@@ -34,7 +34,7 @@ const axiosFunc = async (encodeIdList, index) => {
     );
     Promise.resolve(response).then((getData) => {
       var data = new Object();
-
+      data.number = index;
       data.name = getData.data.name;
       data.id = getData.data.id;
 

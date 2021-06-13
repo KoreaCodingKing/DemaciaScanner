@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Loading from "../components/Loading";
 
 function ApiTest() {
   const [name, setName] = useState("");
@@ -16,6 +17,7 @@ function ApiTest() {
         const response = await axios.get("http://localhost:3001/lol3");
         Promise.resolve(response).then((getData) => {
           setName(getData.data[0].name);
+          setId(getData.data[0].id);
         });
       } catch (e) {
         console.error(e);
@@ -25,9 +27,22 @@ function ApiTest() {
     getData();
   }, []);
 
-  if (load) return <> 로딩중...</>;
+  if (load)
+    return (
+      <>
+        {" "}
+        로딩중...
+        <Loading />
+      </>
+    );
 
-  return <>아이디 : {name}</>;
+  return (
+    <>
+      아이디 : {name}
+      <br />
+      id : {id}
+    </>
+  );
 }
 
 export default ApiTest;
