@@ -1,7 +1,7 @@
 // 테스트중인 페이지
 // CORS policy 오류 ->브라우저에서 보내서 그럼, 서버에서 보내면 됨
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Loading from "../components/Loading";
 
@@ -10,22 +10,19 @@ function ApiTest() {
   const [id, setId] = useState("");
   const [load, setLoad] = useState(false);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        setLoad(true);
-        const response = await axios.get("http://localhost:3001/lol3");
-        Promise.resolve(response).then((getData) => {
-          setName(getData.data[0].name);
-          setId(getData.data[0].id);
-        });
-      } catch (e) {
-        console.error(e);
-      }
-      setLoad(false);
-    };
-    getData();
-  }, []);
+  const getUserInfo = async () => {
+    try {
+      setLoad(true);
+      const response = await axios.get("http://localhost:3001/userinfo");
+      Promise.resolve(response).then((getData) => {
+        setName(getData.data[0].name);
+        setId(getData.data[0].id);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+    setLoad(false);
+  };
 
   if (load)
     return (
@@ -38,6 +35,9 @@ function ApiTest() {
 
   return (
     <>
+      <hr />
+      <button onClick={getUserInfo}>정보 갱신</button>
+      <br />
       아이디 : {name}
       <br />
       id : {id}

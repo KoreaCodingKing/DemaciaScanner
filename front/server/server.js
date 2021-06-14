@@ -10,10 +10,10 @@ const cors = require("cors");
 
 const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
 
-const summonerId = ["kovolt", "구월동원빈", "저렴한 핫바"];
+const summonerId = ["kovolt", "검은머리사나이"];
 let encodeIdList = [];
 
-let testList = new Array();
+let encodeJsonList = [];
 
 app.use(cors());
 
@@ -29,30 +29,60 @@ const encodeFnc = async () => {
 //axios 호출 함수
 const axiosFunc = async (encodeIdList, index) => {
   encodeIdList.map((item, index) => {
-    const response = axios.get(
-      `https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${item}?api_key=${riotApiKey}`
-    );
-    Promise.resolve(response).then((getData) => {
+    Promise.resolve(useAxios(item)).then((getData) => {
       var data = new Object();
       data.number = index;
       data.name = getData.data.name;
       data.id = getData.data.id;
 
-      testList.push(data);
+      encodeJsonList.push(data);
 
-      console.log(`이름${index} - ${getData.data.name}`);
+      // key number의 value로 오름차순 정렬
+      encodeJsonList.sort(function (a, b) {
+        return a.number - b.number;
+      });
+
+      // 인게임여부 확인
+      Promise.resolve(useAxiosInGame(data.id))
+        .then((getState) => {
+          // console.log(getState.data.gameMode);
+          console.log(getState.data);
+          data.status = "true";
+        })
+        .catch((err) => {
+          console.log("에러입니다", err.response.status);
+          data.status = err.response.status === 404 ? "false" : false;
+        });
     });
   });
 
   //엔드포인트 지정
-  app.use("/lol3", (req, res) => res.json(testList));
+  app.use("/userinfo", (req, res) => res.json(encodeJsonList));
 };
 
+// axios 사용
+const useAxios = (item) => {
+  return axios.get(
+    `https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${item}?api_key=${riotApiKey}`
+  );
+};
+
+// 인게임 정보 axios 사용
+const useAxiosInGame = (summonerId) => {
+  return axios.get(
+    `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summonerId}?api_key=${riotApiKey}`
+  );
+};
+
+//데이터 받아오기
 const getUserData = () => {
   axiosFunc(encodeIdList);
 };
 
+//조회할 아이디 리스트를 받아, 인코딩
 encodeFnc();
+
+//받은 리스트를 axios요청 json리스트화
 getUserData();
 
 app.use(bodyParser.json());
