@@ -105,4 +105,8 @@ https://jamesdreaming.tistory.com/2
 
 한글이 있는지 찾는 정규식 참고)
 https://eblee-repo.tistory.com/40
+
+
+중복된 아이디 제거
+참고) http://megaton111.cafe24.com/2018/06/18/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EB%B0%B0%EC%97%B4-%EC%A4%91%EB%B3%B5-%EC%9A%94%EC%86%8C-%EC%A0%9C%EA%B1%B0%ED%95%98%EA%B8%B0/
 ````
