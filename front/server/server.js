@@ -15,7 +15,7 @@ const summonerId = [
   "kovolt",
   "kovolt",
   "kovolt",
-  "kovolt",
+  "박둥희",
   "kovolt1",
   "틀탑라간",
   "bbtzw",
@@ -23,7 +23,7 @@ const summonerId = [
   "삼성 트롤 세탁기",
   "뜨 식",
   "느그집옆동네",
-  "이준경 123",
+  "마술사 짜잔",
   // "엘 림",
   // "원딜김도형2345345",
   // "또 지고 싶다",
@@ -55,7 +55,7 @@ const encodeFnc = async () => {
   let sortFunc = summonerId.filter((item, idx, array) => {
     return array.indexOf(item) === idx;
   });
-  console.log(sortFunc);
+  // console.log(sortFunc);
   sortFunc.map((user) => {
     const encoding = encodeURI(user);
     return (encodeIdList = encodeIdList.concat(encoding));
@@ -64,6 +64,7 @@ const encodeFnc = async () => {
 };
 
 //axios 호출 함수
+
 const axiosFunc = async (encodeIdList, index) => {
   encodeIdList.map((item, index) => {
     Promise.resolve(useAxios(item))
@@ -77,16 +78,13 @@ const axiosFunc = async (encodeIdList, index) => {
         encodeJsonList = encodeJsonList.concat(data);
 
         // key number의 value로 오름차순 정렬
-        encodeJsonList.sort(function (a, b) {
-          return a.number - b.number;
-        });
+        // encodeJsonList.sort(function (a, b) {
+        //   return a.number - b.number;
+        // });
 
         // 인게임여부 확인
         Promise.resolve(useAxiosInGame(data.id))
           .then((getState) => {
-            // console.log(getState.data.gameMode);
-            // console.log(getState.data);
-            // console.log(getData);
             data.status = [
               {
                 state: getState.data.gameType,
@@ -109,14 +107,14 @@ const axiosFunc = async (encodeIdList, index) => {
         console.log("없는 아이디입니다", err.response.status, data.errorId);
         encodeJsonList = encodeJsonList.concat(data);
         // key number의 value로 오름차순 정렬
-        encodeJsonList.sort(function (a, b) {
-          return a.number - b.number;
-        });
+        // encodeJsonList.sort(function (a, b) {
+        //   return a.number - b.number;
+        // });
       });
   });
 
   //엔드포인트 지정
-  app.use("/userinfo", (req, res) => res.json(encodeJsonList));
+  app.use("/userinfo", async (req, res) => res.json(encodeJsonList));
 };
 
 // 정렬
