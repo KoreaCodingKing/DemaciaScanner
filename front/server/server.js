@@ -14,6 +14,9 @@ const summonerId = [
   "원딜 왕자 변정현",
   "kovolt",
   "kovolt",
+  "kovolt",
+  "kovolt",
+  "kovolt1",
   "틀탑라간",
   "bbtzw",
   "쇠똥구리a",
@@ -49,7 +52,11 @@ app.use(cors());
 
 //인코딩한 아이디 리스트화 encodeIdList로 리턴
 const encodeFnc = async () => {
-  summonerId.map((user) => {
+  let sortFunc = summonerId.filter((item, idx, array) => {
+    return array.indexOf(item) === idx;
+  });
+  console.log(sortFunc);
+  sortFunc.map((user) => {
     const encoding = encodeURI(user);
     return (encodeIdList = encodeIdList.concat(encoding));
     // 리턴값 형태 ['encoded','encoded']
@@ -70,9 +77,9 @@ const axiosFunc = async (encodeIdList, index) => {
         encodeJsonList = encodeJsonList.concat(data);
 
         // key number의 value로 오름차순 정렬
-        // encodeJsonList.sort(function (a, b) {
-        //   return a.number - b.number;
-        // });
+        encodeJsonList.sort(function (a, b) {
+          return a.number - b.number;
+        });
 
         // 인게임여부 확인
         Promise.resolve(useAxiosInGame(data.id))
@@ -89,14 +96,22 @@ const axiosFunc = async (encodeIdList, index) => {
           })
           .catch((err) => {
             // console.log("접속하지 않았습니다", err.response.status);
-            data.status = err.response.status === 404 ? "false" : false;
+            if (err.response.status === 404) {
+              data.status = "OFF_LINE";
+            }
+            // data.status = err.response.status === 404 ? "false" : false;
           });
       })
-      .catch((err, item) => {
-        // console.log("없는 아이디입니다", err.response.status, item);
+      .catch((err) => {
+        console.log(item);
         var data = new Object();
         data.errorId = decodeURI(item);
+        console.log("없는 아이디입니다", err.response.status, data.errorId);
         encodeJsonList = encodeJsonList.concat(data);
+        // key number의 value로 오름차순 정렬
+        encodeJsonList.sort(function (a, b) {
+          return a.number - b.number;
+        });
       });
   });
 
@@ -119,6 +134,8 @@ const useAxiosInGame = (summonerId) => {
     `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summonerId}?api_key=${riotApiKey}`
   );
 };
+
+//중복 제거
 
 //데이터 받아오기
 const getUserData = () => {
