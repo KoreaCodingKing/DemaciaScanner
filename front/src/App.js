@@ -12,9 +12,6 @@ import "./assets/scss/common.scss";
 function App() {
   useEffect(() => {
     console.log("useEffect임");
-    axios
-      .get("http://localhost:3001/lol")
-      .then((res) => console.log(res.data.name));
   });
   return (
     <div className="wrapper">

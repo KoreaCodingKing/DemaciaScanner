@@ -8,9 +8,12 @@ const bodyParser = require("body-parser");
 const port = process.env.PORT || 3001;
 const cors = require("cors");
 
+app.use(bodyParser.json());
+
 const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
 
-const summonerId = [
+let summonerId = [
+  "bbtzw",
   "원딜 왕자 변정현",
   "kovolt",
   "kovolt",
@@ -18,12 +21,11 @@ const summonerId = [
   "박둥희",
   "kovolt1",
   "틀탑라간",
-  "bbtzw",
   "쇠똥구리a",
   "삼성 트롤 세탁기",
   "뜨 식",
   "느그집옆동네",
-  "마술사 짜잔",
+  "이준경 123",
   // "엘 림",
   // "원딜김도형2345345",
   // "또 지고 싶다",
@@ -117,8 +119,6 @@ const axiosFunc = async (encodeIdList, index) => {
   app.use("/userinfo", async (req, res) => res.json(encodeJsonList));
 };
 
-// 정렬
-
 // axios 사용
 const useAxios = (item) => {
   return axios.get(
@@ -133,6 +133,15 @@ const useAxiosInGame = (summonerId) => {
   );
 };
 
+//post요청 - 클라이언트에서 보낸 아이디
+function getPost() {
+  app.post("/insertuser", (req, res) => {
+    const text = req.body.id;
+    summonerId = summonerId.concat(text);
+    console.log(summonerId);
+  });
+}
+
 //중복 제거
 
 //데이터 받아오기
@@ -140,13 +149,14 @@ const getUserData = () => {
   axiosFunc(encodeIdList);
 };
 
+getPost();
+
 //조회할 아이디 리스트를 받아, 인코딩
 encodeFnc();
 
 //받은 리스트를 axios요청 json리스트화
 getUserData();
 
-app.use(bodyParser.json());
 app.use("/api", (req, res) => res.json({ username: "bryan" }));
 
 app.listen(port, () => {
