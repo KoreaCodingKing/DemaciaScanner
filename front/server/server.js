@@ -8,11 +8,10 @@ const bodyParser = require("body-parser");
 const port = process.env.PORT || 3001;
 const cors = require("cors");
 
-const riotApiKey = 'RGAPI-4da64f91-ab57-4628-b5f8-c8999af1ab91';
+const riotApiKey = 'RGAPI-09744820-85b0-496a-b5be-139ce66a016c';
 
 const summonersId = [
   "kovolt",
-  "kovolt1",
   // "bbtzw",
   "저렴한 핫바"
   // "쇠똥구리a",
@@ -23,8 +22,8 @@ app.use(cors());
 
 //ToDo: end포인트 확인, 사용자 입력후 아이디값만 먼저 보여줄것인지, 정보를 더 빼와야하는지 확인 필요
 async function getUsersData() {
-  return Promise.all(summonersId.map((userId) => {
-    getUserData(encodeURI(userId)).then((userData) => {
+  return await Promise.all(summonersId.map((userId, index) => {
+    return getUserData(encodeURI(userId)).then((userData) => {
       if (userData.status === 404) {
         throw new Error('no user')
       }
@@ -35,10 +34,20 @@ async function getUsersData() {
         name: userData.name
       }
     }).catch((err) => {
-      console.log('에러', err)
+      console.log('err', err.code)
     })
   }));
 }
+
+async function getUserInformation() {
+  return Promise.all(summonersId.map((userId) => {
+    useAxiosInGame(encodeURI(userId)).then((userInfo) => {
+      console.log(userInfo)
+    })
+  })
+  )
+}
+  
   // encodeIdList.map((item, index) => {
   //   Promise.resolve(useAxios(item))
   //     // 유저 정보 조회
@@ -108,10 +117,10 @@ async function getUserData(userId) {
   return await axios.get(`https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${userId}?api_key=${riotApiKey}`)
 };
 
-//조회할 아이디 리스트를 받아, 인코딩
+getUsersData()
 
 //받은 리스트를 axios요청 json리스트화
-
+app.use("/userinfo/userlist", (req, res) => res.json(getUserInformation()))
 app.use("/userinfo", (req, res) => res.json(getUsersData()));
 app.use(bodyParser.json());
 app.use("/api", (req, res) => res.json({ username: "bryan" }));
