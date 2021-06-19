@@ -137,6 +137,7 @@ const useAxiosInGame = (summonerId) => {
 function getPost() {
   app.post("/insertuser", (req, res) => {
     const text = req.body.id;
+    // 중복 제거 필요함
     summonerId = summonerId.concat(text);
     console.log(summonerId);
   });
