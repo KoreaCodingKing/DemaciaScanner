@@ -15,7 +15,6 @@ const userId = "kovolt1";
 
 app.use(cors());
 
-//ToDo: end포인트 확인, 사용자 입력후 아이디값만 먼저 보여줄것인지, 정보를 더 빼와야하는지 확인 필요
 usersData = async(req, res) => {
   const data = await new Promise((resolve, reject) => {
     resolve(getUserData(encodeURI(userId)));
