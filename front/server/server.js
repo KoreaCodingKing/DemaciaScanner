@@ -17,7 +17,7 @@ app.use(cors());
 
 //ToDo: end포인트 확인, 사용자 입력후 아이디값만 먼저 보여줄것인지, 정보를 더 빼와야하는지 확인 필요
 usersData = async(req, res) => {
-  const data1 = await new Promise((resolve, reject) => {
+  const data = await new Promise((resolve, reject) => {
     resolve(getUserData(encodeURI(userId)));
   }).then((result) => {
     return {
@@ -31,7 +31,7 @@ usersData = async(req, res) => {
     }
   })
 
-  return res.json(data1)
+  return res.json(data)
 }
 // async function getUsersData() {
 //   userDataList = await Promise.all(summonersId.map((userId, index) => {
