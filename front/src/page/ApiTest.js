@@ -9,26 +9,25 @@ import UserInsertForm from "../components/UserInsertForm";
 // import InputItem from "../components/InputItem"
 
 function ApiTest() {
-  const [status, setStatus] = useState(false);
   const [text, setText] = useState("");
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [load, setLoad] = useState(false);
 
-  // const getUserInfo = async () => {
-  //   try {
-  //     // insertUser();
-  //     setLoad(true);
-  //     const response = await axios.get("http://localhost:3001/userinfo");
-  //     Promise.resolve(response).then((getData) => {
-  //       setName(getData.data[0].name);
-  //       setId(getData.data[0].id);
-  //     });
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  //   setLoad(false);
-  // };
+  const getUserInfo = async () => {
+    try {
+      // insertUser();
+      setLoad(true);
+      const response = await axios.get("http://localhost:3001/userinfo");
+      Promise.resolve(response).then((getData) => {
+        setName(getData.data[0].name);
+        setId(getData.data[0].id);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+    setLoad(false);
+  };
 
   let dummyList = [
     {
@@ -66,7 +65,7 @@ function ApiTest() {
       .post("http://localhost:3001/insertuser", {
         id: data.id,
       })
-      .then((res) =>  setStatus(true))
+      .then((res) => console.log(res))
       .catch((err) => console.log(err));
     // inputAreaInfo(data.id);
     onReset();
@@ -90,7 +89,7 @@ function ApiTest() {
   return (
     <>
       <hr />
-      {/* <button onClick={getUserInfo}>정보 갱신</button> */}
+      <button onClick={getUserInfo}>정보 갱신</button>
       <br />
       <form className="insert_form" onSubmit={handleSubmit}>
         {/* <UserInsertForm userId={text} onChange={onChangeHandle} /> */}
@@ -101,7 +100,7 @@ function ApiTest() {
             placeholder="아이디를 입력해주세요"
           />
           <button onClick={insertUser}>정보 삽입</button>
-          <span className="state">{status ? "true" : "false"}</span>
+          <span className="state">대기</span>
         </div>
       </form>
       <br />
