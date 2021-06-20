@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Loading from "../components/Loading";
+import UserInsertForm from "../components/UserInsertForm";
 
 // import InputItem from "../components/InputItem"
 
@@ -29,19 +30,25 @@ function ApiTest() {
   };
 
   let dummyList = [
-    // {
-    //   id: "dummy01",
-    // },
-    // {
-    //   id: "dummy02",
-    // },
-    // {
-    //   id: "dummy03",
-    // },
+    {
+      id: "dummy01",
+    },
+    {
+      id: "dummy02",
+    },
+    {
+      id: "dummy03",
+    },
   ];
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const result = e.target.value;
+    return <UserInsertForm userId={text} />;
+  };
+
   // 인풋 값 변경 확인
-  const onChange = (e) => {
+  const onChangeHandle = (e) => {
     setText(e.target.value);
     console.log("onchange", text);
   };
@@ -60,14 +67,15 @@ function ApiTest() {
       })
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
-    inputAreaInfo(data.id);
+    // inputAreaInfo(data.id);
     onReset();
+    // getUserInfo();
   };
 
-  const inputAreaInfo = (userId) => {
-    console.log(userId);
-    return <p>{userId}</p>;
-  };
+  // const inputAreaInfo = (userId) => {
+  //   console.log(userId);
+  //   return <p>{userId}</p>;
+  // };
 
   if (load)
     return (
@@ -83,14 +91,22 @@ function ApiTest() {
       <hr />
       <button onClick={getUserInfo}>정보 갱신</button>
       <br />
-      <input
-        onChange={onChange}
-        value={text}
-        placeholder="아이디를 입력해주세요"
-      />
-      <button onClick={insertUser}>정보 삽입</button>
+      <form className="insert_form" onSubmit={handleSubmit}>
+        {/* <UserInsertForm userId={text} onChange={onChangeHandle} /> */}
+        <div className="userInfoBox">
+          <input
+            onChange={onChangeHandle}
+            value={text}
+            placeholder="아이디를 입력해주세요"
+          />
+          <button onClick={insertUser}>정보 삽입</button>
+          <span className="state">대기</span>
+        </div>
+      </form>
       <br />
-      <div className="id-list">{inputAreaInfo}</div>
+      <textarea value={JSON.stringify(dummyList)} readOnly />
+      <br />
+      <div className="id-list"></div>
       <br />
       아이디 : {name}
       <br />

@@ -13,19 +13,19 @@ app.use(bodyParser.json());
 const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
 
 let summonerId = [
-  "bbtzw",
-  "원딜 왕자 변정현",
-  "kovolt",
-  "kovolt",
-  "kovolt",
-  "박둥희",
-  "kovolt1",
-  "틀탑라간",
-  "쇠똥구리a",
-  "삼성 트롤 세탁기",
-  "뜨 식",
-  "느그집옆동네",
-  "이준경 123",
+  // "bbtzw",
+  // "원딜 왕자 변정현",
+  // "kovolt",
+  // "kovolt",
+  // "kovolt",
+  // "박둥희",
+  // "kovolt1",
+  // "틀탑라간",
+  // "쇠똥구리a",
+  // "삼성 트롤 세탁기",
+  // "뜨 식",
+  // "느그집옆동네",
+  // "이준경 123",
   // "엘 림",
   // "원딜김도형2345345",
   // "또 지고 싶다",
@@ -53,13 +53,14 @@ app.use(cors());
 // 중복 리스트 제거기능필요
 
 //인코딩한 아이디 리스트화 encodeIdList로 리턴
-const encodeFnc = async () => {
+const encodeFnc = async (summonerId) => {
   let sortFunc = summonerId.filter((item, idx, array) => {
     return array.indexOf(item) === idx;
   });
   // console.log(sortFunc);
   sortFunc.map((user) => {
     const encoding = encodeURI(user);
+    console.log(encoding);
     return (encodeIdList = encodeIdList.concat(encoding));
     // 리턴값 형태 ['encoded','encoded']
   });
@@ -85,22 +86,22 @@ const axiosFunc = async (encodeIdList, index) => {
         // });
 
         // 인게임여부 확인
-        Promise.resolve(useAxiosInGame(data.id))
-          .then((getState) => {
-            data.status = [
-              {
-                state: getState.data.gameType,
-                gameMode: getState.data.gameMode,
-              },
-            ];
-          })
-          .catch((err) => {
-            // console.log("접속하지 않았습니다", err.response.status);
-            if (err.response.status === 404) {
-              data.status = "OFF_LINE";
-            }
-            // data.status = err.response.status === 404 ? "false" : false;
-          });
+        // Promise.resolve(useAxiosInGame(data.id))
+        //   .then((getState) => {
+        //     data.status = [
+        //       {
+        //         state: getState.data.gameType,
+        //         gameMode: getState.data.gameMode,
+        //       },
+        //     ];
+        //   })
+        //   .catch((err) => {
+        //     // console.log("접속하지 않았습니다", err.response.status);
+        //     if (err.response.status === 404) {
+        //       data.status = "OFF_LINE";
+        //     }
+        //     // data.status = err.response.status === 404 ? "false" : false;
+        //   });
       })
       .catch((err) => {
         console.log(item);
@@ -137,9 +138,10 @@ const useAxiosInGame = (summonerId) => {
 function getPost() {
   app.post("/insertuser", (req, res) => {
     const text = req.body.id;
-    // 중복 제거 필요함
     summonerId = summonerId.concat(text);
     console.log(summonerId);
+    encodeFnc(summonerId);
+    axiosFunc(encodeIdList);
   });
 }
 
@@ -153,10 +155,9 @@ const getUserData = () => {
 getPost();
 
 //조회할 아이디 리스트를 받아, 인코딩
-encodeFnc();
 
 //받은 리스트를 axios요청 json리스트화
-getUserData();
+// getUserData();
 
 app.use("/api", (req, res) => res.json({ username: "bryan" }));
 
