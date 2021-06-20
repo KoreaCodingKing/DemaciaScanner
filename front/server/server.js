@@ -8,6 +8,8 @@ const port = process.env.PORT || 3001;
 const cors = require("cors");
 app.use(cors());
 
+app.use(bodyParser.json());
+
 const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
 
 async function getUserData(userId) {
@@ -41,7 +43,7 @@ app.post("/insertuser", async(req, res) => {
   return res.json(data);
 });
 
-app.use(bodyParser.json());
+
 
 app.listen(port, () => {
   console.log(`express is running on ${port}`);

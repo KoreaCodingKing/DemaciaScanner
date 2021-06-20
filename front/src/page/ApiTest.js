@@ -45,18 +45,22 @@ function ApiTest() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const result = e.target.value;
-    return <UserInsertForm userId={text} />;
+    // return <UserInsertForm userId={text} />;
   };
 
   // 인풋 값 변경 확인
   const onChangeHandle = (e) => {
     setText(e.target.value);
-    console.log("onchange", text);
+    console.log(e.target.value)
   };
 
   const onReset = () => {
     setText("");
   };
+
+  const testClick = () => {
+    alert("test!!")
+  }
 
   const insertUser = () => {
     const data = new Object({
@@ -66,17 +70,17 @@ function ApiTest() {
       .post("http://localhost:3001/insertuser", {
         id: data.id,
       })
-      .then((res) => setStatus(res.status))
+      .then((res) => {
+        if(res.data ===null) {
+          setStatus(false)
+          return ;
+        }
+        setStatus(true);
+      })
       .catch((err) => console.log(err));
-    // inputAreaInfo(data.id);
     onReset();
-    // getUserInfo();
   };
 
-  // const inputAreaInfo = (userId) => {
-  //   console.log(userId);
-  //   return <p>{userId}</p>;
-  // };
 
   if (load)
     return (
@@ -93,8 +97,8 @@ function ApiTest() {
       {/* <button onClick={getUserInfo}>정보 갱신</button> */}
       <br />
       <form className="insert_form" onSubmit={handleSubmit}>
-        {/* <UserInsertForm userId={text} onChange={onChangeHandle} /> */}
-        <div className="userInfoBox">
+        <UserInsertForm onInsertUser={insertUser} userValue={text} existValue={status} onChangeEvent={onChangeHandle} />
+        {/* <div className="userInfoBox">
           <input
             onChange={onChangeHandle}
             value={text}
@@ -102,7 +106,7 @@ function ApiTest() {
           />
           <button onClick={insertUser}>정보 삽입</button>
           <span className="state">{status ? "true" : "false"}</span>
-        </div>
+        </div> */}
       </form>
       <br />
       <textarea value={JSON.stringify(dummyList)} readOnly />
