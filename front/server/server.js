@@ -8,36 +8,48 @@ const bodyParser = require("body-parser");
 const port = process.env.PORT || 3001;
 const cors = require("cors");
 
-const riotApiKey = 'RGAPI-09744820-85b0-496a-b5be-139ce66a016c';
+const riotApiKey = 'RGAPI-fb260978-f31f-4455-85e1-09fa663704a6';
+let userDataList = [];
 
-const summonersId = [
-  "kovolt",
-  // "bbtzw",
-  "저렴한 핫바"
-  // "쇠똥구리a",
-  // "삼성 트롤 세탁기",
-];
+const userId = "kovolt1";
 
 app.use(cors());
 
 //ToDo: end포인트 확인, 사용자 입력후 아이디값만 먼저 보여줄것인지, 정보를 더 빼와야하는지 확인 필요
-async function getUsersData() {
-  return await Promise.all(summonersId.map((userId, index) => {
-    return getUserData(encodeURI(userId)).then((userData) => {
-      if (userData.status === 404) {
-        throw new Error('no user')
-      }
+usersData = async(req, res) => {
+  const data1 = await new Promise((resolve, reject) => {
+    resolve(getUserData(encodeURI(userId)));
+  }).then((result) => {
+    return {
+      id: result.data.id,
+      name: result.data.name
+    }
+  }).catch((err) => {
+    console.log(err)
+    if (err.response.status === 404) {
+      return null;
+    }
+  })
 
-      return {
-        index: index,
-        id: userData.id,
-        name: userData.name
-      }
-    }).catch((err) => {
-      console.log('err', err.code)
-    })
-  }));
+  return res.json(data1)
 }
+// async function getUsersData() {
+//   userDataList = await Promise.all(summonersId.map((userId, index) => {
+//     return getUserData(encodeURI(userId)).then((userData) => {
+//       if (userData.status === 404) {
+//         throw new Error('no user')
+//       }
+//       console.log(userData.data)
+//       return {
+//         index: index,
+//         id: userData.id,
+//         name: userData.name
+//       }
+//     }).catch((err) => {
+//       console.log('err', err.code)
+//     })
+//   }));
+// }
 
 async function getUserInformation() {
   return Promise.all(summonersId.map((userId) => {
@@ -104,9 +116,9 @@ async function getUserInformation() {
 
 
 // 인게임 정보 axios 사용
-const useAxiosInGame = (summonerId) => {
-  return axios.get(
-    `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summonerId}?api_key=${riotApiKey}`
+async function getUserInGameData(userId) {
+  return await axios.get(
+    `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${userId}?api_key=${riotApiKey}`
   );
 };
 
@@ -117,12 +129,11 @@ async function getUserData(userId) {
   return await axios.get(`https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${userId}?api_key=${riotApiKey}`)
 };
 
-getUsersData()
-
 //받은 리스트를 axios요청 json리스트화
 app.use("/userinfo/userlist", (req, res) => res.json(getUserInformation()))
-app.use("/userinfo", (req, res) => res.json(getUsersData()));
+
 app.use(bodyParser.json());
+app.get("/userinfo", usersData);
 app.use("/api", (req, res) => res.json({ username: "bryan" }));
 
 app.listen(port, () => {
