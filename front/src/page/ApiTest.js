@@ -15,6 +15,7 @@ function ApiTest() {
   const [id, setId] = useState("");
   const [idList, setIdList]= useState([]);
   const [load, setLoad] = useState(false);
+  const [count, setCount] = useState(0);
 
   let globalList = [];
 
@@ -33,6 +34,12 @@ function ApiTest() {
   //   setLoad(false);
   // };
 
+
+  // ---------------중복제거
+  // let sortFunc = summonerId.filter((item, idx, array) => {
+  //   return array.indexOf(item) === idx;
+  // });
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -41,7 +48,6 @@ function ApiTest() {
   // 인풋 값 변경 확인
   const onChangeHandle = (e) => {
     setText(e.target.value);
-    // console.log(e.target.value)
   };
 
   const onReset = () => {
@@ -61,13 +67,16 @@ function ApiTest() {
           setStatus(false)
           return ;
         }
+        setCount(count+1)
         setStatus(true);
-
         let response1 = res.data.name;
         
         setIdList([
           ...idList,
-          `${response1}\n`
+          {
+            index : count,
+            name : response1
+          }
         ]);
 
         
@@ -102,7 +111,7 @@ function ApiTest() {
         <UserInsertForm onInsertUser={insertUser} userValue={text} existValue={status} onChangeEvent={onChangeHandle} />
       </form>
       <br />
-      <textarea value={idList} readOnly />
+      <textarea value={JSON.stringify(idList)} readOnly />
       <br />
       <div className="id-list"></div>
       <br />
