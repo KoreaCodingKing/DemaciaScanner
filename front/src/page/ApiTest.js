@@ -1,7 +1,7 @@
 // 테스트중인 페이지
 // CORS policy 오류 ->브라우저에서 보내서 그럼, 서버에서 보내면 됨
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect,} from "react";
 import axios from "axios";
 import Loading from "../components/Loading";
 import UserInsertForm from "../components/UserInsertForm";
@@ -13,8 +13,10 @@ function ApiTest() {
   const [text, setText] = useState("");
   const [name, setName] = useState("");
   const [id, setId] = useState("");
-  const [idList, setIdList]= useState("");
+  const [idList, setIdList]= useState([]);
   const [load, setLoad] = useState(false);
+
+  let globalList = [];
 
   // const getUserInfo = async () => {
   //   try {
@@ -31,40 +33,20 @@ function ApiTest() {
   //   setLoad(false);
   // };
 
-  let dummyList = [
-    {
-      id: "dummy01",
-    },
-    {
-      id: "dummy02",
-    },
-    {
-      id: "dummy03",
-    },
-  ];
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIdList(e.target);
-    const result = e.target.value;
-    console.log(idList)
 
-    // return <UserInsertForm userId={text} />;
   };
 
   // 인풋 값 변경 확인
   const onChangeHandle = (e) => {
     setText(e.target.value);
-    console.log(e.target.value)
+    // console.log(e.target.value)
   };
 
   const onReset = () => {
     setText("");
   };
-
-  const testClick = () => {
-    alert("test!!")
-  }
 
   const insertUser = () => {
     const data = new Object({
@@ -80,10 +62,26 @@ function ApiTest() {
           return ;
         }
         setStatus(true);
+
+        let response1 = res.data.name;
+        
+        setIdList([
+          ...idList,
+          `${response1}\n`
+        ]);
+
+        
+        console.log('아이디리스트',...idList)
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setIdList([
+          ...idList
+        ]);
+      });
     onReset();
   };
+
+  
 
 
   if (load)
@@ -104,7 +102,6 @@ function ApiTest() {
         <UserInsertForm onInsertUser={insertUser} userValue={text} existValue={status} onChangeEvent={onChangeHandle} />
       </form>
       <br />
-      {/* <textarea value={JSON.stringify(dummyList)} readOnly /> */}
       <textarea value={idList} readOnly />
       <br />
       <div className="id-list"></div>
