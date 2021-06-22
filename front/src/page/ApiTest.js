@@ -13,6 +13,7 @@ function ApiTest() {
   const [text, setText] = useState("");
   const [name, setName] = useState("");
   const [id, setId] = useState("");
+  const [idList, setIdList]= useState("");
   const [load, setLoad] = useState(false);
 
   // const getUserInfo = async () => {
@@ -44,7 +45,10 @@ function ApiTest() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIdList(e.target);
     const result = e.target.value;
+    console.log(idList)
+
     // return <UserInsertForm userId={text} />;
   };
 
@@ -98,18 +102,10 @@ function ApiTest() {
       <br />
       <form className="insert_form" onSubmit={handleSubmit}>
         <UserInsertForm onInsertUser={insertUser} userValue={text} existValue={status} onChangeEvent={onChangeHandle} />
-        {/* <div className="userInfoBox">
-          <input
-            onChange={onChangeHandle}
-            value={text}
-            placeholder="아이디를 입력해주세요"
-          />
-          <button onClick={insertUser}>정보 삽입</button>
-          <span className="state">{status ? "true" : "false"}</span>
-        </div> */}
       </form>
       <br />
-      <textarea value={JSON.stringify(dummyList)} readOnly />
+      {/* <textarea value={JSON.stringify(dummyList)} readOnly /> */}
+      <textarea value={idList} readOnly />
       <br />
       <div className="id-list"></div>
       <br />
