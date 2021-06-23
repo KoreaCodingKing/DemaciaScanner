@@ -1,10 +1,12 @@
 // 테스트중인 페이지
 // CORS policy 오류 ->브라우저에서 보내서 그럼, 서버에서 보내면 됨
 
-import React, { useState, useEffect,} from "react";
+import React, { useState, useEffect, useRef} from "react";
 import axios from "axios";
 import Loading from "../components/Loading";
 import UserInsertForm from "../components/UserInsertForm";
+
+import UserList from "../components/UserList";
 
 // import InputItem from "../components/InputItem"
 
@@ -15,9 +17,9 @@ function ApiTest() {
   const [id, setId] = useState("");
   const [idList, setIdList]= useState([]);
   const [load, setLoad] = useState(false);
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
 
-  let globalList = [];
+  const nextId = useRef(1);
 
   // const getUserInfo = async () => {
   //   try {
@@ -34,11 +36,6 @@ function ApiTest() {
   //   setLoad(false);
   // };
 
-
-  // ---------------중복제거
-  // let sortFunc = summonerId.filter((item, idx, array) => {
-  //   return array.indexOf(item) === idx;
-  // });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -67,20 +64,16 @@ function ApiTest() {
           setStatus(false)
           return ;
         }
-        setCount(count+1)
         setStatus(true);
-        let response1 = res.data.name;
-        
-        setIdList([
-          ...idList,
-          {
-            index : count,
-            name : response1
-          }
-        ]);
 
-        
-        console.log('아이디리스트',...idList)
+        const user =  {
+            index : nextId,
+            name : res.data.name,
+            id : res.data.id
+          }
+
+        setIdList(idList.concat(user));
+        nextId.current +=1;
       })
       .catch((err) => {
         setIdList([
@@ -89,9 +82,6 @@ function ApiTest() {
       });
     onReset();
   };
-
-  
-
 
   if (load)
     return (
@@ -111,7 +101,8 @@ function ApiTest() {
         <UserInsertForm onInsertUser={insertUser} userValue={text} existValue={status} onChangeEvent={onChangeHandle} />
       </form>
       <br />
-      <textarea value={JSON.stringify(idList)} readOnly />
+      {/* <textarea value={JSON.stringify(idList)} readOnly /> */}
+      <UserList users={idList} />
       <br />
       <div className="id-list"></div>
       <br />
