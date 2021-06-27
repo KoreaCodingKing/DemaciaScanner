@@ -1,4 +1,6 @@
-import React from "react";
+
+// import React from "react";
+import React, { useEffect,createContext, Provider } from "react";
 import { Link, Route } from "react-router-dom";
 import Home from "./page/Home";
 import About from "./page/About";
@@ -8,8 +10,11 @@ import dotenv from "dotenv";
 
 import "./assets/scss/common.scss";
 
+export const ThemeContext = createContext("light");
+
 function App() {
   return (
+    <ThemeContext.Provider value="red">
     <div className="wrapper">
       <div className="header">
         <Link to="/">Home</Link>
@@ -21,6 +26,7 @@ function App() {
       <Route path="/apiTest" component={ApiTest} />
       {/* <h1>test</h1> */}
     </div>
+    </ThemeContext.Provider>
   );
 }
 
