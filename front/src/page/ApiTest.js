@@ -17,25 +17,23 @@ function ApiTest() {
   const [id, setId] = useState("");
   const [idList, setIdList]= useState([]);
   const [load, setLoad] = useState(false);
-  const [dup, setDup] = useState(false)
-  // const [count, setCount] = useState(0);
 
   // const nextId = useRef(1);
 
-  // const getUserInfo = async () => {
-  //   try {
-  //     // insertUser();
-  //     setLoad(true);
-  //     const response = await axios.get("http://localhost:3001/userinfo");
-  //     Promise.resolve(response).then((getData) => {
-  //       setName(getData.data[0].name);
-  //       setId(getData.data[0].id);
-  //     });
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  //   setLoad(false);
-  // };
+  const getUserInfo = async () => {
+    try {
+      setLoad(true);
+      const response = await axios.get("http://localhost:3001/insertuser");
+      Promise.resolve(response).then((getData) => {
+        console.log(getData.data[0])
+        setName(getData.data[0].name);
+        setId(getData.data[0].id);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+    setLoad(false);
+  };
 
 
   // const handleSubmit = (e) => {
@@ -83,27 +81,27 @@ const duplicateId = (inputText) => {
         }
       }
       getUserData(inputText)
-            .then((res) => {
-              if(res.data ===null) {
-                setStatus(false)
-                return false;
-              }
-              setStatus(true);
+        .then((res) => {
+          if(res.data ===null) {
+            setStatus(false)
+            return false;
+          }
+          setStatus(true);
 
-              const user =  {
-                  name : res.data.name,
-                  id : res.data.id
-                }
+          const user =  {
+              name : res.data.name,
+              id : res.data.id
+            }
 
-              setIdList(idList.concat(user))
+          setIdList(idList.concat(user))
 
-            })
-            .catch((err) => {
-              setIdList([
-                ...idList
-              ]);
-            });
-          onReset();
+        })
+        .catch((err) => {
+          setIdList([
+            ...idList
+          ]);
+        });
+      onReset();
     };
   };
   
@@ -120,13 +118,12 @@ const duplicateId = (inputText) => {
   return (
     <>
       <hr />
-      {/* <button onClick={getUserInfo}>정보 갱신</button> */}
+      <button onClick={getUserInfo}>정보 갱신</button>
       <br />
       <form className="insert_form" onSubmit={insertUser}>
         <UserInsertForm onInsertUser={insertUser} userValue={inputText} existValue={status} onChangeEvent={onChangeHandle} />
       </form>
       <br />
-      {/* <textarea value={JSON.stringify(idList)} readOnly /> */}
       <UserList users={idList} />
       <br />
       <div className="id-list"></div>

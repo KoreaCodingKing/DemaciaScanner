@@ -6,11 +6,14 @@ const app = express();
 const bodyParser = require("body-parser");
 const port = process.env.PORT || 3001;
 const cors = require("cors");
+
+let globalList = [];
 app.use(cors());
 
 app.use(bodyParser.json());
 
 const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
+
 
 async function getUserData(userId) {
   return await axios.get(`https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${userId}?api_key=${riotApiKey}`)
@@ -28,8 +31,17 @@ app.post("/insertuser", async(req, res) => {
   const userId = req.body.id;
   const data = await new Promise((resolve, reject) => {
     resolve(getUserData(encodeURI(userId)));
-  }).then((result) => {
+  })
+  .then((result) => {
     console.log(`id : ${result.data.id}`, `name : ${result.data.name}`)
+    globalList = globalList.concat({
+      id : result.data.id,
+      name : result.data.name
+    })
+    app.get('/insertuser', (req,res)=> {
+      res.json(globalList)
+    } )
+
     return {
       id: result.data.id,
       name: result.data.name
