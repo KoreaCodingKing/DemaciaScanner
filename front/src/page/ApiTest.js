@@ -12,14 +12,15 @@ import UserList from "../components/UserList";
 
 function ApiTest() {
   const [status, setStatus] = useState(false)
-  const [text, setText] = useState("");
+  const [inputText, setInputText] = useState("");
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [idList, setIdList]= useState([]);
   const [load, setLoad] = useState(false);
+  const [dup, setDup] = useState(false)
   // const [count, setCount] = useState(0);
 
-  const nextId = useRef(1);
+  // const nextId = useRef(1);
 
   // const getUserInfo = async () => {
   //   try {
@@ -37,51 +38,75 @@ function ApiTest() {
   // };
 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
 
-  };
+  // };
 
   // 인풋 값 변경 확인
   const onChangeHandle = (e) => {
-    setText(e.target.value);
+    setInputText(e.target.value);
   };
 
   const onReset = () => {
-    setText("");
+    setInputText("");
   };
 
-  const insertUser = () => {
+// server.js에서 압력받은 id 값 가져오기
+ const getUserData =  async (inputText) => {
     const data = new Object({
-      id: text,
+      id: inputText,
     });
-    axios
-      .post("http://localhost:3001/insertuser", {
+     return await axios.post("http://localhost:3001/insertuser", {
         id: data.id,
       })
-      .then((res) => {
-        if(res.data ===null) {
-          setStatus(false)
-          return ;
+  }
+
+// 중복 아이디 값 확인 함수 return true, false
+const duplicateId = (inputText) => {
+}
+
+  const insertUser = (e) => {
+    e.preventDefault()
+
+    if(!inputText) {
+      alert("값이 없습니다")
+      return false;
+
+    } else if(inputText) {
+      // 중복제거
+      for(let i = 0; i<idList.length; i++) {
+        if(idList[i].name.toUpperCase() == inputText.toUpperCase()) {
+          onReset();
+          return alert("중복중복");
+          break;
         }
-        setStatus(true);
+      }
+      getUserData(inputText)
+            .then((res) => {
+              if(res.data ===null) {
+                setStatus(false)
+                return false;
+              }
+              setStatus(true);
 
-        const user =  {
-            index : nextId,
-            name : res.data.name,
-            id : res.data.id
-          }
+              const user =  {
+                  name : res.data.name,
+                  id : res.data.id
+                }
 
-        setIdList(idList.concat(user));
-        nextId.current +=1;
-      })
-      .catch((err) => {
-        setIdList([
-          ...idList
-        ]);
-      });
-    onReset();
+              setIdList(idList.concat(user))
+
+            })
+            .catch((err) => {
+              setIdList([
+                ...idList
+              ]);
+            });
+          onReset();
+    };
   };
+  
 
   if (load)
     return (
@@ -97,8 +122,8 @@ function ApiTest() {
       <hr />
       {/* <button onClick={getUserInfo}>정보 갱신</button> */}
       <br />
-      <form className="insert_form" onSubmit={handleSubmit}>
-        <UserInsertForm onInsertUser={insertUser} userValue={text} existValue={status} onChangeEvent={onChangeHandle} />
+      <form className="insert_form" onSubmit={insertUser}>
+        <UserInsertForm onInsertUser={insertUser} userValue={inputText} existValue={status} onChangeEvent={onChangeHandle} />
       </form>
       <br />
       {/* <textarea value={JSON.stringify(idList)} readOnly /> */}

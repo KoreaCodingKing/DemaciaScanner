@@ -4,7 +4,7 @@ import "../assets/scss/userinsertform.scss";
 const status = false;
 
 const UserInsertForm = (props) => {
-  console.log(props.userValue)
+  // console.log(props.userValue)
   return (
     <>
     <input onChange={props.onChangeEvent} value={props.userValue} />
