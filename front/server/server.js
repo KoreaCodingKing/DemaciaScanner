@@ -20,9 +20,9 @@ async function getUserData(userId) {
 };
 
 // 인게임 정보 axios 사용
-async function getUserInGameData(userId) {
+async function getUserInGameData(accountId) {
   return await axios.get(
-    `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${userId}?api_key=${riotApiKey}`
+    `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${accountId}?api_key=${riotApiKey}`
   );
 };
 
@@ -54,6 +54,19 @@ app.post("/insertuser", async(req, res) => {
   })
   return res.json(data);
 });
+
+app.get("/userstate", async(req,res) => {
+  // console.log(globalList)
+
+  const userAccountId = res.body.id
+  const data = await new Promise((resolve, reject) => {
+    resolve(getUserInGameData(encodeURI(userAccountId)));
+  })
+  .then((result)=> {
+    console.log(`id : ${result.data.id}`, `name : ${result.data.name}`)
+  })
+
+})
 
 
 

@@ -5,10 +5,7 @@ import React, { useState, useEffect, useRef} from "react";
 import axios from "axios";
 import Loading from "../components/Loading";
 import UserInsertForm from "../components/UserInsertForm";
-
 import UserList from "../components/UserList";
-
-// import InputItem from "../components/InputItem"
 
 function ApiTest() {
   const [status, setStatus] = useState(false)
@@ -17,8 +14,6 @@ function ApiTest() {
   const [id, setId] = useState("");
   const [idList, setIdList]= useState([]);
   const [load, setLoad] = useState(false);
-
-  // const nextId = useRef(1);
 
   const getUserInfo = async () => {
     try {
@@ -72,7 +67,7 @@ const duplicateId = (inputText) => {
       return false;
 
     } else if(inputText) {
-      // 중복제거
+      // 중복제거입력 불가 
       for(let i = 0; i<idList.length; i++) {
         if(idList[i].name.toUpperCase() == inputText.toUpperCase()) {
           onReset();
@@ -94,7 +89,6 @@ const duplicateId = (inputText) => {
             }
 
           setIdList(idList.concat(user))
-
         })
         .catch((err) => {
           setIdList([
