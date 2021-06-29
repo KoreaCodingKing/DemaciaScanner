@@ -8,6 +8,7 @@ const port = process.env.PORT || 3001;
 const cors = require("cors");
 
 let globalList = [];
+let globalListState = [];
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -56,15 +57,47 @@ app.post("/insertuser", async(req, res) => {
 });
 
 app.get("/userstate", async(req,res) => {
-  // console.log(globalList)
-
-  const userAccountId = res.body.id
-  const data = await new Promise((resolve, reject) => {
+  
+  globalList.map((item, index)=> {
+  const userAccountId = item.id;
+  const data = new Promise((resolve, reject) => {
     resolve(getUserInGameData(encodeURI(userAccountId)));
   })
   .then((result)=> {
-    console.log(`id : ${result.data.id}`, `name : ${result.data.name}`)
+    console.log(` No. ${index+1} Name : ${item.name} gameType : ${result.data.gameType}`, `gameMode : ${result.data.gameMode}`)
+    globalListState = globalListState.concat({
+      name :result.name,
+      status : true 
+    })
+    res.json(globalListState)
   })
+  .catch((err,item)=> {
+    if (err.response.status === 404) {
+      // data.status = "OFF_LINE";
+      // globalListState = globalListState.concat({
+      //   name : item.name,
+      //   status : false
+      // })
+      // res.json(globalListState)
+      console.log(item)
+      console.log("OFF_Line")
+    }
+  })
+  
+  })
+
+  // console.log(res.body)
+  // const data = await new Promise((resolve, reject) => {
+  //   resolve(getUserInGameData(encodeURI(userAccountId)));
+  // })
+  // .then((result)=> {
+  //   console.log(`gameType : ${result.data.gameType}`, `gameMode : ${result.data.gameMode}`)
+  // })
+  // .catch((e)=> {
+  //   if (err.response.status === 404) {
+  //     data.status = "OFF_LINE";
+  //   }
+  // })
 
 })
 
