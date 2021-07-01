@@ -21,7 +21,9 @@ function ApiTest() {
     if (localStorageValue) {
       const reslut = JSON.parse(localStorageValue);
       setIdList(reslut);
+      // *****************************************************
       // 새로고침 했을때, 서버에서도 같은 로컬 스토리지 값으로 갱신되어야 하는가
+      // *****************************************************
       console.log("값이 있다", reslut);
     } else {
       console.log("값이 없다");
