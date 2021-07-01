@@ -98,25 +98,11 @@ app.post("/userstate", async (req, res) => {
           name: userName,
           status: "오프라인",
         };
-=======
-      app.get("/userstate", (req, res) => {
-        res.json(globalList);
-      });
-
-      return {
-        id: result.data.id,
-        name: result.data.name,
-      };
-    })
-    .catch((err) => {
-      console.log(`없는 아이디입니다.-${userId}-${err.response.status}`);
-      if (err.response.status === 404) {
-        return null;
-
       }
     });
   return res.json(data);
 });
+
 app.listen(port, () => {
   console.log(`express is running on ${port}`);
 });
