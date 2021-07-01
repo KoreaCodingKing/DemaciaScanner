@@ -40,7 +40,7 @@ app.post("/insertuser", async (req, res) => {
         id: result.data.id,
         name: result.data.name,
       });
-      app.get("/userstate", (req, res) => {
+      app.get("/insertuser", (req, res) => {
         res.json(globalList);
       });
 
@@ -59,39 +59,64 @@ app.post("/insertuser", async (req, res) => {
 });
 
 app.post("/userstate", async (req, res) => {
-  console.log("post userState");
+  const userName = req.body.name;
+  const userAccountId = req.body.status;
+
+  // console.log(userName, userAccountId);
+
+  const data = new Promise((resolve, reject) => {
+    resolve(getUserInGameData(encodeURI(userAccountId)));
+  })
+    .then((result) => {
+      console.log(
+        ` Name : ${userName} gameType : ${result.data.gameType}`,
+        `gameMode : ${result.data.gameMode}`
+      );
+      globalListState = globalListState.concat({
+        name: userName,
+        status: "접속중",
+      });
+      app.get("/userstate", (req, res) => {
+        res.json(globalListState);
+      });
+      return {
+        name: userName,
+        status: "접속중",
+      };
+    })
+    .catch((err) => {
+      if (err.response.status === 404) {
+        // data.status = "OFF_LINE";
+        globalListState = globalListState.concat({
+          name: userName,
+          status: false,
+        });
+        app.get("/userstate", (req, res) => {
+          res.json(globalListState);
+        });
+        return {
+          name: userName,
+          status: "오프라인",
+        };
+=======
+      app.get("/userstate", (req, res) => {
+        res.json(globalList);
+      });
+
+      return {
+        id: result.data.id,
+        name: result.data.name,
+      };
+    })
+    .catch((err) => {
+      console.log(`없는 아이디입니다.-${userId}-${err.response.status}`);
+      if (err.response.status === 404) {
+        return null;
+
+      }
+    });
+  return res.json(data);
 });
-
-// app.get("/userstate", async (req, res) => {
-//   // globalList.map((item, index)=> {
-//   //   const userName = item.name;
-//   //   const userAccountId = item.id;
-//   //   const data = new Promise((resolve, reject) => {
-//   //     resolve(getUserInGameData(encodeURI(userAccountId)));
-//   //   })
-//   //   .then((result)=> {
-//   //     console.log(` No. ${index+1} Name : ${item.name} gameType : ${result.data.gameType}`, `gameMode : ${result.data.gameMode}`)
-//   //     globalListState = globalListState.concat({
-//   //       name :result.name,
-//   //       status : true
-//   //     })
-//   //     res.json(globalListState)
-//   //   })
-//   //   .catch((err)=> {
-//   //     if (err.response.status === 404) {
-//   //       data.status = "OFF_LINE";
-//   //       globalListState = globalListState.concat({
-//   //         name : userName,
-//   //         status : false
-//   //       })
-//   //       res.json(globalListState)
-//   //       // console.log(userAccountId)
-//   //       // console.log("OFF_Line")
-//   //     }
-//   //   })
-//   // })
-// });
-
 app.listen(port, () => {
   console.log(`express is running on ${port}`);
 });
