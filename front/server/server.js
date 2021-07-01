@@ -58,39 +58,49 @@ app.post("/insertuser", async (req, res) => {
   return res.json(data);
 });
 
-app.get("/userstate", async (req, res) => {
-  globalList.map((item, index) => {
-    const userName = item.name;
-    const userAccountId = item.id;
-    const data = new Promise((resolve, reject) => {
-      resolve(getUserInGameData(encodeURI(userAccountId)));
-    })
-      .then((result) => {
-        console.log(
-          ` No. ${index + 1} Name : ${item.name} gameType : ${
-            result.data.gameType
-          }`,
-          `gameMode : ${result.data.gameMode}`
-        );
-        globalListState = globalListState.concat({
-          name: result.name,
-          status: true,
-        });
-        res.json(globalListState);
-      })
-      .catch((err) => {
-        if (err.response.status === 404) {
-          data.status = "OFF_LINE";
-          globalListState = globalListState.concat({
-            name: userName,
-            status: false,
-          });
-          res.json(globalListState);
-          // console.log(userAccountId)
-          // console.log("OFF_Line")
-        }
+app.post("/userstate", async (req, res) => {
+  const userName = req.body.name;
+  const userAccountId = req.body.status;
+
+  // console.log(userName, userAccountId);
+
+  const data = new Promise((resolve, reject) => {
+    resolve(getUserInGameData(encodeURI(userAccountId)));
+  })
+    .then((result) => {
+      console.log(
+        ` Name : ${userName} gameType : ${result.data.gameType}`,
+        `gameMode : ${result.data.gameMode}`
+      );
+      globalListState = globalListState.concat({
+        name: userName,
+        status: "접속중",
       });
-  });
+      app.get("/userstate", (req, res) => {
+        res.json(globalListState);
+      });
+      return {
+        name: userName,
+        status: "접속중",
+      };
+    })
+    .catch((err) => {
+      if (err.response.status === 404) {
+        // data.status = "OFF_LINE";
+        globalListState = globalListState.concat({
+          name: userName,
+          status: false,
+        });
+        app.get("/userstate", (req, res) => {
+          res.json(globalListState);
+        });
+        return {
+          name: userName,
+          status: "오프라인",
+        };
+      }
+    });
+  return res.json(data);
 });
 
 app.listen(port, () => {
