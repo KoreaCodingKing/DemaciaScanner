@@ -61,7 +61,7 @@ app.post("/insertuser", async (req, res) => {
 app.post("/userstate", async (req, res) => {
   const userName = req.body.name;
   const userAccountId = req.body.status;
-
+  // idList(객체 배열 ex) 500개 )
   // console.log(userName, userAccountId);
 
   const data = new Promise((resolve, reject) => {

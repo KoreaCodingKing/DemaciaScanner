@@ -93,7 +93,7 @@ function ApiTest() {
         name: res.name,
         state: res.status,
       };
-      // console.log(gameState);
+      setUserState(gameState);
     });
   };
 
