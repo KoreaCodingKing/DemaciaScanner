@@ -7,7 +7,7 @@ const UserInsertForm = (props) => {
   // console.log(props.userValue)
   return (
     <>
-      <input onChange={props.onChangeEvent} inputValue={props.userValue} />
+      <input onChange={props.onChangeEvent} value={props.inputValue} />
       <button onClick={props.onInsertUser}>접수</button>
       <span className="state">{props.existValue ? "true" : "false"}</span>
     </>
