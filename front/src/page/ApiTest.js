@@ -105,10 +105,11 @@ function ApiTest() {
       alert("값이 없습니다");
       return;
     }
+  
     const replacedUserName = userName.replace(/\s/gi, '');
-    const doesExistUserName = idList.some((id) => id.name.toUpperCase() === replacedUserName.toUpperCase());
+    const doesExistUserName = idList.some((id) => id.name.toUpperCase().replace(/\s/gi, '') === replacedUserName.toUpperCase());
     if (doesExistUserName) {
-      alert('유저가 중복으로 입력되었습니다.');
+      alert('중복된 소환사 닉네임이 있습니다.');
       return;
     }
 
