@@ -10,7 +10,7 @@ import InGameStateView from "./InGameStateView";
 
 function ApiTest() {
   const [status, setStatus] = useState(false);
-  const [inputText, setInputText] = useState("");
+  const [userName, setUserName] = useState("");
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [idList, setIdList] = useState([]);
@@ -49,11 +49,11 @@ function ApiTest() {
 
   // 인풋 값 변경 확인
   const onChangeHandle = (e) => {
-    setInputText(e.target.value);
+    setUserName(e.target.value);
   };
 
   const onReset = () => {
-    setInputText("");
+    setUserName("");
   };
 
   const localStorageInit = () => {
@@ -61,9 +61,9 @@ function ApiTest() {
   };
 
   // server.js에서 압력받은 id 값 가져오기
-  const getUserData = async (inputText) => {
+  const getUserData = async (userName) => {
     const data = new Object({
-      id: inputText,
+      id: userName,
     });
     return await axios.post("http://localhost:3001/insertuser", {
       id: data.id,
@@ -101,19 +101,21 @@ function ApiTest() {
   const insertUser = (e) => {
     e.preventDefault();
 
-    if (!inputText) {
+    // const trimmedUserName
+    if (!userName) {
       alert("값이 없습니다");
       return false;
-    } else if (inputText) {
+    }
+    const inputText = RegExp()
       // 중복제거입력 불가
       for (let i = 0; i < idList.length; i++) {
-        if (idList[i].name.toUpperCase() == inputText.toUpperCase()) {
+        if (idList[i].name.toUpperCase() == userName.toUpperCase()) {
           onReset();
           return alert("중복중복");
           break;
         }
       }
-      getUserData(inputText)
+      getUserData(userName)
         .then((res) => {
           if (res.data === null) {
             setStatus(false);
@@ -135,7 +137,6 @@ function ApiTest() {
           setIdList([...idList]);
         });
       onReset();
-    }
   };
 
   if (load)
@@ -157,7 +158,7 @@ function ApiTest() {
       <form className="insert_form" onSubmit={insertUser}>
         <UserInsertForm
           onInsertUser={insertUser}
-          userValue={inputText}
+          inputValue={userName}
           existValue={status}
           onChangeEvent={onChangeHandle}
         />
