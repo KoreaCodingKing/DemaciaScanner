@@ -49,7 +49,8 @@ function ApiTest() {
 
   // 인풋 값 변경 확인
   const onChangeHandle = (e) => {
-    setUserName(e.target.value);
+    const trimmedInputUserName = e.target.value.trim();
+    setUserName(trimmedInputUserName);
   };
 
   const onReset = () => {
@@ -97,46 +98,41 @@ function ApiTest() {
     });
   };
 
-  // 아이디 조회
   const insertUser = (e) => {
     e.preventDefault();
 
-    // const trimmedUserName
     if (!userName) {
       alert("값이 없습니다");
-      return false;
+      return;
     }
-    const inputText = RegExp()
-      // 중복제거입력 불가
-      for (let i = 0; i < idList.length; i++) {
-        if (idList[i].name.toUpperCase() == userName.toUpperCase()) {
-          onReset();
-          return alert("중복중복");
-          break;
+    const replacedUserName = userName.replace(/\s/gi, '');
+    const doesExistUserName = idList.some((id) => id.name.toUpperCase() === replacedUserName.toUpperCase());
+    if (doesExistUserName) {
+      alert('유저가 중복으로 입력되었습니다.');
+      return;
+    }
+
+    getUserData(replacedUserName)
+      .then((res) => {
+        if (res.data === null) {
+          setStatus(false);
+          return false;
         }
-      }
-      getUserData(userName)
-        .then((res) => {
-          if (res.data === null) {
-            setStatus(false);
-            return false;
-          }
 
-          setStatus(true);
+        setStatus(true);
 
-          const user = {
-            name: res.data.name,
-            id: res.data.id,
-          };
-          setIdList(idList.concat(user));
+        const user = {
+          name: res.data.name,
+          id: res.data.id,
+        };
+        setIdList(idList.concat(user));
 
-          // 새로고침 데이터 유실 방지 로컬 스토리지 사용
-          localStorage.setItem("idList", JSON.stringify(idList.concat(user)));
-        })
-        .catch((err) => {
-          setIdList([...idList]);
-        });
-      onReset();
+        localStorage.setItem("idList", JSON.stringify(idList.concat(user)));
+      })
+      .catch((err) => {
+        setIdList([...idList]);
+      });
+    onReset();
   };
 
   if (load)
