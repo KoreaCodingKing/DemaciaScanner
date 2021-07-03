@@ -18,10 +18,10 @@ function ApiTest() {
   const [userState, setUserState] = useState(false);
 
   useEffect(() => {
-    const localStorageValue = localStorage.idList;
+    const sessionStorageValue = sessionStorage.idList;
 
-    if (localStorageValue) {
-      const reslut = JSON.parse(localStorageValue);
+    if (sessionStorageValue) {
+      const reslut = JSON.parse(sessionStorageValue);
       setIdList(reslut);
       // *****************************************************
       // 새로고침 했을때, 서버에서도 같은 로컬 스토리지 값으로 갱신되어야 하는가
@@ -57,8 +57,8 @@ function ApiTest() {
     setUserName("");
   };
 
-  const localStorageInit = () => {
-    localStorage.clear();
+  const sessionStorageInit = () => {
+    sessionStorage.clear();
   };
 
   // server.js에서 압력받은 id 값 가져오기
@@ -86,7 +86,7 @@ function ApiTest() {
   // 인게임 조회
   const searchInGameState = (e) => {
     e.preventDefault();
-    const result = JSON.parse(localStorage.idList);
+    const result = JSON.parse(sessionStorage.idList);
     // console.log(result[0].name);
 
     getUserDataInGame(result[0]).then((res) => {
@@ -105,11 +105,15 @@ function ApiTest() {
       alert("값이 없습니다");
       return;
     }
-  
-    const replacedUserName = userName.replace(/\s/gi, '');
-    const doesExistUserName = idList.some((id) => id.name.toUpperCase().replace(/\s/gi, '') === replacedUserName.toUpperCase());
+
+    const replacedUserName = userName.replace(/\s/gi, "");
+    const doesExistUserName = idList.some(
+      (id) =>
+        id.name.toUpperCase().replace(/\s/gi, "") ===
+        replacedUserName.toUpperCase()
+    );
     if (doesExistUserName) {
-      alert('중복된 소환사 닉네임이 있습니다.');
+      alert("중복된 소환사 닉네임이 있습니다.");
       onReset();
       return;
     }
@@ -129,7 +133,7 @@ function ApiTest() {
         };
         setIdList(idList.concat(user));
 
-        localStorage.setItem("idList", JSON.stringify(idList.concat(user)));
+        sessionStorage.setItem("idList", JSON.stringify(idList.concat(user)));
       })
       .catch((err) => {
         setIdList([...idList]);
@@ -150,7 +154,7 @@ function ApiTest() {
     <>
       <hr />
       <button onClick={getUserInfo}>정보 갱신</button>
-      <button onClick={localStorageInit}>로컬스토리지 초기화</button>
+      <button onClick={sessionStorageInit}>로컬스토리지 초기화</button>
       <button onClick={searchInGameState}>인게임 상태</button>
       <br />
       <form className="insert_form" onSubmit={insertUser}>
