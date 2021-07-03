@@ -110,6 +110,7 @@ function ApiTest() {
     const doesExistUserName = idList.some((id) => id.name.toUpperCase().replace(/\s/gi, '') === replacedUserName.toUpperCase());
     if (doesExistUserName) {
       alert('중복된 소환사 닉네임이 있습니다.');
+      onReset();
       return;
     }
 
