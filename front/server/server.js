@@ -12,6 +12,8 @@ const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
 let globalList = [];
 let globalListState = [];
 
+let testList = [];
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -27,6 +29,32 @@ async function getUserInGameData(accountId) {
     `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${accountId}?api_key=${riotApiKey}`
   );
 }
+
+// 테스트용 임시 데이터
+async function getTempIdList() {
+  return await axios.get(
+    `https://kr.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/CHALLENGER/I?page=1&api_key=${riotApiKey}`
+  );
+}
+
+// 테스트용 첼린저 데이터
+app.get("/testlist", async (req, res) => {
+  const data = await new Promise((resolve, reject) => {
+    resolve(getTempIdList());
+  });
+  data.data.map((item) => {
+    const name = item.summonerName;
+    const id = item.summonerId;
+
+    testList = testList.concat({
+      name: name,
+      id: id,
+    });
+  });
+
+  res.json(testList);
+  console.log(data.data.length);
+});
 
 //post요청 - 클라이언트에서 보낸 아이디
 app.post("/searchuser", async (req, res) => {
@@ -61,9 +89,9 @@ app.post("/searchuser", async (req, res) => {
 app.post("/userstatus", async (req, res) => {
   console.log(req.body)
   const userName = req.body.name;
-  const userAccountId = req.body.accountId;
-  // idList(객체 배열 ex) 500개 )
-  // console.log(userName, userAccountId);
+  const userAccountId = req.body.status;
+
+
 
   const data = new Promise((resolve, reject) => {
     resolve(getUserInGameData(encodeURI(userAccountId)));
