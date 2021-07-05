@@ -17,6 +17,7 @@ let testList = [];
 app.use(cors());
 app.use(bodyParser.json());
 
+//소환사 이름 찾기
 async function getUserData(userId) {
   return await axios.get(
     `https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${userId}?api_key=${riotApiKey}`
@@ -30,13 +31,18 @@ async function getUserInGameData(accountId) {
   );
 }
 
+<<<<<<< Updated upstream
 // 테스트용 임시 데이터
+=======
+// 임시 데이터를 위한 첼린저 아이디 서치
+>>>>>>> Stashed changes
 async function getTempIdList() {
   return await axios.get(
     `https://kr.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/CHALLENGER/I?page=1&api_key=${riotApiKey}`
   );
 }
 
+<<<<<<< Updated upstream
 // 테스트용 첼린저 데이터
 app.get("/testlist", async (req, res) => {
   const data = await new Promise((resolve, reject) => {
@@ -54,6 +60,16 @@ app.get("/testlist", async (req, res) => {
 
   res.json(testList);
   console.log(data.data.length);
+=======
+app.get("/gettempidlist", async (req, res) => {
+  const data = await new Promise((resolve, reject) => {
+    resolve(getTempIdList());
+  });
+
+  data.then((res) => console.log(res.data));
+  // getTempIdList.then((res) => console.log(res.data));
+  // res.json()
+>>>>>>> Stashed changes
 });
 
 //post요청 - 클라이언트에서 보낸 아이디
@@ -87,7 +103,7 @@ app.post("/searchuser", async (req, res) => {
 });
 
 app.post("/userstatus", async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   const userName = req.body.name;
   const userAccountId = req.body.status;
 
