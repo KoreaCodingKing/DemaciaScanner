@@ -8,87 +8,60 @@ import UserInsertForm from "../components/UserInsertForm";
 import UserList from "../components/UserList";
 import InGameStateView from "./InGameStateView";
 
+
 function ApiTest() {
   const [status, setStatus] = useState(false);
-  const [inputText, setInputText] = useState("");
-  const [name, setName] = useState("");
-  const [id, setId] = useState("");
-  const [idList, setIdList] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [userList, setuserList] = useState([]);
   const [load, setLoad] = useState(false);
   const [userState, setUserState] = useState(false);
 
   useEffect(() => {
-    const localStorageValue = localStorage.idList;
+    const sessionStorageValue = sessionStorage.userList || null;
 
-    if (localStorageValue) {
-      const reslut = JSON.parse(localStorageValue);
-      setIdList(reslut);
-      // *****************************************************
-      // 새로고침 했을때, 서버에서도 같은 로컬 스토리지 값으로 갱신되어야 하는가
-      // *****************************************************
-      console.log("값이 있다", reslut);
-    } else {
-      console.log("값이 없다");
+    if (sessionStorageValue) {
+      const userListInSession = JSON.parse(sessionStorageValue);
+      setuserList(userListInSession);
     }
   }, []);
 
-  const getUserInfo = async () => {
-    try {
-      setLoad(true);
-      const response = await axios.get("http://localhost:3001/insertuser");
-      Promise.resolve(response).then((getData) => {
-        // console.log(getData.data[0]);
-        setName(getData.data[0].name);
-        setId(getData.data[0].id);
-      });
-    } catch (e) {
-      console.error(e);
-    }
-    setLoad(false);
-  };
-
   // 인풋 값 변경 확인
   const onChangeHandle = (e) => {
-    setInputText(e.target.value);
+    setUserName(e.target.value);
   };
 
   const onReset = () => {
-    setInputText("");
+    setUserName("");
   };
 
-  const localStorageInit = () => {
-    localStorage.clear();
+  const sessionStorageInit = () => {
+    sessionStorage.clear();
   };
 
   // server.js에서 압력받은 id 값 가져오기
-  const getUserData = async (inputText) => {
-    const data = new Object({
-      id: inputText,
-    });
-    return await axios.post("http://localhost:3001/insertuser", {
-      id: data.id,
-    });
+  const getUserData = async (userName) => {
+    return await axios.post("http://localhost:3001/searchuser", { name: userName });
   };
 
   // 인게임 상태 추출
-  const getUserDataInGame = async (accountId) => {
-    const data = new Object({
-      name: accountId.name,
-      id: accountId.id,
-    });
-    return await axios.post("http://localhost:3001/userstate", {
-      name: data.name,
-      status: data.id,
+  const getUserDataInGame = async(users) => {
+    return await axios.post("http://localhost:3001/userstatus", {
+      name: users.name,
+      accountId: users.accountId,
     });
   };
 
   // 인게임 조회
   const searchInGameState = (e) => {
     e.preventDefault();
-    const result = JSON.parse(localStorage.idList);
-    // console.log(result[0].name);
+    const userList = JSON.parse(sessionStorage.userList);
+    console.log(userList);
+    if (!userList || userList.length === 0) {
+      alert('등록한 유저가 없습니다.')
+      return;
+    }
 
-    getUserDataInGame(result[0]).then((res) => {
+    getUserDataInGame(userList[0]).then((res) => {
       const gameState = {
         name: res.name,
         state: res.status,
@@ -97,45 +70,47 @@ function ApiTest() {
     });
   };
 
-  // 아이디 조회
   const insertUser = (e) => {
     e.preventDefault();
 
-    if (!inputText) {
+    if (!userName) {
       alert("값이 없습니다");
-      return false;
-    } else if (inputText) {
-      // 중복제거입력 불가
-      for (let i = 0; i < idList.length; i++) {
-        if (idList[i].name.toUpperCase() == inputText.toUpperCase()) {
-          onReset();
-          return alert("중복중복");
-          break;
-        }
-      }
-      getUserData(inputText)
-        .then((res) => {
-          if (res.data === null) {
-            setStatus(false);
-            return false;
-          }
-
-          setStatus(true);
-
-          const user = {
-            name: res.data.name,
-            id: res.data.id,
-          };
-          setIdList(idList.concat(user));
-
-          // 새로고침 데이터 유실 방지 로컬 스토리지 사용
-          localStorage.setItem("idList", JSON.stringify(idList.concat(user)));
-        })
-        .catch((err) => {
-          setIdList([...idList]);
-        });
-      onReset();
+      return;
     }
+
+    const replacedUserName = userName.trim().replace(/\s/gi, "");
+    const doesExistUserName = userList.some(
+      (id) => id.name.toUpperCase().replace(/\s/gi, "") === replacedUserName.toUpperCase()
+    );
+    if (doesExistUserName) {
+      alert("중복된 소환사 닉네임이 있습니다.");
+      onReset();
+      return;
+    }
+
+    // setUserName(e.target.value);
+
+    getUserData(replacedUserName)
+      .then((res) => {
+        if (res.data === null) {
+          setStatus(false);
+          return false;
+        }
+
+        setStatus(true);
+
+        const user = {
+          name: res.data.name,
+          accountId: res.data.id,
+        };
+        setuserList(userList.concat(user));
+
+        sessionStorage.setItem("userList", JSON.stringify(userList.concat(user)));
+      })
+      .catch((err) => {
+        setuserList([...userList]);
+      });
+    onReset();
   };
 
   if (load)
@@ -150,27 +125,23 @@ function ApiTest() {
   return (
     <>
       <hr />
-      <button onClick={getUserInfo}>정보 갱신</button>
-      <button onClick={localStorageInit}>로컬스토리지 초기화</button>
+      {/* <button onClick={getUserInfo}>정보 갱신</button> */}
+      <button onClick={sessionStorageInit}>로컬스토리지 초기화</button>
       <button onClick={searchInGameState}>인게임 상태</button>
       <br />
       <form className="insert_form" onSubmit={insertUser}>
         <UserInsertForm
           onInsertUser={insertUser}
-          userValue={inputText}
+          inputValue={userName}
           existValue={status}
           onChangeEvent={onChangeHandle}
         />
       </form>
       <br />
-      <UserList users={idList} />
+      <UserList users={userList} />
       <br />
       <div className="id-list"></div>
-      <InGameStateView userValue={idList} userState={userState} />
-      <br />
-      아이디 : {name}
-      <br />
-      id : {id}
+      <InGameStateView userValue={userList} userState={userState} />
     </>
   );
 }
