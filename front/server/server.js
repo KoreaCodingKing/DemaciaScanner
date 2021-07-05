@@ -57,8 +57,8 @@ app.get("/testlist", async (req, res) => {
 });
 
 //post요청 - 클라이언트에서 보낸 아이디
-app.post("/insertuser", async (req, res) => {
-  const userId = req.body.id;
+app.post("/searchuser", async (req, res) => {
+  const userId = req.body.name;
   const data = await new Promise((resolve, reject) => {
     resolve(getUserData(encodeURI(userId)));
   })
@@ -68,7 +68,7 @@ app.post("/insertuser", async (req, res) => {
         id: result.data.id,
         name: result.data.name,
       });
-      app.get("/insertuser", (req, res) => {
+      app.get("/searchuser", (req, res) => {
         res.json(globalList);
       });
 
@@ -86,9 +86,12 @@ app.post("/insertuser", async (req, res) => {
   return res.json(data);
 });
 
-app.post("/userstate", async (req, res) => {
+app.post("/userstatus", async (req, res) => {
+  console.log(req.body)
   const userName = req.body.name;
   const userAccountId = req.body.status;
+
+
 
   const data = new Promise((resolve, reject) => {
     resolve(getUserInGameData(encodeURI(userAccountId)));
@@ -102,7 +105,7 @@ app.post("/userstate", async (req, res) => {
         name: userName,
         status: "접속중",
       });
-      app.get("/userstate", (req, res) => {
+      app.get("/userstatus", (req, res) => {
         res.json(globalListState);
       });
       return {
