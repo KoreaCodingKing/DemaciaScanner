@@ -48,9 +48,15 @@ function ApiTest() {
 
   // 인게임 상태 추출
   const getUserDataInGame = async (users) => {
-    return await axios.post("http://localhost:3001/userstatus", {
-      name: users.name,
-      accountId: users.accountId,
+    users.map((item) => {
+      // console.log(item);
+      const name = item.name;
+      const accountId = item.accountId;
+
+      return axios.post("http://localhost:3001/userstatus", {
+        name: name,
+        accountId: accountId,
+      });
     });
   };
 
@@ -69,7 +75,7 @@ function ApiTest() {
       return;
     }
 
-    getUserDataInGame(userList[0]).then((res) => {
+    getUserDataInGame(userList).then((res) => {
       const gameState = {
         name: res.name,
         state: res.status,
@@ -140,6 +146,7 @@ function ApiTest() {
         tempList = tempList.concat(data);
       });
       setuserList(tempList);
+      sessionStorage.setItem("userList", JSON.stringify(tempList));
       // console.log(testLists);
     });
   };
