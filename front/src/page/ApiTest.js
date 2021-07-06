@@ -8,13 +8,14 @@ import UserInsertForm from "../components/UserInsertForm";
 import UserList from "../components/UserList";
 import InGameStateView from "./InGameStateView";
 
-
 function ApiTest() {
   const [status, setStatus] = useState(false);
   const [userName, setUserName] = useState("");
   const [userList, setuserList] = useState([]);
   const [load, setLoad] = useState(false);
   const [userState, setUserState] = useState(false);
+
+  let testLists = [];
 
   useEffect(() => {
     const sessionStorageValue = sessionStorage.userList || null;
@@ -38,16 +39,41 @@ function ApiTest() {
     sessionStorage.clear();
   };
 
+  // 테스트 리스트 사용하기
+  const testList = async () => {
+    return await axios.get("http://localhost:3001/testlist");
+  };
+
   // server.js에서 압력받은 id 값 가져오기
   const getUserData = async (userName) => {
-    return await axios.post("http://localhost:3001/searchuser", { name: userName });
+    return await axios.post("http://localhost:3001/searchuser", {
+      name: userName,
+    });
   };
 
   // 인게임 상태 추출
-  const getUserDataInGame = async(users) => {
+  const getUserDataInGame = async (users) => {
     return await axios.post("http://localhost:3001/userstatus", {
       name: users.name,
       accountId: users.accountId,
+    });
+  };
+
+  const getTestList = (e) => {
+    e.preventDefault();
+    testList().then((res) => {
+      res.data.map((item) => {
+        const name = item.summonerName;
+        const id = item.summonerId;
+
+        const data = {
+          name: name,
+          accountId: id,
+        };
+        testLists = testLists.concat(data);
+      });
+      setuserList(testLists);
+      console.log(testLists);
     });
   };
 
@@ -57,7 +83,7 @@ function ApiTest() {
     const userList = JSON.parse(sessionStorage.userList);
     console.log(userList);
     if (!userList || userList.length === 0) {
-      alert('등록한 유저가 없습니다.')
+      alert("등록한 유저가 없습니다.");
       return;
     }
 
@@ -80,7 +106,9 @@ function ApiTest() {
 
     const replacedUserName = userName.trim().replace(/\s/gi, "");
     const doesExistUserName = userList.some(
-      (id) => id.name.toUpperCase().replace(/\s/gi, "") === replacedUserName.toUpperCase()
+      (id) =>
+        id.name.toUpperCase().replace(/\s/gi, "") ===
+        replacedUserName.toUpperCase()
     );
     if (doesExistUserName) {
       alert("중복된 소환사 닉네임이 있습니다.");
@@ -105,7 +133,10 @@ function ApiTest() {
         };
         setuserList(userList.concat(user));
 
-        sessionStorage.setItem("userList", JSON.stringify(userList.concat(user)));
+        sessionStorage.setItem(
+          "userList",
+          JSON.stringify(userList.concat(user))
+        );
       })
       .catch((err) => {
         setuserList([...userList]);
@@ -126,6 +157,7 @@ function ApiTest() {
     <>
       <hr />
       {/* <button onClick={getUserInfo}>정보 갱신</button> */}
+      <button onClick={getTestList}>테스트 리스트 갱신</button>
       <button onClick={sessionStorageInit}>로컬스토리지 초기화</button>
       <button onClick={searchInGameState}>인게임 상태</button>
       <br />
