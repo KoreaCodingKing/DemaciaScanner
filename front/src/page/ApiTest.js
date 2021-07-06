@@ -48,8 +48,7 @@ function ApiTest() {
 
   // 인게임 상태 추출
   const getUserDataInGame = async (users) => {
-    users.map((item) => {
-      // console.log(item);
+    return await users.map((item) => {
       const name = item.name;
       const accountId = item.accountId;
 
@@ -81,6 +80,8 @@ function ApiTest() {
         state: res.status,
       };
       setUserState(gameState);
+    }).catch((err) => {
+      console.log(err)
     });
   };
 
@@ -95,17 +96,13 @@ function ApiTest() {
     }
 
     const doesExistUserName = userList.some(
-      (id) =>
-        id.name.replace(/\s/gi, "").toUpperCase() ===
-        trimmedUserName.replace(/\s/gi, "").toUpperCase()
+      (id) => id.name.replace(/\s/gi, "").toUpperCase() === trimmedUserName.replace(/\s/gi, "").toUpperCase()
     );
     if (doesExistUserName) {
       alert("중복된 소환사 닉네임이 있습니다.");
       onReset();
       return;
     }
-
-    //
 
     setUserName(e.target.value);
 
@@ -150,7 +147,6 @@ function ApiTest() {
       });
       setuserList(tempList);
       sessionStorage.setItem("userList", JSON.stringify(tempList));
-      // console.log(testLists);
     });
   };
 
