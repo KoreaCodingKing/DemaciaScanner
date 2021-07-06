@@ -33,7 +33,7 @@ async function getUserInGameData(accountId) {
 // 테스트용 임시 데이터
 async function getTempIdList() {
   return await axios.get(
-    `https://kr.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/CHALLENGER/I?page=1&api_key=${riotApiKey}`
+    `https://kr.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/GRANDMASTER/I?page=1&api_key=${riotApiKey}`
   );
 }
 
@@ -41,19 +41,21 @@ async function getTempIdList() {
 app.get("/testlist", async (req, res) => {
   const data = await new Promise((resolve, reject) => {
     resolve(getTempIdList());
+  }).then((res) => {
+    console.log(res.data);
+    return res.data;
   });
-  data.data.map((item) => {
-    const name = item.summonerName;
-    const id = item.summonerId;
+  // data.data.map((item) => {
+  //   const name = item.summonerName;
+  //   const id = item.summonerId;
 
-    testList = testList.concat({
-      name: name,
-      id: id,
-    });
-  });
+  //   testList = testList.concat({
+  //     name: name,
+  //     id: id,
+  //   });
+  // });
 
-  res.json(testList);
-  console.log(data.data.length);
+  return res.json(data);
 });
 
 //post요청 - 클라이언트에서 보낸 아이디
