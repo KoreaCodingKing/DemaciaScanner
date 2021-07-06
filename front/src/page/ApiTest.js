@@ -8,6 +8,9 @@ import UserInsertForm from "../components/UserInsertForm";
 import UserList from "../components/UserList";
 import InGameStateView from "./InGameStateView";
 
+let tempList = [];
+
+
 function ApiTest() {
   const [status, setStatus] = useState(false);
   const [userName, setUserName] = useState("");
@@ -53,28 +56,23 @@ function ApiTest() {
 
   // 인게임 상태 추출
   const getUserDataInGame = async (users) => {
-    return await axios.post("http://localhost:3001/userstatus", {
-      name: users.name,
-      accountId: users.accountId,
+
+    return await users.map((item) => {
+      // console.log(item);
+      const name = item.name;
+      const accountId = item.accountId;
+
+      return axios.post("http://localhost:3001/userstatus", {
+        name: name,
+        accountId: accountId,
+      });
     });
   };
 
-  const getTestList = (e) => {
-    e.preventDefault();
-    testList().then((res) => {
-      res.data.map((item) => {
-        const name = item.summonerName;
-        const id = item.summonerId;
+  // 테스트 리스트 사용하기
+  const testList = async () => {
+    return await axios.get("http://localhost:3001/testlist");
 
-        const data = {
-          name: name,
-          accountId: id,
-        };
-        testLists = testLists.concat(data);
-      });
-      setuserList(testLists);
-      console.log(testLists);
-    });
   };
 
   // 인게임 조회
@@ -87,7 +85,7 @@ function ApiTest() {
       return;
     }
 
-    getUserDataInGame(userList[0]).then((res) => {
+    getUserDataInGame(userList).then((res) => {
       const gameState = {
         name: res.name,
         state: res.status,
@@ -99,16 +97,19 @@ function ApiTest() {
   const insertUser = (e) => {
     e.preventDefault();
 
-    if (!userName) {
+    const trimmedUserName = userName.trim();
+
+    if (!trimmedUserName) {
       alert("값이 없습니다");
       return;
     }
 
-    const replacedUserName = userName.trim().replace(/\s/gi, "");
     const doesExistUserName = userList.some(
       (id) =>
-        id.name.toUpperCase().replace(/\s/gi, "") ===
-        replacedUserName.toUpperCase()
+new_master_blanch_20210706
+        id.name.replace(/\s/gi, "").toUpperCase() ===
+        trimmedUserName.replace(/\s/gi, "").toUpperCase()
+
     );
     if (doesExistUserName) {
       alert("중복된 소환사 닉네임이 있습니다.");
@@ -116,9 +117,11 @@ function ApiTest() {
       return;
     }
 
-    // setUserName(e.target.value);
+    //
 
-    getUserData(replacedUserName)
+    setUserName(e.target.value);
+
+    getUserData(trimmedUserName)
       .then((res) => {
         if (res.data === null) {
           setStatus(false);
@@ -142,6 +145,25 @@ function ApiTest() {
         setuserList([...userList]);
       });
     onReset();
+  };
+
+  const getTestList = (e) => {
+    e.preventDefault();
+    testList().then((res) => {
+      res.data.map((item) => {
+        const name = item.summonerName;
+        const id = item.summonerId;
+
+        const data = {
+          name: name,
+          accountId: id,
+        };
+        tempList = tempList.concat(data);
+      });
+      setuserList(tempList);
+      sessionStorage.setItem("userList", JSON.stringify(tempList));
+      // console.log(testLists);
+    });
   };
 
   if (load)

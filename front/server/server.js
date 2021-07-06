@@ -12,7 +12,10 @@ const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
 let globalList = [];
 let globalListState = [];
 
+
+let count = 0;
 let testList = [];
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -37,6 +40,7 @@ async function getTempIdList() {
   );
 }
 
+
 // 테스트용 첼린저 데이터
 app.get("/testlist", async (req, res) => {
   const data = await new Promise((resolve, reject) => {
@@ -45,16 +49,6 @@ app.get("/testlist", async (req, res) => {
     console.log(res.data);
     return res.data;
   });
-  // data.data.map((item) => {
-  //   const name = item.summonerName;
-  //   const id = item.summonerId;
-
-  //   testList = testList.concat({
-  //     name: name,
-  //     id: id,
-  //   });
-  // });
-
   return res.json(data);
 });
 
@@ -89,7 +83,7 @@ app.post("/searchuser", async (req, res) => {
 });
 
 app.post("/userstatus", async (req, res) => {
-  console.log(req.body);
+
   const userName = req.body.name;
   const userAccountId = req.body.status;
 
@@ -108,6 +102,7 @@ app.post("/userstatus", async (req, res) => {
       app.get("/userstatus", (req, res) => {
         res.json(globalListState);
       });
+      console.log((count = count + 1));
       return {
         name: userName,
         status: "접속중",
@@ -116,11 +111,12 @@ app.post("/userstatus", async (req, res) => {
     .catch((err) => {
       if (err.response.status === 404) {
         // data.status = "OFF_LINE";
+        console.log((count = count + 1));
         globalListState = globalListState.concat({
           name: userName,
           status: false,
         });
-        app.get("/userstate", (req, res) => {
+        app.get("/userstatus", (req, res) => {
           res.json(globalListState);
         });
         return {
