@@ -12,10 +12,7 @@ const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
 let globalList = [];
 let globalListState = [];
 
-
 let count = 0;
-let testList = [];
-
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -39,8 +36,6 @@ async function getTempIdList() {
     `https://kr.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/GRANDMASTER/I?page=1&api_key=${riotApiKey}`
   );
 }
-
-
 // 테스트용 첼린저 데이터
 app.get("/testlist", async (req, res) => {
   const data = await new Promise((resolve, reject) => {
@@ -83,9 +78,11 @@ app.post("/searchuser", async (req, res) => {
 });
 
 app.post("/userstatus", async (req, res) => {
-
+  // console.log(req.body);
   const userName = req.body.name;
-  const userAccountId = req.body.status;
+  const userAccountId = req.body.accountId;
+  // idList(객체 배열 ex) 500개 )
+  // console.log(userName, userAccountId);
 
   const data = new Promise((resolve, reject) => {
     resolve(getUserInGameData(encodeURI(userAccountId)));
@@ -112,13 +109,13 @@ app.post("/userstatus", async (req, res) => {
       if (err.response.status === 404) {
         // data.status = "OFF_LINE";
         console.log((count = count + 1));
-        globalListState = globalListState.concat({
-          name: userName,
-          status: false,
-        });
-        app.get("/userstatus", (req, res) => {
-          res.json(globalListState);
-        });
+        // globalListState = globalListState.concat({
+        //   name: userName,
+        //   status: false,
+        // });
+        // app.get("/userstatus", (req, res) => {
+        //   res.json(globalListState);
+        // });
         return {
           name: userName,
           status: "오프라인",
