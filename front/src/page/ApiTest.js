@@ -10,15 +10,12 @@ import InGameStateView from "./InGameStateView";
 
 let tempList = [];
 
-
 function ApiTest() {
   const [status, setStatus] = useState(false);
   const [userName, setUserName] = useState("");
   const [userList, setuserList] = useState([]);
   const [load, setLoad] = useState(false);
   const [userState, setUserState] = useState(false);
-
-  let testLists = [];
 
   useEffect(() => {
     const sessionStorageValue = sessionStorage.userList || null;
@@ -42,11 +39,6 @@ function ApiTest() {
     sessionStorage.clear();
   };
 
-  // 테스트 리스트 사용하기
-  const testList = async () => {
-    return await axios.get("http://localhost:3001/testlist");
-  };
-
   // server.js에서 압력받은 id 값 가져오기
   const getUserData = async (userName) => {
     return await axios.post("http://localhost:3001/searchuser", {
@@ -56,7 +48,6 @@ function ApiTest() {
 
   // 인게임 상태 추출
   const getUserDataInGame = async (users) => {
-
     return await users.map((item) => {
       // console.log(item);
       const name = item.name;
@@ -72,7 +63,6 @@ function ApiTest() {
   // 테스트 리스트 사용하기
   const testList = async () => {
     return await axios.get("http://localhost:3001/testlist");
-
   };
 
   // 인게임 조회
@@ -106,18 +96,14 @@ function ApiTest() {
 
     const doesExistUserName = userList.some(
       (id) =>
-new_master_blanch_20210706
         id.name.replace(/\s/gi, "").toUpperCase() ===
         trimmedUserName.replace(/\s/gi, "").toUpperCase()
-
     );
     if (doesExistUserName) {
       alert("중복된 소환사 닉네임이 있습니다.");
       onReset();
       return;
     }
-
-    //
 
     setUserName(e.target.value);
 
