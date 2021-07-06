@@ -87,16 +87,17 @@ function ApiTest() {
   const insertUser = (e) => {
     e.preventDefault();
 
-    if (!userName) {
+    const trimmedUserName = userName.trim();
+
+    if (!trimmedUserName) {
       alert("값이 없습니다");
       return;
     }
 
-    const replacedUserName = userName.trim().replace(/\s/gi, "");
     const doesExistUserName = userList.some(
       (id) =>
-        id.name.toUpperCase().replace(/\s/gi, "") ===
-        replacedUserName.toUpperCase()
+        id.name.replace(/\s/gi, "").toUpperCase() ===
+        trimmedUserName.replace(/\s/gi, "").toUpperCase()
     );
     if (doesExistUserName) {
       alert("중복된 소환사 닉네임이 있습니다.");
@@ -104,9 +105,11 @@ function ApiTest() {
       return;
     }
 
-    // setUserName(e.target.value);
+    //
 
-    getUserData(replacedUserName)
+    setUserName(e.target.value);
+
+    getUserData(trimmedUserName)
       .then((res) => {
         if (res.data === null) {
           setStatus(false);
