@@ -48,7 +48,7 @@ function ApiTest() {
 
   // 인게임 상태 추출
   const getUserDataInGame = async (users) => {
-    users.map((item) => {
+    return await users.map((item) => {
       // console.log(item);
       const name = item.name;
       const accountId = item.accountId;
