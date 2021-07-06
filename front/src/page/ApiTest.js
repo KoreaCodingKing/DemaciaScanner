@@ -74,15 +74,17 @@ function ApiTest() {
       return;
     }
 
-    getUserDataInGame(userList).then((res) => {
-      const gameState = {
-        name: res.name,
-        state: res.status,
-      };
-      setUserState(gameState);
-    }).catch((err) => {
-      console.log(err)
-    });
+    getUserDataInGame(userList)
+      .then((res) => {
+        const gameState = {
+          name: res.name,
+          state: res.status,
+        };
+        setUserState(gameState);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const insertUser = (e) => {
@@ -96,7 +98,9 @@ function ApiTest() {
     }
 
     const doesExistUserName = userList.some(
-      (id) => id.name.replace(/\s/gi, "").toUpperCase() === trimmedUserName.replace(/\s/gi, "").toUpperCase()
+      (id) =>
+        id.name.replace(/\s/gi, "").toUpperCase() ===
+        trimmedUserName.replace(/\s/gi, "").toUpperCase()
     );
     if (doesExistUserName) {
       alert("중복된 소환사 닉네임이 있습니다.");
