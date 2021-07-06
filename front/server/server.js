@@ -109,7 +109,7 @@ app.post("/userstatus", async (req, res) => {
           name: userName,
           status: false,
         });
-        app.get("/userstate", (req, res) => {
+        app.get("/userstatus", (req, res) => {
           res.json(globalListState);
         });
         return {
