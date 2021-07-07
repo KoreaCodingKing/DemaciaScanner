@@ -2,16 +2,15 @@ import React from "react";
 import UserListInGame from "../components/UserListInGame";
 
 const InGameStateView = (props) => {
+  console.log(props.userState);
   let stateList = props.userValue;
   let userState = props.userState;
-  // console.log("userState =>", userState);
-  // console.log("idList=>", stateList.length);
 
   return (
     <>
       <h1>InGameStateView</h1>
       <div className="view__container">
-        <UserListInGame users={stateList} />
+        <UserListInGame users={stateList} gameState={userState} />
       </div>
     </>
   );

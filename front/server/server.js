@@ -41,7 +41,6 @@ app.get("/testlist", async (req, res) => {
   const data = await new Promise((resolve, reject) => {
     resolve(getTempIdList());
   }).then((res) => {
-    console.log(res.data);
     return res.data;
   });
   return res.json(data);
@@ -54,7 +53,7 @@ app.post("/searchuser", async (req, res) => {
     resolve(getUserData(encodeURI(userId)));
   })
     .then((result) => {
-      console.log(`id : ${result.data.id}`, `name : ${result.data.name}`);
+      // console.log(`id : ${result.data.id}`, `name : ${result.data.name}`);
       globalList = globalList.concat({
         id: result.data.id,
         name: result.data.name,
@@ -78,20 +77,14 @@ app.post("/searchuser", async (req, res) => {
 });
 
 app.post("/userstatus", async (req, res) => {
-  // console.log(req.body);
   const userName = req.body.name;
   const userAccountId = req.body.accountId;
-  // idList(객체 배열 ex) 500개 )
-  // console.log(userName, userAccountId);
 
-  const data = new Promise((resolve, reject) => {
+  const data = await new Promise((resolve, reject) => {
     resolve(getUserInGameData(encodeURI(userAccountId)));
   })
     .then((result) => {
-      console.log(
-        ` Name : ${userName} gameType : ${result.data.gameType}`,
-        `gameMode : ${result.data.gameMode}`
-      );
+      // console.log(result.data);
       globalListState = globalListState.concat({
         name: userName,
         status: "접속중",
@@ -99,27 +92,31 @@ app.post("/userstatus", async (req, res) => {
       app.get("/userstatus", (req, res) => {
         res.json(globalListState);
       });
-      console.log((count = count + 1));
+      // console.log((count = count + 1));
       return {
         name: userName,
-        status: "접속중",
+        state: "접속중",
       };
     })
     .catch((err) => {
+      // if (err.response.status === 404) {
+      // data.status = "OFF_LINE";
+      // console.log((count = count + 1));
+      // globalListState = globalListState.concat({
+      //   name: userName,
+      //   status: false,
+      // });
+      // app.get("/userstatus", (req, res) => {
+      //   res.json(globalListState);
+      // });
+      // return {
+      //   name: userName,
+      //   status: false,
+      // };
+      // }
+      console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
       if (err.response.status === 404) {
-        // data.status = "OFF_LINE";
-        console.log((count = count + 1));
-        // globalListState = globalListState.concat({
-        //   name: userName,
-        //   status: false,
-        // });
-        // app.get("/userstatus", (req, res) => {
-        //   res.json(globalListState);
-        // });
-        return {
-          name: userName,
-          status: "오프라인",
-        };
+        return null;
       }
     });
   return res.json(data);

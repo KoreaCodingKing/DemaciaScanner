@@ -48,7 +48,7 @@ function ApiTest() {
 
   // 인게임 상태 추출
   const getUserDataInGame = async (users) => {
-    return await users.map((item) => {
+    return users.map((item) => {
       const name = item.name;
       const accountId = item.accountId;
 
@@ -68,25 +68,18 @@ function ApiTest() {
   const searchInGameState = (e) => {
     e.preventDefault();
     const userList = JSON.parse(sessionStorage.userList);
-    console.log(userList);
+    // console.log(userList);
     if (!userList || userList.length === 0) {
       alert("등록한 유저가 없습니다.");
       return;
     }
 
-    getUserDataInGame(userList)
-      .then((res) => {
-        const gameState = {
-          name: res.name,
-          state: res.status,
-        };
-        setUserState(gameState);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    getUserDataInGame(userList).then((res) => {
+      console.log(res[0]);
+    });
   };
 
+  // 유저 검색
   const insertUser = (e) => {
     e.preventDefault();
 
@@ -153,15 +146,6 @@ function ApiTest() {
       sessionStorage.setItem("userList", JSON.stringify(tempList));
     });
   };
-
-  if (load)
-    return (
-      <>
-        {" "}
-        로딩중...
-        <Loading />
-      </>
-    );
 
   return (
     <>
