@@ -53,7 +53,6 @@ app.post("/searchuser", async (req, res) => {
     resolve(getUserData(encodeURI(userId)));
   })
     .then((result) => {
-      // console.log(`id : ${result.data.id}`, `name : ${result.data.name}`);
       globalList = globalList.concat({
         id: result.data.id,
         name: result.data.name,
@@ -81,44 +80,44 @@ app.post("/userstatus", async (req, res) => {
   const userAccountId = req.body.accountId;
 
   const data = await new Promise((resolve, reject) => {
-    resolve(getUserInGameData(encodeURI(userAccountId)));
+    resolve(getUserInGameData(userAccountId));
   })
     .then((result) => {
-      // console.log(result.data);
       globalListState = globalListState.concat({
         name: userName,
-        status: "접속중",
+        status: {
+          gameMode: result.data.gameMode,
+          gameType: result.data.gameType,
+        },
       });
       app.get("/userstatus", (req, res) => {
         res.json(globalListState);
       });
-      // console.log((count = count + 1));
       return {
         name: userName,
-        state: "접속중",
+        status: true,
       };
     })
     .catch((err) => {
-      // if (err.response.status === 404) {
-      // data.status = "OFF_LINE";
-      // console.log((count = count + 1));
-      // globalListState = globalListState.concat({
-      //   name: userName,
-      //   status: false,
-      // });
-      // app.get("/userstatus", (req, res) => {
-      //   res.json(globalListState);
-      // });
-      // return {
-      //   name: userName,
-      //   status: false,
-      // };
-      // }
-      console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
       if (err.response.status === 404) {
-        return null;
+        globalListState = globalListState.concat({
+          name: userName,
+          status: false,
+        });
+        app.get("/userstatus", (req, res) => {
+          res.json(globalListState);
+        });
+        return {
+          name: userName,
+          status: false,
+        };
       }
+      // console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
+      // if (err.response.status === 404) {
+      //   return null;
+      // }
     });
+  console.log(typeof data);
   return res.json(data);
 });
 

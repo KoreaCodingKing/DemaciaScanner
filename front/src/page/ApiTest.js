@@ -48,7 +48,7 @@ function ApiTest() {
 
   // 인게임 상태 추출
   const getUserDataInGame = async (users) => {
-    return users.map((item) => {
+    return await users.map((item) => {
       const name = item.name;
       const accountId = item.accountId;
 
@@ -68,15 +68,22 @@ function ApiTest() {
   const searchInGameState = (e) => {
     e.preventDefault();
     const userList = JSON.parse(sessionStorage.userList);
-    // console.log(userList);
     if (!userList || userList.length === 0) {
       alert("등록한 유저가 없습니다.");
       return;
     }
 
-    getUserDataInGame(userList).then((res) => {
-      console.log(res[0]);
-    });
+    let temptemp = [];
+
+    getUserDataInGame(userList)
+      // then으로 두번 풀어줘야 사용가능함
+      .then((res) => res[0])
+      // .then((res1) => console.log(res1.data));
+      .then((res1) => {
+        console.log(res1.data.status);
+        setUserState(true);
+      })
+      .catch((e) => console.log(e));
   };
 
   // 유저 검색
@@ -167,7 +174,7 @@ function ApiTest() {
       <UserList users={userList} />
       <br />
       <div className="id-list"></div>
-      <InGameStateView userValue={userList} userState={userState} />
+      <InGameStateView userValue={userList} state={userState} />
     </>
   );
 }

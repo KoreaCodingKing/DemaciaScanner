@@ -1,9 +1,9 @@
 import React from "react";
 
-function User({ user, gameState }) {
+function User({ user, state }) {
   return (
     <div>
-      <span>({user.name})</span> - <span>{gameState}</span>
+      <span>({user.name})</span> - <span>{state ? "게임중" : "대기중"}</span>
     </div>
   );
 }
