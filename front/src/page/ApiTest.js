@@ -15,7 +15,7 @@ function ApiTest() {
   const [userName, setUserName] = useState("");
   const [userList, setuserList] = useState([]);
   const [load, setLoad] = useState(false);
-  const [userState, setUserState] = useState(false);
+  const [userState, setUserState] = useState([]);
 
   useEffect(() => {
     const sessionStorageValue = sessionStorage.userList || null;
@@ -64,6 +64,8 @@ function ApiTest() {
     return await axios.get("http://localhost:3001/testlist");
   };
 
+  let statusList = [];
+
   // 인게임 조회
   const searchInGameState = (e) => {
     e.preventDefault();
@@ -73,17 +75,40 @@ function ApiTest() {
       return;
     }
 
-    let temptemp = [];
+    const inGameData = getUserDataInGame(userList);
 
-    getUserDataInGame(userList)
-      // then으로 두번 풀어줘야 사용가능함
-      .then((res) => res[0])
-      // .then((res1) => console.log(res1.data));
-      .then((res1) => {
-        console.log(res1.data.status);
-        setUserState(true);
+    inGameData
+      .then((res) => {
+        res.map((item) => {
+          const response = new Promise((resolve, reject) => {
+            resolve(item);
+          });
+          response.then((resData) => {
+            const uState = resData.data.status;
+            const uName = resData.data.name;
+
+            const data = {
+              name: uName,
+              state: uState,
+            };
+
+            if (resData.data.status === true) {
+              // 게임중
+              setUserState(userState.concat(data));
+              statusList = statusList.concat(resData.data.status);
+              console.log(`${resData.data.name}이(가) 게임중입니다.`);
+            } else {
+              // 안게임중
+              setUserState(userState.concat(data));
+              statusList = statusList.concat(resData.data.status);
+              console.log(`${resData.data.name}이(가) 대기 상태 입니다.`);
+            }
+          });
+          // 값을 모두 들고있기 때문에, catch필요 없을 듯하다
+        });
+        // console.log(statusList);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => setUserState(false));
   };
 
   // 유저 검색

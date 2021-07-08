@@ -117,7 +117,6 @@ app.post("/userstatus", async (req, res) => {
       //   return null;
       // }
     });
-  console.log(typeof data);
   return res.json(data);
 });
 

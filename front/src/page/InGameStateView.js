@@ -4,7 +4,7 @@ import UserListInGame from "../components/UserListInGame";
 const InGameStateView = (props) => {
   let stateList = props.userValue;
   let userState = props.state;
-  console.log(props.state);
+  // console.log(userState);
 
   return (
     <>
