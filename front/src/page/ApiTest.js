@@ -58,7 +58,7 @@ function ApiTest() {
     //     accountId: accountId,
     //   });
     // });
-    return axios.post("http://localhost:3001/userstatus", {
+    return await axios.post("http://localhost:3001/userstatus", {
       users,
       // name: name,
       // accountId: accountId,
@@ -79,7 +79,14 @@ function ApiTest() {
       return;
     }
     const inGameData = getUserDataInGame(userList);
-    // inGameData.then((res) => console.log(res));
+    new Promise((resolve) => {
+      resolve(inGameData);
+    }).then((res) => {
+      console.log(res.data);
+      setUserState(res.data);
+    });
+
+    // 기존 코드(1)
     // inGameData.then((res) => {
     //   res.map((item) => {
     //     const response = new Promise((resolve, reject) => {

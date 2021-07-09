@@ -1,18 +1,23 @@
 import React from "react";
+import "../assets/scss/ingamestate.scss";
 
 function User({ user, state }) {
   return (
     <div>
-      <span>({user.name})</span> - <span>{state ? "게임중" : "대기중"}</span>
+      <span>({user})</span> -
+      <span className={state ? "state--true" : "state--false"}>
+        {state ? "게임중" : "대기중"}
+      </span>
     </div>
   );
 }
 
-function UserListInGame({ gameState }) {
-  // console.log(gameState);
+function UserListInGame({ users }) {
+  // console.log();
   return (
     <div>
-      {gameState.map((user, index) => (
+      {users.map((user, index) => (
+        // console.log(user)
         <User user={user.name} key={index} state={user.state} />
       ))}
     </div>

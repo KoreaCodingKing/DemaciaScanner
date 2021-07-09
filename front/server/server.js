@@ -12,6 +12,7 @@ const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
 let globalList = [];
 let globalListState = [];
 
+let asdList = [];
 let count = 0;
 
 app.use(cors());
@@ -26,7 +27,7 @@ async function getUserData(userId) {
 // 인게임 정보 axios 사용
 async function getUserInGameData(data) {
   const userId = data.accountId;
-  console.log(userId);
+  // console.log(data.name);
   return await axios.get(
     `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${userId}?api_key=${riotApiKey}`
   );
@@ -78,9 +79,6 @@ app.post("/searchuser", async (req, res) => {
 });
 
 app.post("/userstatus", async (req, res) => {
-  // const userName = req.body.name;
-  // const userAccountId = req.body.accountId;
-  // console.log(req.body.users);
   const userList = req.body.users;
 
   const listing = (userList) => {
@@ -90,17 +88,34 @@ app.post("/userstatus", async (req, res) => {
           new Promise((resolve) => {
             resolve(getUserInGameData(item));
           })
-            .then((res) => console.log(res.data.gameType))
+            .then((res) => {
+              console.log(`${item.name} 게임중임`);
+              asdList = asdList.concat({
+                name: item.name,
+                state: true,
+              });
+            })
             .catch((err) => {
-              console.log("니가 찾는 놈 안들어왔어 ㅡㅡ");
+              console.log(`니가 찾는 ${item.name} 안들어왔어 ㅡㅡ`);
+              asdList = asdList.concat({
+                name: item.name,
+                state: false,
+              });
+            })
+            .finally(() => {
+              console.log(index);
+              if (userList.length === index + 1) {
+                return res.json(asdList);
+              }
             });
-        }, 1000 * x);
+        }, 125 * x);
       })(index);
     });
   };
 
   listing(userList);
 
+  // 기존코드(1)
   // const data = await new Promise((resolve, reject) => {
   // resolve(getUserInGameData(userAccountId));
   // })
