@@ -8,11 +8,12 @@ function User({ user, state }) {
   );
 }
 
-function UserListInGame({ users, gameState }) {
+function UserListInGame({ gameState }) {
+  // console.log(gameState);
   return (
     <div>
-      {users.map((user, index) => (
-        <User user={user} key={index} state={gameState} />
+      {gameState.map((user, index) => (
+        <User user={user.name} key={index} state={user.state} />
       ))}
     </div>
   );

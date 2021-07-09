@@ -24,9 +24,11 @@ async function getUserData(userId) {
 }
 
 // 인게임 정보 axios 사용
-async function getUserInGameData(accountId) {
+async function getUserInGameData(data) {
+  const userId = data.accountId;
+  console.log(userId);
   return await axios.get(
-    `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${accountId}?api_key=${riotApiKey}`
+    `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${userId}?api_key=${riotApiKey}`
   );
 }
 
@@ -76,48 +78,68 @@ app.post("/searchuser", async (req, res) => {
 });
 
 app.post("/userstatus", async (req, res) => {
-  const userName = req.body.name;
-  const userAccountId = req.body.accountId;
+  // const userName = req.body.name;
+  // const userAccountId = req.body.accountId;
+  // console.log(req.body.users);
+  const userList = req.body.users;
 
-  const data = await new Promise((resolve, reject) => {
-    resolve(getUserInGameData(userAccountId));
-  })
-    .then((result) => {
-      globalListState = globalListState.concat({
-        name: userName,
-        status: {
-          gameMode: result.data.gameMode,
-          gameType: result.data.gameType,
-        },
-      });
-      app.get("/userstatus", (req, res) => {
-        res.json(globalListState);
-      });
-      return {
-        name: userName,
-        status: true,
-      };
-    })
-    .catch((err) => {
-      if (err.response.status === 404) {
-        globalListState = globalListState.concat({
-          name: userName,
-          status: false,
-        });
-        app.get("/userstatus", (req, res) => {
-          res.json(globalListState);
-        });
-        return {
-          name: userName,
-          status: false,
-        };
-      }
-      // console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
-      // if (err.response.status === 404) {
-      //   return null;
-      // }
+  const listing = (userList) => {
+    userList.map((item, index) => {
+      ((x) => {
+        setTimeout(() => {
+          new Promise((resolve) => {
+            resolve(getUserInGameData(item));
+          })
+            .then((res) => console.log(res.data.gameType))
+            .catch((err) => {
+              console.log("니가 찾는 놈 안들어왔어 ㅡㅡ");
+            });
+        }, 1000 * x);
+      })(index);
     });
-  return res.json(data);
+  };
+
+  listing(userList);
+
+  // const data = await new Promise((resolve, reject) => {
+  // resolve(getUserInGameData(userAccountId));
+  // })
+  // .then((result) => {
+  //   globalListState = globalListState.concat({
+  //     name: userName,
+  //     status: {
+  //       gameMode: result.data.gameMode,
+  //       gameType: result.data.gameType,
+  //     },
+  //   });
+  //   app.get("/userstatus", (req, res) => {
+  //     res.json(globalListState);
+  //   });
+  //   return {
+  //     name: userName,
+  //     status: true,
+  //   };
+  // })
+  // .catch((err) => {
+  //   if (err.response.status === 404) {
+  //     globalListState = globalListState.concat({
+  //       name: userName,
+  //       status: false,
+  //     });
+  //     app.get("/userstatus", (req, res) => {
+  //       res.json(globalListState);
+  //     });
+  //     return {
+  //       name: userName,
+  //       status: false,
+  //     };
+  //   }
+  //   // console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
+  //   // if (err.response.status === 404) {
+  //   //   return null;
+  //   // }
+  // });
+  // return res.json(data);
 });
 
 app.listen(port, () => {
