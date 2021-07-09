@@ -9,13 +9,14 @@ import UserList from "../components/UserList";
 import InGameStateView from "./InGameStateView";
 
 let tempList = [];
+let statusList = [];
 
 function ApiTest() {
   const [status, setStatus] = useState(false);
   const [userName, setUserName] = useState("");
   const [userList, setuserList] = useState([]);
   const [load, setLoad] = useState(false);
-  const [userState, setUserState] = useState(false);
+  const [userState, setUserState] = useState([]);
 
   useEffect(() => {
     const sessionStorageValue = sessionStorage.userList || null;
@@ -48,14 +49,19 @@ function ApiTest() {
 
   // 인게임 상태 추출
   const getUserDataInGame = async (users) => {
-    return await users.map((item) => {
-      const name = item.name;
-      const accountId = item.accountId;
+    // return await users.map((item) => {
+    //   const name = item.name;
+    //   const accountId = item.accountId;
 
-      return axios.post("http://localhost:3001/userstatus", {
-        name: name,
-        accountId: accountId,
-      });
+    //   return axios.post("http://localhost:3001/userstatus", {
+    //     name: name,
+    //     accountId: accountId,
+    //   });
+    // });
+    return await axios.post("http://localhost:3001/userstatus", {
+      users,
+      // name: name,
+      // accountId: accountId,
     });
   };
 
@@ -67,26 +73,47 @@ function ApiTest() {
   // 인게임 조회
   const searchInGameState = (e) => {
     e.preventDefault();
-    const userList = JSON.parse(sessionStorage.userList);
-    console.log(userList);
+    // const userList = JSON.parse(sessionStorage.userList);
     if (!userList || userList.length === 0) {
       alert("등록한 유저가 없습니다.");
       return;
     }
+    const inGameData = getUserDataInGame(userList);
+    new Promise((resolve) => {
+      resolve(inGameData);
+    }).then((res) => {
+      console.log(res.data);
+      setUserState(res.data);
+    });
 
-    getUserDataInGame(userList)
-      .then((res) => {
-        const gameState = {
-          name: res.name,
-          state: res.status,
-        };
-        setUserState(gameState);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // 기존 코드(1)
+    // inGameData.then((res) => {
+    //   res.map((item) => {
+    //     const response = new Promise((resolve, reject) => {
+    //       resolve(item);
+    //     });
+    //     response.then((resData) => {
+    //       const uState = resData.data.status;
+    //       const uName = resData.data.name;
+
+    //       const data = {
+    //         name: uName,
+    //         state: uState,
+    //       };
+
+    //       // if (resData.data.status === true) {
+    //       // 게임중
+    //       statusList = statusList.concat(data);
+    //     });
+    //     // 값을 모두 들고있기 때문에, catch필요 없을 듯하다
+    //   });
+    //   // console.log(statusList);
+    //   return setUserState(userState.concat(statusList));
+    //   // console.log(statusList);
+    // });
   };
 
+  // 유저 검색
   const insertUser = (e) => {
     e.preventDefault();
 
@@ -154,15 +181,6 @@ function ApiTest() {
     });
   };
 
-  if (load)
-    return (
-      <>
-        {" "}
-        로딩중...
-        <Loading />
-      </>
-    );
-
   return (
     <>
       <hr />
@@ -183,7 +201,7 @@ function ApiTest() {
       <UserList users={userList} />
       <br />
       <div className="id-list"></div>
-      <InGameStateView userValue={userList} userState={userState} />
+      <InGameStateView state={userState} />
     </>
   );
 }
