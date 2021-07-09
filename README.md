@@ -120,3 +120,34 @@ UX)
 input에 아이디를 입력, 엔터치면 다음 input활성화 반복
 
 ````
+
+
+
+# 에러 해결 방법
+````20210710
+리스트의 형태로 api서버에 보낼때.
+
+1. 클라이언트에서 하나씩 보내지 말고, 리스트 형태로 서버에 넘기고 서버에서 분기처리 해야함(비중이 큰 작업은 서버에서).
+2. map.(index=> setTimeOut(()=> console.log(index), 1000)) 해당 map함수는 1초마다 setTimeOut이 실행되겠다고 생각하지만,
+해당 결과는 {1,1,1,1....} 비동기 처리 안에서 map 함수의 속도보다 index의 값이 변경되는 속도가 느리기 때문임(정확히는, 클로저 개념이 필요 -->
+참고)https://webisfree.com/2015-07-07/[%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8]-%ED%81%B4%EB%A1%9C%EC%A0%80%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%98%EC%97%AC-settimeout%EC%9D%84-%EC%8B%A4%ED%96%89%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95)
+3. map + setTimeout을 이용해 클라이언트로 부터 받은 리스트값을 axios를 통해 api와 통신함 거기서 받은 값을 Promise를 사용해 아래와 같이 값을 얻는다.
+.then(res=>console.log(res)
+.catch(err=>console.log(err)
+
+(!)여기서 기존과 같이 then()과 catch() 각각에 'return {name : name, status : status}' 를 사용하여 클라이언트로 넘기면 아래와 같은 이슈가 생김
+'cannot set headers after they are sent to the client.'
+
+위 이슈는 서버에서 클라이언트로 값(resolve or reject)을 보냈으나 다시한번 값을 보내려하여 발생함(response 중복)
+
+
+하여 나의 경우 아래 방법을 사용함.
+.then(res=>console.log(res)
+.catch(err=>console.log(err)
+.finally(()=>console.log('끝'))
+
+
+then()과 catch()에서 받은 값을 임시 리스트에 저장하고 그 값을 finally때 return res.json(tempList)로 보내는 형태다.
+
+여기서 finally()에 if문을 사용하여 리스트.map((item, index))의 총 item 갯수와 index의 값이 같아지면 위 임시리스트(tempList)를 최종적으로 반환 하는 형태를 사용했다.
+````
