@@ -49,19 +49,8 @@ function ApiTest() {
 
   // 인게임 상태 추출
   const getUserDataInGame = async (users) => {
-    // return await users.map((item) => {
-    //   const name = item.name;
-    //   const accountId = item.accountId;
-
-    //   return axios.post("http://localhost:3001/userstatus", {
-    //     name: name,
-    //     accountId: accountId,
-    //   });
-    // });
     return await axios.post("http://localhost:3001/userstatus", {
       users,
-      // name: name,
-      // accountId: accountId,
     });
   };
 

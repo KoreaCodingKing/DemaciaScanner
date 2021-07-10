@@ -13,7 +13,10 @@ let globalList = [];
 let globalListState = [];
 
 let asdList = [];
-let count = 0;
+
+const listReset = (resetedList) => {
+  resetedList.splice(0, resetedList.length);
+};
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -36,7 +39,7 @@ async function getUserInGameData(data) {
 // 테스트용 임시 데이터
 async function getTempIdList() {
   return await axios.get(
-    `https://kr.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/GRANDMASTER/I?page=1&api_key=${riotApiKey}`
+    `https://kr.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/SILVER/I?page=1&api_key=${riotApiKey}`
   );
 }
 // 테스트용 첼린저 데이터
@@ -89,14 +92,14 @@ app.post("/userstatus", async (req, res) => {
             resolve(getUserInGameData(item));
           })
             .then((res) => {
-              console.log(`${item.name} 게임중임`);
+              console.log(`${item.name}--- 게임중 @@@@@@@@@@@@`);
               asdList = asdList.concat({
                 name: item.name,
                 state: true,
               });
             })
             .catch((err) => {
-              console.log(`니가 찾는 ${item.name} 안들어왔어 ㅡㅡ`);
+              console.log(`${item.name}--- 미접속`);
               asdList = asdList.concat({
                 name: item.name,
                 state: false,
@@ -111,6 +114,8 @@ app.post("/userstatus", async (req, res) => {
         }, 125 * x);
       })(index);
     });
+    // 리스트 초기화
+    listReset(asdList);
   };
 
   listing(userList);

@@ -5,7 +5,7 @@ function User({ user, state }) {
   return (
     <div>
       <span>({user})</span> -
-      <span className={state ? "state--true" : "state--false"}>
+      <span className={`state ${state ? "state--true" : "state--false"}`}>
         {state ? "게임중" : "대기중"}
       </span>
     </div>
