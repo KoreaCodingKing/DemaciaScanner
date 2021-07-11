@@ -27,7 +27,10 @@ function TimeView({ gameTime }) {
       };
 
       // 현재 시간 - 게임 시작한 시간 = 게임중인 시간
+      // const calcResult = convertDate(cuy)
       const calcResult = convertDate(currentDate) - convertDate(date);
+
+      // calcResult < 0 ? Math.abs(calcResult) : calcResult
 
       // 시간 state 갱신
       setDateTime({
@@ -50,7 +53,7 @@ function User({ user, state, runningTime }) {
   return (
     <div>
       <span>({user})</span> -
-      <span className={state ? "state--true" : "state--false"}>
+      <span className={`state ${state ? "state--true" : "state--false"}`}>
         {state ? "게임중" : "대기중"}
       </span>
       {state ? <TimeView gameTime={runningTime} /> : <span></span>}
