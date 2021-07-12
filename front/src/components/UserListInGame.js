@@ -26,24 +26,24 @@ function TimeView({ gameTime }) {
         return targetM + targetS;
       };
 
-      // 현재 시간 - 게임 시작한 시간 = 게임중인 시간
-      // const calcResult = convertDate(currentDate) - convertDate(date);
+      const convertDateCurrent = () => {
+        const parmDate = new Date();
+        const targetM = parmDate.getMinutes() * 60;
+        const targetS = parmDate.getSeconds();
 
-      // setDateTime({
-      //   minutes: parseInt(calcResult / 60),
-      //   seconds: parseInt(calcResult % 60),
-      // });
+        return targetM + targetS;
+      }
 
-      if (convertDate(currentDate) < convertDate(date)) {
+      if (convertDateCurrent() < convertDate(date)) {
         const calcResult =
-          3600 - (convertDate(date) - convertDate(currentDate));
+          3600 - (convertDate(date) - convertDateCurrent());
 
         setDateTime({
           minutes: parseInt(calcResult / 60),
           seconds: parseInt(calcResult % 60),
         });
       } else {
-        const calcResult = convertDate(currentDate) - convertDate(date);
+        const calcResult = convertDateCurrent() - convertDate(date);
 
         setDateTime({
           minutes: parseInt(calcResult / 60),

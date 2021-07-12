@@ -128,6 +128,22 @@ function ApiTest() {
     onReset();
   };
 
+  // 인게임 조회 주기적인 실행
+  const searchInGameScanner = ()=> {
+    
+    setInterval(()=> {
+      const inGameData = getUserDataInGame(userList);
+    new Promise((resolve) => {
+      resolve(inGameData);
+    }).then((res) => {
+      console.log(res.data);
+      setUserState(res.data);
+      setLoading(false);
+    });
+    },60000)
+  }
+
+// 테스트 리스트 반환
   const getTestList = (e) => {
     e.preventDefault();
     testList().then((res) => {
@@ -140,6 +156,7 @@ function ApiTest() {
           accountId: id,
         };
         tempList = tempList.concat(data);
+        
       });
       setuserList(tempList);
       sessionStorage.setItem("userList", JSON.stringify(tempList));
@@ -152,6 +169,7 @@ function ApiTest() {
       <button onClick={getTestList}>테스트 리스트 갱신</button>
       <button onClick={sessionStorageInit}>로컬스토리지 초기화</button>
       <button onClick={searchInGameState}>인게임 상태</button>
+      <button onClick={searchInGameScanner}>인게임 스케너</button>
       <br />
       <form className="insert_form" onSubmit={insertUser}>
         <UserInsertForm

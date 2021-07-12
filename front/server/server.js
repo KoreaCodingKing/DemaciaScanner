@@ -112,7 +112,7 @@ app.post("/userstatus", async (req, res) => {
                 return res.json(asdList);
               }
             });
-        }, 125 * x);
+        }, 500 * x);
       })(index);
     });
 
