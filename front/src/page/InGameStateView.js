@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import UserListInGame from "../components/UserListInGame";
+import Loading from "../components/Loading";
 
 const InGameStateView = (props) => {
   const users = props.state;
@@ -9,7 +10,7 @@ const InGameStateView = (props) => {
     <>
       <h1>InGameStateView</h1>
       <div className="view__container">
-        {props.loading ? "Loading..." : <UserListInGame users={users} />}
+        {props.loading ? <Loading /> : <UserListInGame users={users} />}
       </div>
     </>
   );

@@ -27,16 +27,31 @@ function TimeView({ gameTime }) {
       };
 
       // 현재 시간 - 게임 시작한 시간 = 게임중인 시간
-      // const calcResult = convertDate(cuy)
-      const calcResult = convertDate(currentDate) - convertDate(date);
+      // const calcResult = convertDate(currentDate) - convertDate(date);
 
-      // calcResult < 0 ? Math.abs(calcResult) : calcResult
+      // setDateTime({
+      //   minutes: parseInt(calcResult / 60),
+      //   seconds: parseInt(calcResult % 60),
+      // });
+
+      if (convertDate(currentDate) < convertDate(date)) {
+        const calcResult =
+          3600 - (convertDate(date) - convertDate(currentDate));
+
+        setDateTime({
+          minutes: parseInt(calcResult / 60),
+          seconds: parseInt(calcResult % 60),
+        });
+      } else {
+        const calcResult = convertDate(currentDate) - convertDate(date);
+
+        setDateTime({
+          minutes: parseInt(calcResult / 60),
+          seconds: parseInt(calcResult % 60),
+        });
+      }
 
       // 시간 state 갱신
-      setDateTime({
-        minutes: parseInt(calcResult / 60),
-        seconds: parseInt(calcResult % 60),
-      });
     }, 1000);
     return () => clearInterval(asd);
   }, []);
