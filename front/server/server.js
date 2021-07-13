@@ -76,31 +76,28 @@ app.post("/userstatus", async (req, res) => {
       setTimeout(() => {
         new Promise((resolve) => {
           resolve(getUserInGameData(item));
-        })
-          .then((res) => {
-            const timeStamp = new Date(res.data.gameStartTime);
-            console.log(`${item.name} 게임중임 - ${timeStamp}`);
-            // console.log(res.data.gameStartTime);
-            //           gameStartTime: 1625966487381,
-            //           gameLength: 628
-            asdList = asdList.concat({
-              name: item.name,
-              state: true,
-              currentTimeStamp: timeStamp,
-            });
-          })
-          .catch((err) => {
-            console.log(`니가 찾는 ${item.name} 안들어왔어 ㅡㅡ`);
-            asdList = asdList.concat({
-              name: item.name,
-              state: false,
-            });
-          })
-          .finally(() => {
-            if (userList.length === index + 1) {
-              return res.json(asdList);
-            }
+        }).then((res) => {
+          const timeStamp = new Date(res.data.gameStartTime);
+          console.log(`${item.name} 게임중임 - ${timeStamp}`);
+          // console.log(res.data.gameStartTime);
+          //           gameStartTime: 1625966487381,
+          //           gameLength: 628
+          asdList = asdList.concat({
+            name: item.name,
+            state: true,
+            currentTimeStamp: timeStamp,
           });
+        }).catch((err) => {
+          console.log(`니가 찾는 ${item.name} 안들어왔어 ㅡㅡ`);
+          asdList = asdList.concat({
+            name: item.name,
+            state: false,
+          });
+        }).finally(() => {
+          if (userList.length === index + 1) {
+            return res.json(asdList);
+          }
+        });
       }, 250 * x);
     })(index);
   });
