@@ -71,45 +71,41 @@ app.post("/searchuser", async (req, res) => {
 app.post("/userstatus", async (req, res) => {
   const userList = req.body.users;
 
-  const listing = (userList) => {
-    userList.map((item, index) => {
-      ((x) => {
-        setTimeout(() => {
-          new Promise((resolve) => {
-            resolve(getUserInGameData(item));
-          })
-            .then((res) => {
-              const timeStamp = new Date(res.data.gameStartTime);
-              console.log(`${item.name} 게임중임 - ${timeStamp}`);
-              // console.log(res.data.gameStartTime);
-              //           gameStartTime: 1625966487381,
-              //           gameLength: 628
-              asdList = asdList.concat({
-                name: item.name,
-                state: true,
-                currentTimeStamp: timeStamp,
-              });
-            })
-            .catch((err) => {
-              console.log(`니가 찾는 ${item.name} 안들어왔어 ㅡㅡ`);
-              asdList = asdList.concat({
-                name: item.name,
-                state: false,
-              });
-            })
-            .finally(() => {
-              if (userList.length === index + 1) {
-                return res.json(asdList);
-              }
+  userList.map((item, index) => {
+    ((x) => {
+      setTimeout(() => {
+        new Promise((resolve) => {
+          resolve(getUserInGameData(item));
+        })
+          .then((res) => {
+            const timeStamp = new Date(res.data.gameStartTime);
+            console.log(`${item.name} 게임중임 - ${timeStamp}`);
+            // console.log(res.data.gameStartTime);
+            //           gameStartTime: 1625966487381,
+            //           gameLength: 628
+            asdList = asdList.concat({
+              name: item.name,
+              state: true,
+              currentTimeStamp: timeStamp,
             });
-        }, 250 * x);
-      })(index);
-    });
+          })
+          .catch((err) => {
+            console.log(`니가 찾는 ${item.name} 안들어왔어 ㅡㅡ`);
+            asdList = asdList.concat({
+              name: item.name,
+              state: false,
+            });
+          })
+          .finally(() => {
+            if (userList.length === index + 1) {
+              return res.json(asdList);
+            }
+          });
+      }, 250 * x);
+    })(index);
+  });
 
-    asdList.splice(0, asdList.length);
-  };
-
-  listing(userList);
+  asdList.splice(0, asdList.length);
 });
 
 app.listen(port, () => {
