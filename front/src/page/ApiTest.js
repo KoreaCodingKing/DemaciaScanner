@@ -143,7 +143,8 @@ function ApiTest() {
   
 
   // 인게임 조회 주기적인 실행
-  function startScanner() {
+  const startScanner = (e)=> {
+    e.preventDefault()
     // 스캐너 플래그 상태
      isPause = false;
      // 로딩 상태
@@ -153,8 +154,9 @@ function ApiTest() {
     updateInGame(userList)
     // 주기적 실행 함수
     timer = setInterval(()=> {
+      setLoading(true);
       updateInGame(userList)
-    },75000)
+    },60000)
   }
 
   const stopScanner= () => {  

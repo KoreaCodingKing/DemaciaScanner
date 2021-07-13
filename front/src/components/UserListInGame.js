@@ -81,7 +81,7 @@ function UserListInGame({ users }) {
   return (
     <div>
       {users.map((user, index) => (
-        // console.log(user)
+
         <User
           user={user.name}
           key={index}
