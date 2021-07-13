@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../assets/scss/userinsertform.scss";
+import "../../assets/scss/userinsertform.scss";
 
 const status = false;
 

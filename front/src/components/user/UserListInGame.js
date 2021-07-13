@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../assets/scss/ingamestate.scss";
+import "../../assets/scss/ingamestate.scss";
 
 function TimeView({ gameTime }) {
   const [dateTime, setDateTime] = useState({
