@@ -66,8 +66,8 @@ function TimeView({ gameTime }) {
 
 function User({ user, state, runningTime }) {
   return (
-    <div>
-      <span>({user})</span> -
+    <div className="user_block">
+      <span className="user_block__name">({user})</span> -
       <span className={`state ${state ? "state--true" : "state--false"}`}>
         {state ? "게임중" : "대기중"}
       </span>
