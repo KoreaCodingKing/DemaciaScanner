@@ -37,6 +37,7 @@ async function getTempIdList() {
     `https://kr.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/CHALLENGER/I?page=1&api_key=${riotApiKey}`
   );
 }
+
 // 테스트용 첼린저 데이터
 app.get("/testlist", async (req, res) => {
   const data = await new Promise((resolve, reject) => {
