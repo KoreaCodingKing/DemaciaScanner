@@ -54,19 +54,17 @@ app.post("/searchuser", async (req, res) => {
   const userId = req.body.name;
   const data = await new Promise((resolve, reject) => {
     resolve(getUserData(encodeURI(userId)));
-  })
-    .then((result) => {
-      return {
-        id: result.data.id,
-        name: result.data.name,
-      };
-    })
-    .catch((err) => {
-      console.log(`없는 아이디입니다.-${userId}-${err.response.status}`);
-      if (err.response.status === 404) {
-        return null;
-      }
-    });
+  }).then((result) => {
+    return {
+      id: result.data.id,
+      name: result.data.name,
+    };
+  }).catch((err) => {
+    console.log(`없는 아이디입니다.-${userId}-${err.response.status}`);
+    if (err.response.status === 404) {
+      return null;
+    }
+  });
   return res.json(data);
 });
 
