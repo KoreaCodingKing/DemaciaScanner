@@ -11,8 +11,6 @@ const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
 
 let globalList = [];
 let globalListState = [];
-
-let asdList = [];
 let count = 0;
 
 app.use(cors());
@@ -70,7 +68,7 @@ app.post("/searchuser", async (req, res) => {
 
 app.post("/userstatus", async (req, res) => {
   const userList = req.body.users;
-
+  let asdList = [];
   userList.map((item, index) => {
     ((x) => {
       setTimeout(() => {
@@ -101,8 +99,6 @@ app.post("/userstatus", async (req, res) => {
       }, 250 * x);
     })(index);
   });
-
-  asdList.splice(0, asdList.length);
 });
 
 app.listen(port, () => {
