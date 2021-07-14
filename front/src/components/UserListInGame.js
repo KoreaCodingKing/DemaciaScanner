@@ -37,6 +37,7 @@ function TimeView({ gameTime }) {
       if (convertDateCurrent() < convertDate(date)) {
         const calcResult =
           3600 - (convertDate(date) - convertDateCurrent());
+          // 3600은 60초에 1분, 6분에 360초, 60분에 3600초
 
         setDateTime({
           minutes: parseInt(calcResult / 60),
@@ -53,7 +54,7 @@ function TimeView({ gameTime }) {
 
       // 시간 state 갱신
     }, 1000);
-    return () => clearInterval(asd);
+    return () => clearInterval(asd); setDateTime({minutes : "", seconds : ""});
   }, []);
 
   return (

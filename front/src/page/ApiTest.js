@@ -77,19 +77,7 @@ function ApiTest() {
     }
   }
 
-  // 인게임 조회
-  const searchInGameState = (e) => {
-    e.preventDefault();
-    
-    setLoading(true);
-
-    if (!userList || userList.length === 0) {
-      alert("등록한 유저가 없습니다.");
-      return;
-    }
-    // 게임상태 업데이트
-    updateInGame(userList)
-  };
+  
 
   // 유저 검색
   const insertUser = (e) => {
@@ -129,6 +117,7 @@ function ApiTest() {
           accountId: res.data.id,
         };
         setuserList(userList.concat(user));
+        console.log(`추가된 유저 리스트 ${userList}`)
 
         sessionStorage.setItem(
           "userList",
@@ -139,6 +128,20 @@ function ApiTest() {
         setuserList([...userList]);
       });
     onReset();
+  };
+
+  // 인게임 조회
+  const searchInGameState = (e) => {
+    e.preventDefault();
+    
+    setLoading(true);
+
+    if (!userList || userList.length === 0) {
+      alert("등록한 유저가 없습니다.");
+      return;
+    }
+    // 게임상태 업데이트
+    updateInGame(userList)
   };
   
 
@@ -154,9 +157,15 @@ function ApiTest() {
     updateInGame(userList)
     // 주기적 실행 함수
     timer = setInterval(()=> {
+
+      function updateList() {
+        return JSON.parse(sessionStorage.userList);
+      }
+      const updateUserList = updateList();
+
       setLoading(true);
-      updateInGame(userList)
-    },60000)
+      updateInGame(updateUserList)
+    },15000)
   }
 
   const stopScanner= () => {  

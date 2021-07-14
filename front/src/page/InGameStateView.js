@@ -4,6 +4,7 @@ import Loading from "../components/Loading";
 
 const InGameStateView = (props) => {
   const users = props.state;
+  console.log(props.state)
   // console.log(props.state.currentTime);
 
   return (
