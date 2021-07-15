@@ -18,6 +18,7 @@ function ApiTest() {
   const [userList, setUserList] = useState([]);
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [scanning, setScanning] = useState(false);
   
 
   useEffect(() => {
@@ -36,13 +37,12 @@ function ApiTest() {
 
 // 리스트 제거 함수
   const onRemove = (accountId) => {
+    
     setUserList(userList.filter(user=> user.accountId !== accountId))
     const data = sessionStorage.getItem('userList')
     const dataParse = JSON.parse(data);
     const removeSesstionList = dataParse.filter(user=> user.accountId !== accountId);
     sessionStorage.setItem('userList', JSON.stringify(removeSesstionList))
-    // console.log(JSON.parse(data))
-
 
   }
 
@@ -88,8 +88,6 @@ function ApiTest() {
       console.log("isPause값은 true로 스캔을 정지합니다.")
     }
   }
-
-  
 
   // 유저 검색
   const insertUser = (e) => {
@@ -164,6 +162,8 @@ function ApiTest() {
      // 로딩 상태
      setLoading(true);
 
+     setScanning(true);
+
     // 게임 진행 상태 체크 
     updateInGame(userList)
     // 주기적 실행 함수
@@ -176,7 +176,7 @@ function ApiTest() {
 
       setLoading(true);
       updateInGame(updateUserList)
-    },15000)
+    },25000)
   }
 
   const stopScanner= () => {  
@@ -184,6 +184,8 @@ function ApiTest() {
       clearInterval(timer)
       // 스캐너 플래그 상태 중지
       isPause=true;
+
+      setScanning(false)
   }
 
 // 테스트 리스트 반환
@@ -211,7 +213,7 @@ function ApiTest() {
       <hr />
       <button onClick={getTestList}>테스트 리스트 갱신</button>
       <button onClick={sessionStorageInit}>로컬스토리지 초기화</button>
-      <button onClick={searchInGameState}>인게임 상태</button>
+      {/* <button onClick={searchInGameState}>인게임 상태</button> */}
       <button onClick={startScanner}>인게임 스케너</button>
       <button onClick={stopScanner}>인게임 스캐너 중지</button>
       <br />
@@ -227,7 +229,7 @@ function ApiTest() {
       <UserList users={userList} onRemove={onRemove}  />
       <br />
       <div className="id-list"></div>
-      <InGameStateView state={userState} loading={loading} />
+      <InGameStateView state={userState} loading={loading} scanning={scanning} />
     </>
   );
 }

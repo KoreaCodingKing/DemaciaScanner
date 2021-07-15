@@ -65,12 +65,14 @@ function TimeView({ gameTime }) {
   );
 }
 
-function User({ user, state, runningTime }) {
+function User({ user, state, runningTime, numb}) {
+  const [show, setShow] = useState(false);
+
   return (
-    <div className="user_block">
+    <div className="user_block" style={{animationDelay :  `0.${numb}s`}} >
       <span className="user_block__name">({user})</span> -
       <span className={`state ${state ? "state--true" : "state--false"}`}>
-        {state ? "게임중" : "대기중"}
+        {state ? "게임중" : "대기중 - 몇분전 체크 해야함"}
       </span>
       {state ? <TimeView gameTime={runningTime} /> : <span></span>}
     </div>
@@ -78,14 +80,17 @@ function User({ user, state, runningTime }) {
 }
 
 function UserListInGame({ users }) {
-  // console.log();
+// const [show, setShow] = useState(false);
+const numb = users.length;
+  
+
   return (
     <div>
       {users.map((user, index) => (
-
         <User
           user={user.name}
           key={index}
+          numb={index}
           state={user.state}
           runningTime={user.currentTimeStamp}
         />
