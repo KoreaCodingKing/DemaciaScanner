@@ -15,7 +15,7 @@ let timer;
 function ApiTest() {
   const [status, setStatus] = useState(false);
   const [userName, setUserName] = useState("");
-  const [userList, setuserList] = useState([]);
+  const [userList, setUserList] = useState([]);
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
   
@@ -25,7 +25,7 @@ function ApiTest() {
 
     if (sessionStorageValue) {
       const userListInSession = JSON.parse(sessionStorageValue);
-      setuserList(userListInSession);
+      setUserList(userListInSession);
     }
   }, []);
 
@@ -33,6 +33,18 @@ function ApiTest() {
   const onChangeHandle = (e) => {
     setUserName(e.target.value);
   };
+
+// 리스트 제거 함수
+  const onRemove = (accountId) => {
+    setUserList(userList.filter(user=> user.accountId !== accountId))
+    const data = sessionStorage.getItem('userList')
+    const dataParse = JSON.parse(data);
+    const removeSesstionList = dataParse.filter(user=> user.accountId !== accountId);
+    sessionStorage.setItem('userList', JSON.stringify(removeSesstionList))
+    // console.log(JSON.parse(data))
+
+
+  }
 
   const onReset = () => {
     setUserName("");
@@ -116,8 +128,7 @@ function ApiTest() {
           name: res.data.name,
           accountId: res.data.id,
         };
-        setuserList(userList.concat(user));
-        console.log(`추가된 유저 리스트 ${userList}`)
+        setUserList(userList.concat(user));
 
         sessionStorage.setItem(
           "userList",
@@ -125,7 +136,7 @@ function ApiTest() {
         );
       })
       .catch((err) => {
-        setuserList([...userList]);
+        setUserList([...userList]);
       });
     onReset();
   };
@@ -190,7 +201,7 @@ function ApiTest() {
         tempList = tempList.concat(data);
         
       });
-      setuserList(tempList);
+      setUserList(tempList);
       sessionStorage.setItem("userList", JSON.stringify(tempList));
     });
   };
@@ -213,7 +224,7 @@ function ApiTest() {
         />
       </form>
       <br />
-      <UserList users={userList} />
+      <UserList users={userList} onRemove={onRemove}  />
       <br />
       <div className="id-list"></div>
       <InGameStateView state={userState} loading={loading} />
