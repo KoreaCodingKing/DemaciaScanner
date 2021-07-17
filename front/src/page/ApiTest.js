@@ -85,7 +85,7 @@ function ApiTest() {
         setLoading(false);
       });
     }else {
-      console.log("isPause값은 true로 스캔을 정지합니다.")
+      console.log("isPause값은 true로 스캔을 정지합니다.!")
     }
   }
 
