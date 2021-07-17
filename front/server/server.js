@@ -18,15 +18,15 @@ let count = 0;
 app.use(cors());
 app.use(bodyParser.json());
 
-async function getUserData(userId) {
+async function getUserData(userName) {
   return await axios.get(
-    `https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${userId}?api_key=${riotApiKey}`
+    `https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${userName}?api_key=${riotApiKey}`
   );
 }
 
 // 인게임 정보 axios 사용
 async function getUserInGameData(data) {
-  const userId = data.accountId;
+  const userId = data.id;
   // console.log(data.name);
   return await axios.get(
     `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${userId}?api_key=${riotApiKey}`
@@ -51,26 +51,28 @@ app.get("/testlist", async (req, res) => {
 
 //post요청 - 클라이언트에서 보낸 아이디
 app.post("/searchuser", async (req, res) => {
-  const userId = req.body.name;
+  const userName = req.body.name;
   const data = await new Promise((resolve, reject) => {
-    resolve(getUserData(encodeURI(userId)));
+    resolve(getUserData(encodeURI(userName)));
   })
     .then((result) => {
-      globalList = globalList.concat({
-        id: result.data.id,
-        name: result.data.name,
-      });
-      app.get("/searchuser", (req, res) => {
-        res.json(globalList);
-      });
+      // globalList = globalList.concat({
+      //   id: result.data.id,
+      //   name: result.data.name,
+      // });
+      // app.get("/searchuser", (req, res) => {
+      //   res.json(globalList);
+      // });
 
       return {
         id: result.data.id,
         name: result.data.name,
+        accountId: result.data.accountId
+        
       };
     })
     .catch((err) => {
-      console.log(`없는 아이디입니다.-${userId}-${err.response.status}`);
+      console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
       if (err.response.status === 404) {
         return null;
       }
@@ -82,28 +84,28 @@ app.post("/userstatus", async (req, res) => {
   const userList = req.body.users;
 
   const listing = (userList) => {
-    userList.map((item, index) => {
+    userList.map((user, index) => {
       ((x) => {
         setTimeout(() => {
           new Promise((resolve) => {
-            resolve(getUserInGameData(item));
+            resolve(getUserInGameData(user));
           })
             .then((res) => {
               const timeStamp = new Date(res.data.gameStartTime);
-              console.log(`${item.name} 게임중임 - ${timeStamp}`);
+              console.log(`${user.name} 게임중임 - ${timeStamp}`);
               // console.log(res.data.gameStartTime);
               //           gameStartTime: 1625966487381,
               //           gameLength: 628
               asdList = asdList.concat({
-                name: item.name,
+                name: user.name,
                 state: true,
                 currentTimeStamp: timeStamp,
               });
             })
             .catch((err) => {
-              console.log(`니가 찾는 ${item.name} 안들어왔어 ㅡㅡ`);
+              console.log(`니가 찾는 ${user.name} 안들어왔어 ㅡㅡ`);
               asdList = asdList.concat({
-                name: item.name,
+                name: user.name,
                 state: false,
               });
             })

@@ -36,12 +36,12 @@ function ApiTest() {
   };
 
 // 리스트 제거 함수
-  const onRemove = (accountId) => {
+  const onRemove = (targetId) => {
     
-    setUserList(userList.filter(user=> user.accountId !== accountId))
+    setUserList(userList.filter(user=> user.id !== targetId))
     const data = sessionStorage.getItem('userList')
     const dataParse = JSON.parse(data);
-    const removeSesstionList = dataParse.filter(user=> user.accountId !== accountId);
+    const removeSesstionList = dataParse.filter(user=> user.id !== targetId);
     sessionStorage.setItem('userList', JSON.stringify(removeSesstionList))
 
   }
@@ -85,7 +85,7 @@ function ApiTest() {
         setLoading(false);
       });
     }else {
-      console.log("isPause값은 true로 스캔을 정지합니다.")
+      console.log("isPause값은 true로 스캔을 정지합니다.!")
     }
   }
 
@@ -124,7 +124,8 @@ function ApiTest() {
 
         const user = {
           name: res.data.name,
-          accountId: res.data.id,
+          id: res.data.id,
+          accountId: res.data.accountId
         };
         setUserList(userList.concat(user));
 
@@ -198,7 +199,7 @@ function ApiTest() {
 
         const data = {
           name: name,
-          accountId: id,
+          id: id,
         };
         tempList = tempList.concat(data);
         
