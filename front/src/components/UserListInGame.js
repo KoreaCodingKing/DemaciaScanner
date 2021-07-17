@@ -65,8 +65,19 @@ function TimeView({ gameTime }) {
   );
 }
 
-function User({ user, state, runningTime, numb}) {
-  const [show, setShow] = useState(false);
+function RevisionView({ revisionDate}) {
+  // console.log(revisionDate)
+  const asd = new Date(revisionDate);
+  console.log(asd)
+  return (
+    <>
+      {/* {new Date(revisionDate)}} */}
+    </>
+  );
+}
+
+function User({ user, state, runningTime, numb, revisionDate}) {
+  // const [show, setShow] = useState(false);
 
   return (
     <div className="user_block" style={{animationDelay :  `0.${numb}s`}} >
@@ -74,13 +85,12 @@ function User({ user, state, runningTime, numb}) {
       <span className={`state ${state ? "state--true" : "state--false"}`}>
         {state ? "게임중" : "대기중 - 몇분전 체크 해야함"}
       </span>
-      {state ? <TimeView gameTime={runningTime} /> : <span></span>}
+      {state ? <TimeView gameTime={runningTime} /> : <RevisionView revisionDate={revisionDate} />}
     </div>
   );
 }
 
 function UserListInGame({ users }) {
-// const [show, setShow] = useState(false);
 const numb = users.length;
   
 
@@ -92,6 +102,7 @@ const numb = users.length;
           key={index}
           numb={index}
           state={user.state}
+          revisionDate={user.revisionDate}
           runningTime={user.currentTimeStamp}
         />
       ))}

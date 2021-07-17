@@ -59,6 +59,7 @@ app.post("/searchuser", async (req, res) => {
       globalList = globalList.concat({
         id: result.data.id,
         name: result.data.name,
+        revisionDate: result.data.revisionDate
       });
       app.get("/searchuser", (req, res) => {
         res.json(globalList);
@@ -67,6 +68,7 @@ app.post("/searchuser", async (req, res) => {
       return {
         id: result.data.id,
         name: result.data.name,
+        revisionDate: result.data.revisionDate
       };
     })
     .catch((err) => {
@@ -80,15 +82,18 @@ app.post("/searchuser", async (req, res) => {
 
 app.post("/userstatus", async (req, res) => {
   const userList = req.body.users;
+  // console.log('userList 값 : ',userList)
 
   const listing = (userList) => {
     userList.map((item, index) => {
       ((x) => {
         setTimeout(() => {
+          // console.log(item)
           new Promise((resolve) => {
             resolve(getUserInGameData(item));
           })
             .then((res) => {
+              
               const timeStamp = new Date(res.data.gameStartTime);
               console.log(`${item.name} 게임중임 - ${timeStamp}`);
               // console.log(res.data.gameStartTime);
@@ -98,13 +103,16 @@ app.post("/userstatus", async (req, res) => {
                 name: item.name,
                 state: true,
                 currentTimeStamp: timeStamp,
+                // revisionDate : 
               });
             })
             .catch((err) => {
+              const timeStamp = new Date(item.revisionDate);
               console.log(`니가 찾는 ${item.name} 안들어왔어 ㅡㅡ`);
               asdList = asdList.concat({
                 name: item.name,
                 state: false,
+                revisionDate : timeStamp
               });
             })
             .finally(() => {

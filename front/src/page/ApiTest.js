@@ -36,12 +36,12 @@ function ApiTest() {
   };
 
 // 리스트 제거 함수
-  const onRemove = (accountId) => {
+  const onRemove = (id) => {
     
-    setUserList(userList.filter(user=> user.accountId !== accountId))
+    setUserList(userList.filter(user=> user.id !== id))
     const data = sessionStorage.getItem('userList')
     const dataParse = JSON.parse(data);
-    const removeSesstionList = dataParse.filter(user=> user.accountId !== accountId);
+    const removeSesstionList = dataParse.filter(user=> user.id !== id);
     sessionStorage.setItem('userList', JSON.stringify(removeSesstionList))
 
   }
@@ -80,7 +80,7 @@ function ApiTest() {
       new Promise((resolve) => {
         resolve(inGameData);
       }).then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         setUserState(res.data);
         setLoading(false);
       });
@@ -124,8 +124,10 @@ function ApiTest() {
 
         const user = {
           name: res.data.name,
-          accountId: res.data.id,
+          id: res.data.id,
+          revisionDate : res.data.revisionDate
         };
+        // console.log(new Date(user.revisionDate))
         setUserList(userList.concat(user));
 
         sessionStorage.setItem(
@@ -161,7 +163,6 @@ function ApiTest() {
      isPause = false;
      // 로딩 상태
      setLoading(true);
-
      setScanning(true);
 
     // 게임 진행 상태 체크 
@@ -198,7 +199,7 @@ function ApiTest() {
 
         const data = {
           name: name,
-          accountId: id,
+          id: id,
         };
         tempList = tempList.concat(data);
         
@@ -213,7 +214,7 @@ function ApiTest() {
       <hr />
       <button onClick={getTestList}>테스트 리스트 갱신</button>
       <button onClick={sessionStorageInit}>로컬스토리지 초기화</button>
-      {/* <button onClick={searchInGameState}>인게임 상태</button> */}
+      <button onClick={searchInGameState}>인게임 상태</button>
       <button onClick={startScanner}>인게임 스케너</button>
       <button onClick={stopScanner}>인게임 스캐너 중지</button>
       <br />
