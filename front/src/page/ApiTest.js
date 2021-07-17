@@ -15,9 +15,10 @@ let timer;
 function ApiTest() {
   const [status, setStatus] = useState(false);
   const [userName, setUserName] = useState("");
-  const [userList, setuserList] = useState([]);
+  const [userList, setUserList] = useState([]);
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [scanning, setScanning] = useState(false);
   
 
   useEffect(() => {
@@ -25,7 +26,7 @@ function ApiTest() {
 
     if (sessionStorageValue) {
       const userListInSession = JSON.parse(sessionStorageValue);
-      setuserList(userListInSession);
+      setUserList(userListInSession);
     }
   }, []);
 
@@ -33,6 +34,17 @@ function ApiTest() {
   const onChangeHandle = (e) => {
     setUserName(e.target.value);
   };
+
+// 리스트 제거 함수
+  const onRemove = (id) => {
+    
+    setUserList(userList.filter(user=> user.id !== id))
+    const data = sessionStorage.getItem('userList')
+    const dataParse = JSON.parse(data);
+    const removeSesstionList = dataParse.filter(user=> user.id !== id);
+    sessionStorage.setItem('userList', JSON.stringify(removeSesstionList))
+
+  }
 
   const onReset = () => {
     setUserName("");
@@ -78,20 +90,6 @@ function ApiTest() {
     });
   }
 
-  // 인게임 조회
-  const searchInGameState = (e) => {
-    e.preventDefault();
-    
-    setLoading(true);
-
-    if (!userList || userList.length === 0) {
-      alert("등록한 유저가 없습니다.");
-      return;
-    }
-    // 게임상태 업데이트
-    updateInGame(userList)
-  };
-
   // 유저 검색
   const insertUser = (e) => {
     e.preventDefault();
@@ -127,9 +125,11 @@ function ApiTest() {
 
         const user = {
           name: res.data.name,
-          accountId: res.data.id,
+          id: res.data.id,
+          revisionDate : res.data.revisionDate
         };
-        setuserList(userList.concat(user));
+        // console.log(new Date(user.revisionDate))
+        setUserList(userList.concat(user));
 
         sessionStorage.setItem(
           "userList",
@@ -137,25 +137,48 @@ function ApiTest() {
         );
       })
       .catch((err) => {
-        setuserList([...userList]);
+        setUserList([...userList]);
       });
     onReset();
+  };
+
+  // 인게임 조회
+  const searchInGameState = (e) => {
+    e.preventDefault();
+    
+    setLoading(true);
+
+    if (!userList || userList.length === 0) {
+      alert("등록한 유저가 없습니다.");
+      return;
+    }
+    // 게임상태 업데이트
+    updateInGame(userList)
   };
   
 
   // 인게임 조회 주기적인 실행
-  function startScanner() {
+  const startScanner = (e)=> {
+    e.preventDefault()
     // 스캐너 플래그 상태
      isPause = false;
      // 로딩 상태
      setLoading(true);
+     setScanning(true);
 
     // 게임 진행 상태 체크 
     updateInGame(userList)
     // 주기적 실행 함수
     timer = setInterval(()=> {
-      updateInGame(userList)
-    },75000)
+
+      function updateList() {
+        return JSON.parse(sessionStorage.userList);
+      }
+      const updateUserList = updateList();
+
+      setLoading(true);
+      updateInGame(updateUserList)
+    },15000)
   }
 
   const stopScanner= () => {  
@@ -163,6 +186,8 @@ function ApiTest() {
       clearInterval(timer)
       // 스캐너 플래그 상태 중지
       isPause=true;
+
+      setScanning(false)
   }
 
 // 테스트 리스트 반환
@@ -175,12 +200,12 @@ function ApiTest() {
 
         const data = {
           name: name,
-          accountId: id,
+          id: id,
         };
         tempList = tempList.concat(data);
         
       });
-      setuserList(tempList);
+      setUserList(tempList);
       sessionStorage.setItem("userList", JSON.stringify(tempList));
     });
   };
@@ -203,10 +228,10 @@ function ApiTest() {
         />
       </form>
       <br />
-      <UserList users={userList} />
+      <UserList users={userList} onRemove={onRemove}  />
       <br />
       <div className="id-list"></div>
-      <InGameStateView state={userState} loading={loading} />
+      <InGameStateView state={userState} loading={loading} scanning={scanning} />
     </>
   );
 }

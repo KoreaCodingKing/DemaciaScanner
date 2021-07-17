@@ -3,7 +3,7 @@
 import React, { useEffect,createContext, Provider } from "react";
 import { Link, Route } from "react-router-dom";
 import Home from "./page/Home";
-import About from "./page/About";
+import CurrentMyGame from "./page/CurrentMyGame";
 import ApiTest from "./page/ApiTest";
 
 import dotenv from "dotenv";
@@ -18,11 +18,11 @@ function App() {
     <div className="wrapper">
       <div className="header">
         <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
+        <Link to="/currentmygame">CurrentMyGame</Link>
         <Link to="/apitest">apiTest</Link>
       </div>
       <Route path="/" exact component={Home} />
-      <Route path="/about" component={About} />
+      <Route path="/currentmygame" component={CurrentMyGame} />
       <Route path="/apiTest" component={ApiTest} />
       {/* <h1>test</h1> */}
     </div>
