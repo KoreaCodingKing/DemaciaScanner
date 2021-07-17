@@ -82,6 +82,7 @@ function User({ user, state, runningTime, numb}) {
 function UserListInGame({ users }) {
 // const [show, setShow] = useState(false);
 const numb = users.length;
+console.log(users)
   
 
   return (

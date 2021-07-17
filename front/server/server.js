@@ -87,25 +87,29 @@ app.post("/userstatus", async (req, res) => {
     userList.map((user, index) => {
       ((x) => {
         setTimeout(() => {
+          // console.log(user.accountId)
           new Promise((resolve) => {
             resolve(getUserInGameData(user));
           })
             .then((res) => {
               const timeStamp = new Date(res.data.gameStartTime);
               console.log(`${user.name} 게임중임 - ${timeStamp}`);
-              // console.log(res.data.gameStartTime);
+              console.log(res.data.participants);
               //           gameStartTime: 1625966487381,
               //           gameLength: 628
               asdList = asdList.concat({
                 name: user.name,
-                state: true,
                 currentTimeStamp: timeStamp,
+                state: true,
+                accountId : user.accountId,
+                participants : res.data.participants
               });
             })
             .catch((err) => {
               console.log(`니가 찾는 ${user.name} 안들어왔어 ㅡㅡ`);
               asdList = asdList.concat({
                 name: user.name,
+                accountId: user.accountId,
                 state: false,
               });
             })
