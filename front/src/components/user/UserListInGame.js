@@ -12,29 +12,39 @@ function useInterval(callback, delay) {
       function tick() {
           savedCallback.current();
       }
+
       const interval = setInterval(tick, delay);
-      return () => {
+
+      if (!delay) {
+        return () => {
           clearInterval(interval);
       };
+      }
   }, [delay]);
 }
 
 function TimeView({ gameTime }) {
   const currentDate = new Date();
-  const currentSec = (currentDate.getMinutes()) * 60 + (currentDate.getSeconds());
+  const currentSec = (currentDate.getMinutes() * 60) + (currentDate.getSeconds());
 
-  const [dateTime, setDateTime] = useState(currentSec - (new Date(gameTime).getMinutes() * 60 + new Date(gameTime).getSeconds()));
+  const dateOfGame = new Date(gameTime);
+  const secOfgameTime = (dateOfGame.getMinutes() * 60) + dateOfGame.getSeconds();
+
+  const defaultTime = (currentSec < secOfgameTime) ? (secOfgameTime - currentSec) : (currentSec - secOfgameTime);
+
+  const [gameTimeToCurrent, setgameTimeToCurrent] = useState(defaultTime);
   const [timer, setTimer] = useState(true);
 
-  const minutes = Math.floor(dateTime / 60);
-  const seconds =  dateTime - minutes * 60;
+  const minutes = Math.floor(gameTimeToCurrent / 60);
+  const seconds =  gameTimeToCurrent - minutes * 60;
   const content = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
   useInterval(() => {
-    if (!dateTime) {
+    if (!gameTimeToCurrent) {
+      setTimer(false);
       return;
     }
-    setDateTime(dateTime + 1);
+    setgameTimeToCurrent(gameTimeToCurrent + 1);
   }, timer ? 1000 : null);
 
   return (
