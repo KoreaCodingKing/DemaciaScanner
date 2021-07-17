@@ -177,7 +177,7 @@ function ApiTest() {
 
       setLoading(true);
       updateInGame(updateUserList)
-    },30000)
+    },15000)
   }
 
   const stopScanner= () => {  

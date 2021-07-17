@@ -65,16 +65,6 @@ function TimeView({ gameTime }) {
   );
 }
 
-function RevisionView({ revisionDate}) {
-  // console.log(revisionDate)
-  const asd = new Date(revisionDate);
-  console.log(asd)
-  return (
-    <>
-      {/* {new Date(revisionDate)}} */}
-    </>
-  );
-}
 
 function User({ user, state, runningTime, numb, revisionDate}) {
   // const [show, setShow] = useState(false);
@@ -85,7 +75,7 @@ function User({ user, state, runningTime, numb, revisionDate}) {
       <span className={`state ${state ? "state--true" : "state--false"}`}>
         {state ? "게임중" : "대기중 - 몇분전 체크 해야함"}
       </span>
-      {state ? <TimeView gameTime={runningTime} /> : <RevisionView revisionDate={revisionDate} />}
+      {state ? <TimeView gameTime={runningTime} /> : <span></span>}
     </div>
   );
 }
@@ -102,7 +92,6 @@ const numb = users.length;
           key={index}
           numb={index}
           state={user.state}
-          revisionDate={user.revisionDate}
           runningTime={user.currentTimeStamp}
         />
       ))}
