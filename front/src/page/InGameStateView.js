@@ -6,7 +6,7 @@ import Scanning from "../components/Scanning";
 
 const InGameStateView = (props) => {
   const users = props.state;
-  console.log(props.state)
+  // console.log(props.state)
   // console.log(props.state.currentTime);
 
   return (

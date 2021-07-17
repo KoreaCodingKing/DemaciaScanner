@@ -65,8 +65,9 @@ function TimeView({ gameTime }) {
   );
 }
 
-function User({ user, state, runningTime, numb}) {
-  const [show, setShow] = useState(false);
+
+function User({ user, state, runningTime, numb, revisionDate}) {
+  // const [show, setShow] = useState(false);
 
   return (
     <div className="user_block" style={{animationDelay :  `0.${numb}s`}} >
@@ -80,7 +81,6 @@ function User({ user, state, runningTime, numb}) {
 }
 
 function UserListInGame({ users }) {
-// const [show, setShow] = useState(false);
 const numb = users.length;
   
 

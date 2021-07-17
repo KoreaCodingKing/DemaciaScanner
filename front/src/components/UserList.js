@@ -4,7 +4,7 @@ function User({user, onRemove}) {
     return (
         <div>
         <span>({user.name})</span>
-        <button onClick={()=> onRemove(user.accountId)}>제거</button>
+        <button onClick={()=> onRemove(user.id)}>제거</button>
         </div>
     )
 }
