@@ -30,7 +30,7 @@ function TimeView({ gameTime }) {
   const dateOfGame = new Date(gameTime);
   const secOfgameTime = (dateOfGame.getMinutes() * 60) + dateOfGame.getSeconds();
 
-  const defaultTime = (currentSec < secOfgameTime) ? (secOfgameTime - currentSec) : (currentSec - secOfgameTime);
+  const defaultTime = (currentSec < secOfgameTime) ? (3600 - secOfgameTime - currentSec) : (currentSec - secOfgameTime);
 
   const [gameTimeToCurrent, setgameTimeToCurrent] = useState(defaultTime);
   const [timer, setTimer] = useState(true);
