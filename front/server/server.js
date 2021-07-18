@@ -92,17 +92,73 @@ app.post("/userstatus", async (req, res) => {
             resolve(getUserInGameData(user));
           })
             .then((res) => {
+              // console.log(`${user.name} 게임중임 - ${timeStamp}`);
+              // console.log(res.data)
+
+              let data = {
+                name: '',
+                currentTimeStamp: '',
+                gameMode : '',
+                gameType : '',
+                state: '',
+                accountId : '',
+                participants : ''
+              }
+
+
+              if(res.data.gameMode == "CLASSIC") {
+                data.gameMode = '소환사의 협곡'
+              } else if(res.data.gameMode == "ARAM") {
+                data.gameMode = '칼바람 나락'
+              } else if(res.data.gameMode == "URF") {
+                data.gameMode = '우르프'
+              } else if(res.data.gameMode == "SIEGE") {
+                data.gameMode = '돌격 넥서스'
+              } else if(res.data.gameMode == "ONEFORALL") {
+                data.gameMode = '단일 챔피언'
+              } else if(res.data.gameMode == "ULTBOOK") {
+                data.gameMode = '궁극기 모드'
+              }
+              
+              if(res.data.gameType == "MATCHED_GAME") {
+                if(res.data.gameQueueConfigId == 420) {
+                  data.gameType = '솔로 랭크'
+                } else if(res.data.gameQueueConfigId == 430) {
+                  data.gameType = '일반 게임'
+                } else if(res.data.gameQueueConfigId == 450) {
+                  data.gameType = '칼바람 나락'
+                } else if(res.data.gameQueueConfigId == 1090 || 1100 || 1110) {
+                  data.gameType = '롤토체스'
+                } else if(res.data.gameQueueConfigId == 1400) {
+                  data.gameType = '궁극기 모드'
+                } else {
+                  data.gameType = '자유랭크'
+                }
+
+              }else if(res.data.gameType == 'CUSTOM_GAME') {
+                data.gameType = '사용자 설정 게임'
+              }
+
+
+              // 게임 시간 체크
               const timeStamp = new Date(res.data.gameStartTime);
-              console.log(`${user.name} 게임중임 - ${timeStamp}`);
-              console.log(res.data.participants);
-              //           gameStartTime: 1625966487381,
-              //           gameLength: 628
+
               asdList = asdList.concat({
                 name: user.name,
                 currentTimeStamp: timeStamp,
+                gameMode : data.gameMode,
+                gameType : data.gameType,
                 state: true,
                 accountId : user.accountId,
                 participants : res.data.participants
+
+
+                // 수저 전 res파일
+                // name: user.name,
+                // currentTimeStamp: timeStamp,
+                // state: true,
+                // accountId : user.accountId,
+                // participants : res.data.participants
               });
             })
             .catch((err) => {
@@ -115,6 +171,7 @@ app.post("/userstatus", async (req, res) => {
             })
             .finally(() => {
               if (userList.length === index + 1) {
+                console.log(asdList)
                 return res.json(asdList);
               }
             });

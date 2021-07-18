@@ -38,17 +38,27 @@ function CurrentMyState({users, onAdd}) {
       new Promise((resolve) => {
         resolve(inGameData);
       }).then((res) => {
-        // console.log(res.data[0].participants)
-        
         setAaa(res.data[0]);
         setLoading(false)
-      });
+      })
+      .catch((e)=> {
+        alert("게임 중이지 않습니다")
+        onReset();
+        return ;
+        
+      })
   }
 
 
   // 유저 검색 -> function.js의 형태로 불러올 예정
   const insertUser = (e) => {
     e.preventDefault();
+
+    if(!myName || '') {
+      alert("값이 없다");
+      onReset();
+      return ;
+    }
 
     const trimmedUserName = myName.trim();
 
@@ -77,8 +87,6 @@ function CurrentMyState({users, onAdd}) {
         );
         
         return user
-
-        
       })
       .then(resUser=> {
         // 인게임 상태 확인
@@ -87,7 +95,7 @@ function CurrentMyState({users, onAdd}) {
         updateInGame(resUser)
 
 
-      }) 
+      })
       .catch((err) => {
         // setUserList([...userList]);
         console.log("없는 아이디 ㅇ비니다")
