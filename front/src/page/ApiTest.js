@@ -4,8 +4,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Loading from "../components/Loading";
-import UserInsertForm from "../components/UserInsertForm";
-import UserList from "../components/UserList";
+import UserInsertForm from "../components/user/UserInsertForm";
+import UserList from "../components/user/UserList";
 import InGameStateView from "./InGameStateView";
 
 let tempList = [];
@@ -75,18 +75,19 @@ function ApiTest() {
 
 // 서버로 부터 인게임 상태를 받아와 상태값 변경 함수
   function updateInGame(targetUserList) {
-    if(!isPause) {
-      const inGameData = getUserDataInGame(targetUserList);
-      new Promise((resolve) => {
-        resolve(inGameData);
-      }).then((res) => {
-        console.log(res.data);
-        setUserState(res.data);
-        setLoading(false);
-      });
-    }else {
-      console.log("isPause값은 true로 스캔을 정지합니다.!")
+    if (isPause) {
+      console.log("isPause값은 true로 스캔을 정지합니다.");
+      return;
     }
+
+    const inGameData = getUserDataInGame(targetUserList);
+    new Promise((resolve) => {
+      resolve(inGameData);
+    }).then((res) => {
+      // console.log(res.data);
+      setUserState(res.data);
+      setLoading(false);
+    });
   }
 
   // 유저 검색

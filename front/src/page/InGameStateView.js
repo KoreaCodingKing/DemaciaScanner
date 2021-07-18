@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import UserListInGame from "../components/UserListInGame";
-import "../assets/scss/ingamestate.scss"
+import UserListInGame from "../components/user/UserListInGame";
 import Loading from "../components/Loading";
 import Scanning from "../components/Scanning";
 

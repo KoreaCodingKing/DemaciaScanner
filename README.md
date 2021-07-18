@@ -120,3 +120,13 @@ UX)
 input에 아이디를 입력, 엔터치면 다음 input활성화 반복
 
 ````
+
+# useInterval
+
+```
+https://usehooks-typescript.com/react-hook/use-interval
+https://overreacted.io/making-setinterval-declarative-with-react-hooks/
+ㄴ> 사용목적 요약: If you played with React Hooks for more than a few hours,
+    you probably ran into an intriguing problem: using setInterval just doesn’t work as you’d expect.
+
+````
