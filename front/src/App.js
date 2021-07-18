@@ -1,6 +1,6 @@
 
 // import React from "react";
-import React, { useEffect,createContext, Provider } from "react";
+import React, {createContext, Provider, useState } from "react";
 import { Link, Route } from "react-router-dom";
 import Home from "./page/Home";
 import About from "./page/About";
@@ -14,6 +14,9 @@ import "./assets/scss/common.scss";
 export const ThemeContext = createContext("light");
 
 function App() {
+  const [parent, setParent] = useState("test");
+
+
   return (
     <ThemeContext.Provider value="red">
     <div className="wrapper">
@@ -25,7 +28,7 @@ function App() {
       </div>
       <Route path="/" exact component={Home} />
       <Route path="/about" component={About} />
-      <Route path="/apiTest" component={ApiTest} />
+      <Route path="/apiTest" component={ApiTest}  />
       <Route path="/currentMyState" component={CurrentMyState} />
       {/* <h1>test</h1> */}
     </div>

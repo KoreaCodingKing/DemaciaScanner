@@ -1,14 +1,20 @@
 import React,{useEffect, useState} from "react";
 import axios from "axios";
+import CurrentMyGameView from './CurrentMyGameView';
 
-function CurrentMyState() {
+function CurrentMyState({users, onAdd}) {
   const [myName, setMyName] = useState();
+  const [aaa, setAaa] = useState();
+  const [loading, setLoading] = useState(true);
+
+  // 부모에서 받은 리스트값
+  console.log(users)
 
   const onChangeHandle = (e) => {
     setMyName(e.target.value)
   }
 
-    const onReset = () => {
+  const onReset = () => {
     setMyName("");
   };
 
@@ -19,6 +25,25 @@ function CurrentMyState() {
       name: userName,
     });
   };
+
+   // 인게임 상태 추출
+  const getUserDataInGame = async (users) => {
+    return await axios.post("http://localhost:3001/userstatus", {
+      users,
+    });
+  };
+  // 서버로 부터 인게임 상태를 받아와 상태값 변경 함수
+  function updateInGame(targetUserList) {
+      const inGameData = getUserDataInGame(targetUserList);
+      new Promise((resolve) => {
+        resolve(inGameData);
+      }).then((res) => {
+        // console.log(res.data[0].participants)
+        
+        setAaa(res.data[0]);
+        setLoading(false)
+      });
+  }
 
 
   // 유저 검색 -> function.js의 형태로 불러올 예정
@@ -31,19 +56,6 @@ function CurrentMyState() {
       alert("값이 없습니다");
       return;
     }
-
-    // const doesExistUserName = userList.some(
-    //   (id) =>
-    //     id.name.replace(/\s/gi, "").toUpperCase() ===
-    //     trimmedUserName.replace(/\s/gi, "").toUpperCase()
-    // );
-    // if (doesExistUserName) {
-    //   alert("중복된 소환사 닉네임이 있습니다.");
-    //   onReset();
-    //   return;
-    // }
-
-    // setMyName(e.target.value);
 
     getUserData(trimmedUserName)
       .then((res) => {
@@ -59,13 +71,23 @@ function CurrentMyState() {
           id: res.data.id,
           accountId: res.data.accountId
         }];
-        // setUserList(userList.concat(user));
-
         sessionStorage.setItem(
           `${res.data.name}`,
           JSON.stringify(user)
         );
+        
+        return user
+
+        
       })
+      .then(resUser=> {
+        // 인게임 상태 확인
+        // console.log(resUser)
+        setLoading(true);
+        updateInGame(resUser)
+
+
+      }) 
       .catch((err) => {
         // setUserList([...userList]);
         console.log("없는 아이디 ㅇ비니다")
@@ -76,11 +98,17 @@ function CurrentMyState() {
 
   return (
     <>
+    <hr />
       <h1>내 상태입니다</h1>
       <form onSubmit={insertUser}>
         <input onChange={onChangeHandle} value={myName || ''} />
       </form>
-      {myName}
+      {`${loading}`}
+      <br />
+      <div>
+      
+      {loading ? 'loading...' : <CurrentMyGameView userList={users} onAdd={onAdd}  users={aaa} />}
+      </div>
     </>
   );
 }

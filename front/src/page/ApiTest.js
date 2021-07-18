@@ -7,12 +7,13 @@ import Loading from "../components/Loading";
 import UserInsertForm from "../components/UserInsertForm";
 import UserList from "../components/UserList";
 import InGameStateView from "./InGameStateView";
+import CurrentMyState from "./CurrentMyState";
 
 let tempList = [];
 let timer;
   let isPause = false;
 
-function ApiTest() {
+function ApiTest(props) {
   const [status, setStatus] = useState(false);
   const [userName, setUserName] = useState("");
   const [userList, setUserList] = useState([]);
@@ -22,6 +23,7 @@ function ApiTest() {
   
 
   useEffect(() => {
+    
     const sessionStorageValue = sessionStorage.userList || null;
 
     if (sessionStorageValue) {
@@ -44,6 +46,38 @@ function ApiTest() {
     const removeSesstionList = dataParse.filter(user=> user.id !== targetId);
     sessionStorage.setItem('userList', JSON.stringify(removeSesstionList))
 
+  }
+// 리스트 추가 함수
+  const onAdd = (target) => {
+
+    const trimmedUserName = target.summonerName.trim();
+    if (!trimmedUserName) {
+      alert("값이 없습니다");
+      return;
+    }
+
+    const doesExistUserName = userList.some(
+      (id) =>
+        id.name.replace(/\s/gi, "").toUpperCase() ===
+        trimmedUserName.replace(/\s/gi, "").toUpperCase()
+    );
+    if (doesExistUserName) {
+      alert("중복된 소환사 닉네임이 있습니다.");
+      onReset();
+      return;
+    }
+
+    const user = {
+          name: target.summonerName,
+          id: target.summonerId,
+          // accountId: target.accountId
+        };
+        setUserList(userList.concat(user));
+
+        sessionStorage.setItem(
+          "userList",
+          JSON.stringify(userList.concat(user))
+        );
   }
 
   const onReset = () => {
@@ -133,6 +167,7 @@ function ApiTest() {
           "userList",
           JSON.stringify(userList.concat(user))
         );
+
       })
       .catch((err) => {
         setUserList([...userList]);
@@ -231,6 +266,7 @@ function ApiTest() {
       <br />
       <div className="id-list"></div>
       <InGameStateView state={userState} loading={loading} scanning={scanning} />
+      <CurrentMyState users={userList} onAdd={onAdd} />
     </>
   );
 }

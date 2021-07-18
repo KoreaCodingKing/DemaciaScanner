@@ -13,8 +13,6 @@ function LayoutSkeleton({count}) {
 
 function Loading(props) {
 
-  const tempNumb = props.users;
-  
 
   return (
     <div>
@@ -31,11 +29,6 @@ function Loading(props) {
       <LayoutSkeleton />
       <LayoutSkeleton />
     </div>
-    // <>...loading</>
-    // <div className="loading__bg">
-    //   <div className="loading"></div>
-    // </div>
-    // {tempNumb.map()}
   );
 }
 
