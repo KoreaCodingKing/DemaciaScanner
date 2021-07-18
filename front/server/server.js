@@ -52,29 +52,27 @@ app.post("/searchuser", async (req, res) => {
   const userName = req.body.name;
   const data = await new Promise((resolve, reject) => {
     resolve(getUserData(encodeURI(userName)));
-  })
-    .then((result) => {
-      // globalList = globalList.concat({
-      //   id: result.data.id,
-      //   name: result.data.name,
-      // });
-      // app.get("/searchuser", (req, res) => {
-      //   res.json(globalList);
-      // });
+  }).then((result) => {
+    // globalList = globalList.concat({
+    //   id: result.data.id,
+    //   name: result.data.name,
+    // });
+    // app.get("/searchuser", (req, res) => {
+    //   res.json(globalList);
+    // });
 
-      return {
-        id: result.data.id,
-        name: result.data.name,
-        accountId: result.data.accountId
-        
-      };
-    })
-    .catch((err) => {
-      console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
-      if (err.response.status === 404) {
-        return null;
-      }
-    });
+    return {
+      id: result.data.id,
+      name: result.data.name,
+      accountId: result.data.accountId
+      
+    };
+  }).catch((err) => {
+    console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
+    if (err.response.status === 404) {
+      return null;
+    }
+  });
   return res.json(data);
 });
 
