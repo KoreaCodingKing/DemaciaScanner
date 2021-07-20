@@ -114,7 +114,7 @@ function ApiTest(props) {
       new Promise((resolve) => {
         resolve(inGameData);
       }).then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         setUserState(res.data);
         setLoading(false);
       });
@@ -212,7 +212,7 @@ function ApiTest(props) {
 
       setLoading(true);
       updateInGame(updateUserList)
-    },100000)
+    },60000)
   }
 
   const stopScanner= () => {  

@@ -8,7 +8,7 @@ function CurrentMyState({users, onAdd}) {
   const [loading, setLoading] = useState(true);
 
   // 부모에서 받은 리스트값
-  console.log(users)
+  // console.log(users)
 
   const onChangeHandle = (e) => {
     setMyName(e.target.value)

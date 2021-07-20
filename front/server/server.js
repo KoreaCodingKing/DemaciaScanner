@@ -13,7 +13,6 @@ let globalList = [];
 let globalListState = [];
 
 let asdList = [];
-let count = 0;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -93,13 +92,14 @@ app.post("/userstatus", async (req, res) => {
           })
             .then((res) => {
               // console.log(`${user.name} 게임중임 - ${timeStamp}`);
-              // console.log(res.data)
+              console.log(res.data.gameId)
 
               let data = {
                 name: '',
                 currentTimeStamp: '',
                 gameMode : '',
                 gameType : '',
+                gameLength : '',
                 state: '',
                 accountId : '',
                 participants : ''
@@ -148,6 +148,7 @@ app.post("/userstatus", async (req, res) => {
                 currentTimeStamp: timeStamp,
                 gameMode : data.gameMode,
                 gameType : data.gameType,
+                gameLength : res.data.gameLength,
                 state: true,
                 accountId : user.accountId,
                 participants : res.data.participants
@@ -162,7 +163,7 @@ app.post("/userstatus", async (req, res) => {
               });
             })
             .catch((err) => {
-              console.log(`니가 찾는 ${user.name} 안들어왔어 ㅡㅡ`);
+              console.log(`${user.name}은(는) 게임 중이지 않습니다.`);
               asdList = asdList.concat({
                 name: user.name,
                 accountId: user.accountId,
@@ -171,11 +172,11 @@ app.post("/userstatus", async (req, res) => {
             })
             .finally(() => {
               if (userList.length === index + 1) {
-                console.log(asdList)
+               
                 return res.json(asdList);
               }
             });
-        }, 500 * x);
+        }, 1000 * x);
       })(index);
     });
 
