@@ -55,13 +55,6 @@ app.post("/searchuser", async (req, res) => {
     resolve(getUserData(encodeURI(userName)));
   })
     .then((result) => {
-      // globalList = globalList.concat({
-      //   id: result.data.id,
-      //   name: result.data.name,
-      // });
-      // app.get("/searchuser", (req, res) => {
-      //   res.json(globalList);
-      // });
 
       return {
         id: result.data.id,

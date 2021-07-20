@@ -104,7 +104,6 @@ function ApiTest(props) {
 
   // 게임 종료 후 승패 결과, 게임 시간, 끝나고 난 뒤 시간 체크
   const getUserDataGameResult = async (user) => {
-    
   }
 
   // 테스트 리스트 사용하기
