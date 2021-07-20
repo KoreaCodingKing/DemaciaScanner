@@ -127,12 +127,10 @@ app.post("/userstatus", async (req, res) => {
                   data.gameType = '일반 게임'
                 } else if(res.data.gameQueueConfigId == 450) {
                   data.gameType = '칼바람 나락'
-                } else if(res.data.gameQueueConfigId == 1090 || 1100 || 1110) {
-                  data.gameType = '롤토체스'
                 } else if(res.data.gameQueueConfigId == 1400) {
                   data.gameType = '궁극기 모드'
                 } else {
-                  data.gameType = '자유랭크'
+                  data.gameType = '자유 랭크'
                 }
 
               }else if(res.data.gameType == 'CUSTOM_GAME') {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../assets/scss/ingamestate.scss";
 
-function TimeView({ gameTime }) {
+function TimeView({ gameTime, gameLength }) {
   const [dateTime, setDateTime] = useState({
     minutes: "",
     seconds: "",
@@ -81,16 +81,18 @@ function User({ user, state, runningTime, numb}) {
         {/* {state ? `게임중 - ${user.gameMode} - ${user.gameType}` : "대기중 - 몇분전 체크 해야함"} */}
         {state ? `게임중 - ${user.gameMode !== '소환사의 협곡' ? user.gameMode : `${user.gameMode} - ${user.gameType}` }` : "대기중 - 몇분전 체크 해야함"}
       </span>
-      {/* {gameLength >= 0 ? <TimeView gameTime={runningTime} /> : <span></span>} */}
-      {state ? <TimeView gameTime={runningTime} /> : <span></span>}
+      {gameLength >= 0 ? <TimeView gameTime={runningTime} gameLength={gameLength} /> : <span></span>}
+      {/* {state ? <TimeView gameTime={runningTime} /> : <span></span>} */}
     </div>
   );
 }
 
 function UserListInGame({ users }) {
-// const [show, setShow] = useState(false);
 useEffect(()=> {
-console.log("재실행")
+  users.map(user => {
+    console.log(`${user.name} - ${user.currentTimeStamp}`)
+  })
+
   return ()=> console.log("없어짐")
 },[])
 const numb = users.length;
