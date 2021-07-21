@@ -209,10 +209,11 @@ function ApiTest(props) {
     // 주기적 실행 함수
     timer = setInterval(()=> {
 
-      function updateList() {
-        return JSON.parse(sessionStorage.userList);
+      function updateList(list) {
+        const userListData = list;
+        return JSON.parse(userListData);
       }
-      const updateUserList = updateList();
+      const updateUserList = updateList(sessionStorage.userList);
 
       setLoading(true);
       updateInGame(updateUserList)

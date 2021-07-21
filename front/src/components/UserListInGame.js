@@ -78,10 +78,9 @@ function User({ user, state, runningTime, numb}) {
     <div className="user_block" style={{animationDelay :  `0.${numb}s`}} >
       <span className="user_block__name">({user.name})</span> -
       <span className={`state ${state ? "state--true" : "state--false"}`}>
-        {/* {state ? `게임중 - ${user.gameMode} - ${user.gameType}` : "대기중 - 몇분전 체크 해야함"} */}
         {state ? `게임중 - ${user.gameMode !== '소환사의 협곡' ? user.gameMode : `${user.gameMode} - ${user.gameType}` }` : "대기중 - 몇분전 체크 해야함"}
       </span>
-      {gameLength >= 0 ? <TimeView gameTime={runningTime} gameLength={gameLength} /> : <span></span>}
+      {gameLength != 0 && state ? <TimeView gameTime={runningTime} gameLength={gameLength} /> : <span></span>}
       {/* {state ? <TimeView gameTime={runningTime} /> : <span></span>} */}
     </div>
   );

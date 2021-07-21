@@ -85,7 +85,7 @@ app.post("/userstatus", async (req, res) => {
           })
             .then((res) => {
               // console.log(`${user.name} 게임중임 - ${timeStamp}`);
-              console.log(res.data.gameId)
+              
 
               let data = {
                 name: '',
@@ -144,17 +144,12 @@ app.post("/userstatus", async (req, res) => {
                 accountId : user.accountId,
                 participants : res.data.participants
 
-
-                // 수저 전 res파일
-                // name: user.name,
-                // currentTimeStamp: timeStamp,
-                // state: true,
-                // accountId : user.accountId,
-                // participants : res.data.participants
               });
+              console.log(user.name,'게임 진입 후 소요된 시간 : ',parseInt(res.data.gameLength /60)+'분', parseInt(res.data.gameLength %60)+'초' , '게임 잡힌 시간 : ',timeStamp.getDate(), timeStamp.getHours(), timeStamp.getMinutes(), timeStamp.getSeconds())
             })
             .catch((err) => {
               console.log(`${user.name}은(는) 게임 중이지 않습니다.`);
+              // accountId를 앚아서 match v4를 사용해 최근 게임의 끝난 시간을 도출해야함
               asdList = asdList.concat({
                 name: user.name,
                 accountId: user.accountId,
