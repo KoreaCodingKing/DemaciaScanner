@@ -17,39 +17,39 @@ let timer;
   let isPause = false;
 
 
-export const TodoContext = React.createContext();
+// export const TodoContext = React.createContext();
 
 function ApiTest(props) {
   const [status, setStatus] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [userList, setUserList] = useState([]);
+  // const [userName, setUserName] = useState("");
+  // const [userList, setUserList] = useState([]);
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
   const [scanning, setScanning] = useState(false);
 
   
   // 상위 context에서function 가져오기
-  const {sessionStorageInit} = useContext(UserListContext);
+  let {userList, userName, insertUser, onReset, onChangeHandle} = useContext(UserListContext);
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    const sessionStorageValue = sessionStorage.userList || null;
+  //   const sessionStorageValue = sessionStorage.userList || null;
 
-    if (sessionStorageValue) {
-      const userListInSession = JSON.parse(sessionStorageValue);
-      setUserList(userListInSession);
-    }
-  }, []);
+  //   if (sessionStorageValue) {
+  //     const userListInSession = JSON.parse(sessionStorageValue);
+  //     // setUserList(userListInSession);
+  //   }
+  // }, []);
 
   // 인풋 값 변경 확인
-  const onChangeHandle = (e) => {
-    setUserName(e.target.value);
-  };
+  // const onChangeHandle = (e) => {
+  //   setUserName(e.target.value);
+  // };
 
   // 리스트 제거 함수
   const onRemove = (targetId) => {
     
-    setUserList(userList.filter(user=> user.id !== targetId))
+    userList.filter(user=> user.id !== targetId)
     const data = sessionStorage.getItem('userList')
     const dataParse = JSON.parse(data);
     const removeSesstionList = dataParse.filter(user=> user.id !== targetId);
@@ -57,52 +57,52 @@ function ApiTest(props) {
 
   }
   // 리스트 추가 함수
-  const onAdd = (target) => {
+  // const onAdd = (target) => {
 
-    const trimmedUserName = target.summonerName.trim();
-    if (!trimmedUserName) {
-      alert("값이 없습니다");
-      return;
-    }
+  //   const trimmedUserName = target.summonerName.trim();
+  //   if (!trimmedUserName) {
+  //     alert("값이 없습니다");
+  //     return;
+  //   }
 
-    const doesExistUserName = userList.some(
-      (id) =>
-        id.name.replace(/\s/gi, "").toUpperCase() ===
-        trimmedUserName.replace(/\s/gi, "").toUpperCase()
-    );
-    if (doesExistUserName) {
-      alert("중복된 소환사 닉네임이 있습니다.");
-      onReset();
-      return;
-    }
+  //   const doesExistUserName = userList.some(
+  //     (id) =>
+  //       id.name.replace(/\s/gi, "").toUpperCase() ===
+  //       trimmedUserName.replace(/\s/gi, "").toUpperCase()
+  //   );
+  //   if (doesExistUserName) {
+  //     alert("중복된 소환사 닉네임이 있습니다.");
+  //     onReset();
+  //     return;
+  //   }
 
-    const user = {
-          name: target.summonerName,
-          id: target.summonerId,
-          // accountId: target.accountId
-        };
-        setUserList(userList.concat(user));
+  //   const user = {
+  //         name: target.summonerName,
+  //         id: target.summonerId,
+  //         // accountId: target.accountId
+  //       };
+  //       userList = userList.concat(user);
 
-        sessionStorage.setItem(
-          "userList",
-          JSON.stringify(userList.concat(user))
-        );
-  }
+  //       sessionStorage.setItem(
+  //         "userList",
+  //         JSON.stringify(userList.concat(user))
+  //       );
+  // }
 
-  const onReset = () => {
-    setUserName("");
-  };
-
-  // const sessionStorageInit = () => {
-  //   sessionStorage.clear();
+  // const onReset = () => {
+  //   setUserName("");
   // };
 
-  // server.js에서 압력받은 id 값 가져오기
-  const getUserData = async (userName) => {
-    return await axios.post("http://localhost:3001/searchuser", {
-      name: userName,
-    });
+  const sessionStorageInit = () => {
+    sessionStorage.clear();
   };
+
+  // server.js에서 압력받은 id 값 가져오기
+  // const getUserData = async (userName) => {
+  //   return await axios.post("http://localhost:3001/searchuser", {
+  //     name: userName,
+  //   });
+  // };
 
   // 인게임 상태 추출
   const getUserDataInGame = async (users) => {
@@ -137,56 +137,58 @@ function ApiTest(props) {
   }
 
   // 유저 검색
-  const insertUser = (e) => {
-    e.preventDefault();
+  // const insertUser = (e) => {
+  //   e.preventDefault();
 
-    const trimmedUserName = userName.trim();
+  //   const trimmedUserName = userName.trim();
 
-    if (!trimmedUserName) {
-      alert("값이 없습니다");
-      return;
-    }
+  //   if (!trimmedUserName) {
+  //     alert("값이 없습니다");
+  //     return;
+  //   }
 
-    const doesExistUserName = userList.some(
-      (id) =>
-        id.name.replace(/\s/gi, "").toUpperCase() ===
-        trimmedUserName.replace(/\s/gi, "").toUpperCase()
-    );
-    if (doesExistUserName) {
-      alert("중복된 소환사 닉네임이 있습니다.");
-      onReset();
-      return;
-    }
+  //   const doesExistUserName = userList.some(
+  //     (id) =>
+  //       id.name.replace(/\s/gi, "").toUpperCase() ===
+  //       trimmedUserName.replace(/\s/gi, "").toUpperCase()
+  //   );
+  //   if (doesExistUserName) {
+  //     alert("중복된 소환사 닉네임이 있습니다.");
+  //     onReset();
+  //     return;
+  //   }
 
-    setUserName(e.target.value);
+  //   setUserName(e.target.value);
 
-    getUserData(trimmedUserName)
-      .then((res) => {
-        if (res.data === null) {
-          setStatus(false);
-          return false;
-        }
+  //   getUserData(trimmedUserName)
+  //     .then((res) => {
+  //       if (res.data === null) {
+  //         setStatus(false);
+  //         return false;
+  //       }
 
-        setStatus(true);
+  //       setStatus(true);
 
-        const user = {
-          name: res.data.name,
-          id: res.data.id,
-          accountId: res.data.accountId
-        };
-        setUserList(userList.concat(user));
+  //       const user = {
+  //         name: res.data.name,
+  //         id: res.data.id,
+  //         accountId: res.data.accountId
+  //       };
+  //       userList = userList.concat(user);
+  //       console.log("userList 추가된 값", userList)
 
-        sessionStorage.setItem(
-          "userList",
-          JSON.stringify(userList.concat(user))
-        );
+  //       sessionStorage.setItem(
+  //         "userList",
+  //         JSON.stringify(userList.concat(user))
+  //       );
 
-      })
-      .catch((err) => {
-        setUserList([...userList]);
-      });
-    onReset();
-  };
+  //     })
+  //     .catch((err) => {
+  //       // ([...userList])
+  //       console.log(err)
+  //     });
+  //   onReset();
+  // };
 
   // 인게임 조회
   const searchInGameState = (e) => {
@@ -253,13 +255,13 @@ function ApiTest(props) {
         tempList = tempList.concat(data);
         
       });
-      setUserList(tempList);
+      // setUserList(tempList);
       sessionStorage.setItem("userList", JSON.stringify(tempList));
     });
   };
 
 return (
-    <TodoContext.Provider value={{userList, onAdd}}>
+    <>
       <hr />
       <button onClick={getTestList}>테스트 리스트 갱신</button>
       <button onClick={sessionStorageInit}>로컬스토리지 초기화</button>
@@ -269,7 +271,7 @@ return (
       <br />
       <form className="insert_form" onSubmit={insertUser}>
         <UserInsertForm
-          onInsertUser={insertUser}
+          // onInsertUser={insertUser}
           inputValue={userName}
           existValue={status}
           onChangeEvent={onChangeHandle}
@@ -282,7 +284,7 @@ return (
       <InGameStateView state={userState} loading={loading} scanning={scanning} />
       <CurrentMyState />
       <About />
-    </TodoContext.Provider>
+    </>
   );
 }
 

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {TodoContext} from './ApiTest'
+import {UserListContext} from '../App'
 
 
 function User({user}) {
@@ -14,7 +14,7 @@ function User({user}) {
 
 
 function CurrentMyGameView({users}) {
-  const {onAdd} = useContext(TodoContext);
+  const {onAdd} = useContext(UserListContext);
     
   return (
     <div>
