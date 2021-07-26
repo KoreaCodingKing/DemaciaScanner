@@ -1,7 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import {TodoContext} from './ApiTest'
 
 
 function User({user}) {
+  
     console.log(user)
     return (
         <div>
@@ -11,7 +13,8 @@ function User({user}) {
 }
 
 
-function CurrentMyGameView({users, onAdd}) {
+function CurrentMyGameView({users}) {
+  const {onAdd} = useContext(TodoContext);
     
   return (
     <div>

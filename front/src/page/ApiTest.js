@@ -1,17 +1,23 @@
 // 테스트중인 페이지
 // CORS policy 오류 ->브라우저에서 보내서 그럼, 서버에서 보내면 됨
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import Loading from "../components/Loading";
 import UserInsertForm from "../components/UserInsertForm";
 import UserList from "../components/UserList";
 import InGameStateView from "./InGameStateView";
 import CurrentMyState from "./CurrentMyState";
+import {UserListContext} from '../App';
+
+import About from './About'
 
 let tempList = [];
 let timer;
   let isPause = false;
+
+
+export const TodoContext = React.createContext();
 
 function ApiTest(props) {
   const [status, setStatus] = useState(false);
@@ -20,7 +26,10 @@ function ApiTest(props) {
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
   const [scanning, setScanning] = useState(false);
+
   
+  // 상위 context에서function 가져오기
+  const {sessionStorageInit} = useContext(UserListContext);
 
   useEffect(() => {
     
@@ -37,7 +46,7 @@ function ApiTest(props) {
     setUserName(e.target.value);
   };
 
-// 리스트 제거 함수
+  // 리스트 제거 함수
   const onRemove = (targetId) => {
     
     setUserList(userList.filter(user=> user.id !== targetId))
@@ -47,7 +56,7 @@ function ApiTest(props) {
     sessionStorage.setItem('userList', JSON.stringify(removeSesstionList))
 
   }
-// 리스트 추가 함수
+  // 리스트 추가 함수
   const onAdd = (target) => {
 
     const trimmedUserName = target.summonerName.trim();
@@ -84,9 +93,9 @@ function ApiTest(props) {
     setUserName("");
   };
 
-  const sessionStorageInit = () => {
-    sessionStorage.clear();
-  };
+  // const sessionStorageInit = () => {
+  //   sessionStorage.clear();
+  // };
 
   // server.js에서 압력받은 id 값 가져오기
   const getUserData = async (userName) => {
@@ -111,7 +120,7 @@ function ApiTest(props) {
     return await axios.get("http://localhost:3001/testlist");
   };
 
-// 서버로 부터 인게임 상태를 받아와 상태값 변경 함수
+  // 서버로 부터 인게임 상태를 받아와 상태값 변경 함수
   function updateInGame(targetUserList) {
     if(!isPause) {
       const inGameData = getUserDataInGame(targetUserList);
@@ -229,7 +238,7 @@ function ApiTest(props) {
       setScanning(false)
   }
 
-// 테스트 리스트 반환
+  // 테스트 리스트 반환
   const getTestList = (e) => {
     e.preventDefault();
     testList().then((res) => {
@@ -249,8 +258,8 @@ function ApiTest(props) {
     });
   };
 
-  return (
-    <>
+return (
+    <TodoContext.Provider value={{userList, onAdd}}>
       <hr />
       <button onClick={getTestList}>테스트 리스트 갱신</button>
       <button onClick={sessionStorageInit}>로컬스토리지 초기화</button>
@@ -271,8 +280,9 @@ function ApiTest(props) {
       <br />
       <div className="id-list"></div>
       <InGameStateView state={userState} loading={loading} scanning={scanning} />
-      <CurrentMyState users={userList} onAdd={onAdd} />
-    </>
+      <CurrentMyState />
+      <About />
+    </TodoContext.Provider>
   );
 }
 

@@ -11,14 +11,18 @@ import dotenv from "dotenv";
 
 import "./assets/scss/common.scss";
 
-export const ThemeContext = createContext("light");
+export const UserListContext = createContext();
 
 function App() {
   const [parent, setParent] = useState("test");
 
+  const sessionStorageInit = () => {
+        sessionStorage.clear();
+    };
+    
+
 
   return (
-    <ThemeContext.Provider value="red">
     <div className="wrapper">
       <div className="header">
         <Link to="/">Home</Link>
@@ -26,13 +30,13 @@ function App() {
         <Link to="/apitest">apiTest</Link>
         <Link to="/currentmystate">나의 게임</Link>
       </div>
-      <Route path="/" exact component={Home} />
-      <Route path="/about" component={About} />
-      <Route path="/apiTest" component={ApiTest}  />
-      <Route path="/currentMyState" component={CurrentMyState} />
-      {/* <h1>test</h1> */}
+      <UserListContext.Provider value={{sessionStorageInit}}>
+        <Route path="/" exact component={Home} />
+        <Route path="/about" component={About} />
+        <Route path="/apiTest" component={ApiTest}  />
+        <Route path="/currentMyState" component={CurrentMyState} />
+      </UserListContext.Provider>
     </div>
-    </ThemeContext.Provider>
   );
 }
 

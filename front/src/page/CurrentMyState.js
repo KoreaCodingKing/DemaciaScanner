@@ -2,7 +2,12 @@ import React,{useEffect, useState} from "react";
 import axios from "axios";
 import CurrentMyGameView from './CurrentMyGameView';
 
-function CurrentMyState({users, onAdd}) {
+
+
+// function CurrentMyState({users, onAdd}) {
+function CurrentMyState() {
+
+
   const [myName, setMyName] = useState();
   const [aaa, setAaa] = useState();
   const [loading, setLoading] = useState(true);
@@ -115,7 +120,7 @@ function CurrentMyState({users, onAdd}) {
       <br />
       <div>
       
-      {loading ? 'loading...' : <CurrentMyGameView userList={users} onAdd={onAdd}  users={aaa} />}
+      {loading ? 'loading...' : <CurrentMyGameView  users={aaa} />}
       </div>
     </>
   );
