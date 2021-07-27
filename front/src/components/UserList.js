@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {UserListContext} from "../App"
 
-function User({user, onRemove}) {
+function User({user}) {
+  const {onRemove} = useContext(UserListContext)
     return (
         <div>
         <span>({user.name})</span>
@@ -9,13 +11,13 @@ function User({user, onRemove}) {
     )
 }
 
-function UserList({users, onRemove}) {
+function UserList({users}) {
     
 
   return (
     <div>
       {users.map((user, index) => (
-        <User user={user} key={index} onRemove={onRemove} />
+        <User user={user} key={index} />
       ))}
     </div>
   );

@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from "react";
+import React,{useEffect, useState, useContext} from "react";
 import axios from "axios";
 import CurrentMyGameView from './CurrentMyGameView';
 import {UserListContext} from '../App';
@@ -9,35 +9,37 @@ import {UserListContext} from '../App';
 function CurrentMyState() {
 
 
-  const [myName, setMyName] = useState();
+  // const [myName, setMyName] = useState();
   const [aaa, setAaa] = useState();
   const [loading, setLoading] = useState(true);
+
+  let {onChangeHandle, onReset, userName, getUserDataInGame, getUserData } = useContext(UserListContext);
 
   // 부모에서 받은 리스트값
   // console.log(users)
 
-  const onChangeHandle = (e) => {
-    setMyName(e.target.value)
-  }
+  // const onChangeHandle = (e) => {
+  //   setMyName(e.target.value)
+  // }
 
-  const onReset = () => {
-    setMyName("");
-  };
+  // const onReset = () => {
+  //   setMyName("");
+  // };
 
 
   // server.js에서 압력받은 id 값 가져오기
-  const getUserData = async (userName) => {
-    return await axios.post("http://localhost:3001/searchuser", {
-      name: userName,
-    });
-  };
+  // const getUserData = async (userName) => {
+  //   return await axios.post("http://localhost:3001/searchuser", {
+  //     name: userName,
+  //   });
+  // };
 
    // 인게임 상태 추출
-  const getUserDataInGame = async (users) => {
-    return await axios.post("http://localhost:3001/userstatus", {
-      users,
-    });
-  };
+  // const getUserDataInGame = async (users) => {
+  //   return await axios.post("http://localhost:3001/userstatus", {
+  //     users,
+  //   });
+  // };
   // 서버로 부터 인게임 상태를 받아와 상태값 변경 함수
   function updateInGame(targetUserList) {
       const inGameData = getUserDataInGame(targetUserList);
@@ -60,13 +62,13 @@ function CurrentMyState() {
   const insertUser = (e) => {
     e.preventDefault();
 
-    if(!myName || '') {
+    if(!userName || '') {
       alert("값이 없다");
       onReset();
       return ;
     }
 
-    const trimmedUserName = myName.trim();
+    const trimmedUserName = userName.trim();
 
     if (!trimmedUserName) {
       alert("값이 없습니다");
@@ -82,15 +84,15 @@ function CurrentMyState() {
 
         // setStatus(true);
 
-        const user = [{
+        const user = {
           name: res.data.name,
           id: res.data.id,
           accountId: res.data.accountId
-        }];
-        sessionStorage.setItem(
-          `${res.data.name}`,
-          JSON.stringify(user)
-        );
+        };
+        // sessionStorage.setItem(
+        //   `${res.data.name}`,
+        //   JSON.stringify(user)
+        // );
         
         return user
       })
@@ -98,7 +100,7 @@ function CurrentMyState() {
         // 인게임 상태 확인
         // console.log(resUser)
         setLoading(true);
-        updateInGame(resUser)
+        updateInGame([resUser])
 
 
       })
@@ -115,7 +117,7 @@ function CurrentMyState() {
     <hr />
       <h1>내 상태입니다</h1>
       <form onSubmit={insertUser}>
-        <input onChange={onChangeHandle} value={myName || ''} />
+        <input onChange={onChangeHandle} value={userName || ''} />
       </form>
       {`${loading}`}
       <br />

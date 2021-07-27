@@ -14,9 +14,16 @@ import "./assets/scss/common.scss";
 
 export const UserListContext = createContext();
 
+let timer;
+let isPause = false;
+
+
 function App() {
   const [userList, setUserList] = useState([]);
   const [userName, setUserName] = useState("");
+  const [userState, setUserState] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [scanning, setScanning] = useState(false);
 
   useEffect(() => {
     
@@ -28,6 +35,11 @@ function App() {
     }
   }, []);
 
+  // 세션 스토리지 초기화
+   const sessionStorageInit = () => {
+    sessionStorage.clear();
+  };
+
   // 인풋 값 변경 확인
   const onChangeHandle = (e) => {
     setUserName(e.target.value);
@@ -36,10 +48,13 @@ function App() {
     setUserName("");
   };
 
+
+
   // 리스트 추가 함수
   const onAdd = (target) => {
 
     const trimmedUserName = target.summonerName.trim();
+    
     if (!trimmedUserName) {
       alert("값이 없습니다");
       return;
@@ -67,14 +82,88 @@ function App() {
           "userList",
           JSON.stringify(userList.concat(user))
         );
+
+        return user
   }
 
+  // remove User
+  const onRemove = (targetId) => {
+    
+    setUserList(userList.filter(user=> user.id !== targetId))
+    const data = sessionStorage.getItem('userList')
+    const dataParse = JSON.parse(data);
+    const removeSesstionList = dataParse.filter(user=> user.id !== targetId);
+    sessionStorage.setItem('userList', JSON.stringify(removeSesstionList))
+
+  }
+
+  // recive data to server
   const getUserData = async (userName) => {
     return await axios.post("http://localhost:3001/searchuser", {
       name: userName,
     });
   };
 
+  // recive ingame data to server
+  const getUserDataInGame = async (users) => {
+    return await axios.post("http://localhost:3001/userstatus", {
+      users,
+    });
+  };
+
+  // 서버로 부터 인게임 상태를 받아와 상태값 변경 함수
+  function updateInGame(targetUserList) {
+    if(!isPause) {
+      const inGameData = getUserDataInGame(targetUserList);
+      new Promise((resolve) => {
+        resolve(inGameData);
+      }).then((res) => {
+        console.log(res.data);
+        setUserState(res.data);
+        setLoading(false);
+      });
+    }else {
+      console.log("isPause값은 true로 스캔을 정지합니다.!")
+    }
+  }
+
+  // 스캐너 시작
+  const startScanner = (e)=> {
+    e.preventDefault()
+    // 스캐너 플래그 상태
+     isPause = false;
+     // 로딩 상태
+     setLoading(true);
+
+     setScanning(true);
+
+    // 게임 진행 상태 체크 
+    updateInGame(userList)
+    // 주기적 실행 함수
+    timer = setInterval(()=> {
+
+      function updateList(list) {
+        const userListData = list;
+        return JSON.parse(userListData);
+      }
+      const updateUserList = updateList(sessionStorage.userList);
+
+      setLoading(true);
+      updateInGame(updateUserList)
+    },60000)
+  }
+
+  // 스캐너 중지
+  const stopScanner= () => {  
+      // 주시적 실행 정지
+      clearInterval(timer)
+      // 스캐너 플래그 상태 중지
+      isPause=true;
+
+      setScanning(false)
+  }
+
+  // todo User
   const insertUser = (e) => {
     e.preventDefault();
 
@@ -96,7 +185,7 @@ function App() {
       return;
     }
 
-    setUserName(e.target.value);
+    // setUserName(e.target.value);
 
     getUserData(trimmedUserName)
       .then((res) => {
@@ -112,8 +201,10 @@ function App() {
           id: res.data.id,
           accountId: res.data.accountId
         };
+        //--------------- 여기까지 동일
+
+
         setUserList(userList.concat(user));
-        console.log("userList 추가된 값", userList)
 
         sessionStorage.setItem(
           "userList",
@@ -138,12 +229,40 @@ function App() {
         <Link to="/currentmystate">나의 게임</Link>
       </div>
       <Route path="/apiTest">
-        <UserListContext.Provider value={{userList,onAdd, onChangeHandle, insertUser, userName}}>
+        <UserListContext.Provider value={{
+          userList,
+          onAdd,
+          onRemove,
+          sessionStorageInit,
+          onChangeHandle,
+          insertUser,
+          getUserDataInGame,
+          userName,
+          isPause,
+          timer,
+          loading,
+          userState,
+          startScanner,
+          stopScanner,
+          scanning
+          }}>
           <ApiTest />
         </UserListContext.Provider>
       </Route>
       <Route path="/currentMyState">
-        <UserListContext.Provider value={{userList,onAdd, onChangeHandle, insertUser, userName}}>
+        <UserListContext.Provider value={{
+          userList,
+          onAdd,
+          onRemove,
+          onReset,
+          sessionStorageInit,
+          onChangeHandle,
+          insertUser,
+          getUserDataInGame,
+          updateInGame,
+          getUserData,
+          userName
+          }}>
           <CurrentMyState />
         </UserListContext.Provider>
       </Route>
