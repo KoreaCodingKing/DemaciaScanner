@@ -51,39 +51,59 @@ function App() {
 
 
   // 리스트 추가 함수
-  const onAdd = (target) => {
+  const addUserList = (addUser, saveValue, storageValue) => {
 
-    const trimmedUserName = target.summonerName.trim();
+    // 분리 예정
+    // const trimmedUserName = addUser.summonerName.trim();
     
-    if (!trimmedUserName) {
-      alert("값이 없습니다");
-      return;
-    }
-
-    const doesExistUserName = userList.some(
-      (id) =>
-        id.name.replace(/\s/gi, "").toUpperCase() ===
-        trimmedUserName.replace(/\s/gi, "").toUpperCase()
-    );
-    if (doesExistUserName) {
-      alert("중복된 소환사 닉네임이 있습니다.");
-      onReset();
-      return;
-    }
+    // // 분리 예정
+    // if (!trimmedUserName) {
+    //   alert("값이 없습니다");
+    //   return;
+    // }
+    // // 분리 예정
+    // const doesExistUserName = userList.some(
+    //   (id) =>
+    //     id.name.replace(/\s/gi, "").toUpperCase() ===
+    //     trimmedUserName.replace(/\s/gi, "").toUpperCase()
+    // );
+    // // 분리 예정
+    // if (doesExistUserName) {
+    //   alert("중복된 소환사 닉네임이 있습니다.");
+    //   onReset();
+    //   return;
+    // }
 
     const user = {
-          name: target.summonerName,
-          id: target.summonerId,
-          // accountId: target.accountId
+          name: addUser.name || addUser.summonerName,
+          id: addUser.id || addUser.summonerId,
+          // accountId: addUser.accountId
         };
-        setUserList(userList.concat(user));
 
+    if(saveValue) {
+      setUserList(userList.concat(user));
+    }
+
+    if(!storageValue) {
+      return false;
+    }
+    else if(storageValue ==='userList') {
         sessionStorage.setItem(
           "userList",
           JSON.stringify(userList.concat(user))
         );
+    }else {
+      sessionStorage.setItem(
+          "userList",
+          JSON.stringify(userList.concat(user))
+        );
+      sessionStorage.setItem(
+          `${user.name}`,
+          JSON.stringify(user)
+        );
+    }
 
-        return user
+    return user
   }
 
   // remove User
@@ -150,7 +170,7 @@ function App() {
 
       setLoading(true);
       updateInGame(updateUserList)
-    },60000)
+    },50000)
   }
 
   // 스캐너 중지
@@ -196,21 +216,11 @@ function App() {
 
         // setStatus(true);
 
-        const user = {
-          name: res.data.name,
-          id: res.data.id,
-          accountId: res.data.accountId
-        };
-        //--------------- 여기까지 동일
+        const searchUser = res.data;
+        console.log("찾아진 아이디", searchUser)
 
-
-        setUserList(userList.concat(user));
-
-        sessionStorage.setItem(
-          "userList",
-          JSON.stringify(userList.concat(user))
-        );
-
+        // addUserList
+        addUserList(searchUser, true, 'userList');
       })
       .catch((err) => {
         setUserList([...userList])
@@ -231,7 +241,7 @@ function App() {
       <Route path="/apiTest">
         <UserListContext.Provider value={{
           userList,
-          onAdd,
+          addUserList,
           onRemove,
           sessionStorageInit,
           onChangeHandle,
@@ -252,7 +262,7 @@ function App() {
       <Route path="/currentMyState">
         <UserListContext.Provider value={{
           userList,
-          onAdd,
+          addUserList,
           onRemove,
           onReset,
           sessionStorageInit,

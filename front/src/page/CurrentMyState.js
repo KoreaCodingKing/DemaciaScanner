@@ -13,7 +13,7 @@ function CurrentMyState() {
   const [aaa, setAaa] = useState();
   const [loading, setLoading] = useState(true);
 
-  let {onChangeHandle, onReset, userName, getUserDataInGame, getUserData } = useContext(UserListContext);
+  let {onChangeHandle, addUserList, onReset, userName, getUserDataInGame, getUserData } = useContext(UserListContext);
 
   // 부모에서 받은 리스트값
   // console.log(users)
