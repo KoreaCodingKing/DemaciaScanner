@@ -48,31 +48,53 @@ function App() {
     setUserName("");
   };
 
+  const idValidate = (name) => {
+    console.log(name)
+
+
+    // function validate(name) {
+    //   const trimmedUserName = nameType.trim();
+
+    //   if (!trimmedUserName) {
+    //     alert("값이 없습니다");
+    //     return false;
+    //   }
+
+    //   const doesExistUserName = userList.some(
+    //     (id) =>
+    //       id.name.replace(/\s/gi, "").toUpperCase() ===
+    //       trimmedUserName.replace(/\s/gi, "").toUpperCase()
+    //   );
+
+    //   if (doesExistUserName) {
+    //     alert("중복된 소환사 닉네임이 있습니다.");
+    //     onReset();
+    //     return false;
+    //   }
+    // }
+  }
+
+  // 유저 찾기 
+  const searchUser = (userName) => {
+    return getUserData(userName)
+            .then(res=> {
+              if (res.data === null) {
+                  return false;
+                }
+
+                const getUser = res.data;
+
+                return getUser;
+            })
+            .catch(()=> {
+              setUserList([...userList])
+            })
+
+  }
 
 
   // 리스트 추가 함수
   const addUserList = (addUser, saveValue, storageValue) => {
-
-    // 분리 예정
-    // const trimmedUserName = addUser.summonerName.trim();
-    
-    // // 분리 예정
-    // if (!trimmedUserName) {
-    //   alert("값이 없습니다");
-    //   return;
-    // }
-    // // 분리 예정
-    // const doesExistUserName = userList.some(
-    //   (id) =>
-    //     id.name.replace(/\s/gi, "").toUpperCase() ===
-    //     trimmedUserName.replace(/\s/gi, "").toUpperCase()
-    // );
-    // // 분리 예정
-    // if (doesExistUserName) {
-    //   alert("중복된 소환사 닉네임이 있습니다.");
-    //   onReset();
-    //   return;
-    // }
 
     const user = {
           name: addUser.name || addUser.summonerName,
@@ -138,7 +160,6 @@ function App() {
       new Promise((resolve) => {
         resolve(inGameData);
       }).then((res) => {
-        console.log(res.data);
         setUserState(res.data);
         setLoading(false);
       });
@@ -187,6 +208,7 @@ function App() {
   const insertUser = (e) => {
     e.preventDefault();
 
+    // -----id 적합성 검사
     const trimmedUserName = userName.trim();
 
     if (!trimmedUserName) {
@@ -204,28 +226,15 @@ function App() {
       onReset();
       return;
     }
+    // -----id 적합성 검사
 
-    // setUserName(e.target.value);
 
-    getUserData(trimmedUserName)
-      .then((res) => {
-        if (res.data === null) {
-          // setStatus(false);
-          return false;
-        }
+    searchUser(trimmedUserName)
+    .then(getUserData => {
+      const data =  getUserData;
+      addUserList(data, true, 'userList');
+    })
 
-        // setStatus(true);
-
-        const searchUser = res.data;
-        console.log("찾아진 아이디", searchUser)
-
-        // addUserList
-        addUserList(searchUser, true, 'userList');
-      })
-      .catch((err) => {
-        setUserList([...userList])
-        // console.log(err)
-      });
     onReset();
   };
   
@@ -262,6 +271,7 @@ function App() {
       <Route path="/currentMyState">
         <UserListContext.Provider value={{
           userList,
+          searchUser,
           addUserList,
           onRemove,
           onReset,

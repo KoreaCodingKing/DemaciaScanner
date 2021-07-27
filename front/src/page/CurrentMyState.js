@@ -13,33 +13,13 @@ function CurrentMyState() {
   const [aaa, setAaa] = useState();
   const [loading, setLoading] = useState(true);
 
-  let {onChangeHandle, addUserList, onReset, userName, getUserDataInGame, getUserData } = useContext(UserListContext);
+  let {onChangeHandle, addUserList,searchUser, onReset, userName, getUserDataInGame, getUserData } = useContext(UserListContext);
 
   // 부모에서 받은 리스트값
   // console.log(users)
 
-  // const onChangeHandle = (e) => {
-  //   setMyName(e.target.value)
-  // }
 
-  // const onReset = () => {
-  //   setMyName("");
-  // };
-
-
-  // server.js에서 압력받은 id 값 가져오기
-  // const getUserData = async (userName) => {
-  //   return await axios.post("http://localhost:3001/searchuser", {
-  //     name: userName,
-  //   });
-  // };
-
-   // 인게임 상태 추출
-  // const getUserDataInGame = async (users) => {
-  //   return await axios.post("http://localhost:3001/userstatus", {
-  //     users,
-  //   });
-  // };
+ 
   // 서버로 부터 인게임 상태를 받아와 상태값 변경 함수
   function updateInGame(targetUserList) {
       const inGameData = getUserDataInGame(targetUserList);
@@ -47,6 +27,12 @@ function CurrentMyState() {
         resolve(inGameData);
       }).then((res) => {
         setAaa(res.data[0]);
+
+        sessionStorage.setItem(
+          "participantsData", 
+          JSON.stringify(res.data[0].participants)
+        )
+
         setLoading(false)
       })
       .catch((e)=> {
@@ -75,40 +61,60 @@ function CurrentMyState() {
       return;
     }
 
-    getUserData(trimmedUserName)
-      .then((res) => {
-        if (res.data === null) {
-          // setStatus(false);
-          return false;
-        }
-
-        // setStatus(true);
-
-        const user = {
-          name: res.data.name,
-          id: res.data.id,
-          accountId: res.data.accountId
-        };
-        // sessionStorage.setItem(
-        //   `${res.data.name}`,
-        //   JSON.stringify(user)
-        // );
-        
-        return user
-      })
-      .then(resUser=> {
-        // 인게임 상태 확인
-        // console.log(resUser)
+    searchUser(trimmedUserName)
+    .then(getUserData => {
+      const data =  getUserData;
+      // addUserList(data, true, 'userList');
+      return data
+    })
+    .then(resUser=> {
+      console.log(resUser)
         setLoading(true);
+        
+        // 인게임 상태 확인
+        // updateInGame의 인자는 [리스트]형태로 받아야함
         updateInGame([resUser])
+    })
+    .catch((err) => {
+      console.log("없는 아이디 입니다")
+        onReset();
+    });
 
 
-      })
-      .catch((err) => {
-        // setUserList([...userList]);
-        console.log("없는 아이디 ㅇ비니다")
-          onReset();
-      });
+
+
+    // 이전 코드
+    // getUserData(trimmedUserName)
+    //   .then((res) => {
+    //     if (res.data === null) {
+    //       return false;
+    //     }
+
+
+    //     const user = {
+    //       name: res.data.name,
+    //       id: res.data.id,
+    //       accountId: res.data.accountId
+    //     };
+    //     // sessionStorage.setItem(
+    //     //   `${res.data.name}`,
+    //     //   JSON.stringify(user)
+    //     // );
+        
+    //     return user
+    //   })
+    //   .then(resUser=> {
+    //     setLoading(true);
+    //     // 인게임 상태 확인
+    //     updateInGame([resUser])
+
+
+    //   })
+    //   .catch((err) => {
+    //     // setUserList([...userList]);
+    //     console.log("없는 아이디 ㅇ비니다")
+    //       onReset();
+    //   });
     onReset();
   };
 

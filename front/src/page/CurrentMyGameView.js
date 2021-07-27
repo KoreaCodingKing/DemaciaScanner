@@ -14,11 +14,21 @@ function User({user}) {
 
 
 function CurrentMyGameView({users}) {
-  const {addUserList} = useContext(UserListContext);
+  const {addUserList, loading, aaa} = useContext(UserListContext);
+  // console.log(aaa)
+      
     
   return (
     <div>
-        <h1>게임중입니다</h1>
+        {/* <User
+          user={aaa}
+          key={index}
+          numb={index}
+          state={user.state}
+          runningTime={user.currentTimeStamp}
+        /> */}
+
+        {/* <h1>게임중입니다</h1> */}
         <hr />
         <div>{users.participants[0].summonerName}<button onClick={()=> addUserList(users.participants[0], true, "userList" )}>추가</button></div>
         <div>{users.participants[1].summonerName}<button onClick={()=> addUserList(users.participants[1], true, "userList" )}>추가</button></div>
