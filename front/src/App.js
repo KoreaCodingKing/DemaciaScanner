@@ -211,7 +211,7 @@ function App() {
     // -----id 적합성 검사
     const trimmedUserName = userName.trim();
 
-    if (!trimmedUserName) {
+    if (!trimmedUserName || '') {
       alert("값이 없습니다");
       return;
     }

@@ -15,6 +15,18 @@ function CurrentMyState() {
 
   let {onChangeHandle, addUserList,searchUser, onReset, userName, getUserDataInGame, getUserData } = useContext(UserListContext);
 
+  useEffect(()=> {
+    const sessionStorageValue = sessionStorage.participantsData || null;
+
+    if (sessionStorageValue) {
+      const userListInSession = JSON.parse(sessionStorageValue);
+      setAaa(userListInSession)
+      console.log(userListInSession)
+      setLoading(false)
+    }
+    // findUser()
+  }, [])
+
   // 부모에서 받은 리스트값
   // console.log(users)
 
@@ -30,13 +42,13 @@ function CurrentMyState() {
 
         sessionStorage.setItem(
           "participantsData", 
-          JSON.stringify(res.data[0].participants)
+          JSON.stringify(res.data[0])
         )
 
         setLoading(false)
       })
       .catch((e)=> {
-        alert("게임 중이지 않습니다")
+        console.log(e)
         onReset();
         return ;
         
@@ -45,7 +57,7 @@ function CurrentMyState() {
 
 
   // 유저 검색 -> function.js의 형태로 불러올 예정
-  const insertUser = (e) => {
+  const findUser = (e) => {
     e.preventDefault();
 
     if(!userName || '') {
@@ -64,11 +76,10 @@ function CurrentMyState() {
     searchUser(trimmedUserName)
     .then(getUserData => {
       const data =  getUserData;
-      // addUserList(data, true, 'userList');
       return data
     })
     .then(resUser=> {
-      console.log(resUser)
+      // console.log(resUser)
         setLoading(true);
         
         // 인게임 상태 확인
@@ -83,7 +94,7 @@ function CurrentMyState() {
 
 
 
-    // 이전 코드
+  // 이전 코드
     // getUserData(trimmedUserName)
     //   .then((res) => {
     //     if (res.data === null) {
@@ -122,7 +133,7 @@ function CurrentMyState() {
     <>
     <hr />
       <h1>내 상태입니다</h1>
-      <form onSubmit={insertUser}>
+      <form onSubmit={findUser}>
         <input onChange={onChangeHandle} value={userName || ''} />
       </form>
       {`${loading}`}

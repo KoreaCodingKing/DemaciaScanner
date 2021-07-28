@@ -2,44 +2,38 @@ import React, {useState, useEffect, useContext} from 'react';
 import {UserListContext} from '../App'
 
 
-function User({user}) {
-  
-    console.log(user)
+// function User({user}) {
+//     console.log('user컴포넌트 : ', user)
+//     return (
+//         <div>
+//           hi
+//         </div>
+//     )
+// }
+
+function Test(props) {
     return (
-        <div>
-        {user.name}
-        </div>
+      'asd'
     )
+  
 }
 
 
 function CurrentMyGameView({users}) {
   const {addUserList, loading, aaa} = useContext(UserListContext);
-  // console.log(aaa)
-      
-    
+
+  const rendering = () => {
+    const result = [];
+
+    for(let i = 0; i<users.participants.length; i++) {
+      result.push(<div key={i}>{users.participants[i].summonerName}<button onClick={()=> addUserList(users.participants[i], true, "userList" )}>추가</button></div>)
+    }
+    return result;
+  }
+
   return (
     <div>
-        {/* <User
-          user={aaa}
-          key={index}
-          numb={index}
-          state={user.state}
-          runningTime={user.currentTimeStamp}
-        /> */}
-
-        {/* <h1>게임중입니다</h1> */}
-        <hr />
-        <div>{users.participants[0].summonerName}<button onClick={()=> addUserList(users.participants[0], true, "userList" )}>추가</button></div>
-        <div>{users.participants[1].summonerName}<button onClick={()=> addUserList(users.participants[1], true, "userList" )}>추가</button></div>
-        <div>{users.participants[2].summonerName}<button onClick={()=> addUserList(users.participants[2], true, "userList" )}> 추가</button></div>
-        <div>{users.participants[3].summonerName}<button onClick={()=> addUserList(users.participants[3], true, "userList" )}>추가</button></div>
-        <div>{users.participants[4].summonerName}<button onClick={()=> addUserList(users.participants[4], true, "userList" )}>추가</button></div>
-        <div>{users.participants[5].summonerName}<button onClick={()=> addUserList(users.participants[5], true, "userList" )}>추가</button></div>
-        <div>{users.participants[6].summonerName}<button onClick={()=> addUserList(users.participants[6], true, "userList" )}>추가</button></div>
-        <div>{users.participants[7].summonerName}<button onClick={()=> addUserList(users.participants[7], true, "userList" )}>추가</button></div>
-        <div>{users.participants[8].summonerName}<button onClick={()=> addUserList(users.participants[8], true, "userList" )}>추가</button></div>
-        <div>{users.participants[9].summonerName}<button onClick={()=> addUserList(users.participants[9], true, "userList" )}>추가</button></div>
+        {rendering()}
     </div>
   )
 
