@@ -12,16 +12,9 @@ import {UserListContext} from '../App';
 
 
 let tempList = [];
-// let timer;
-// let isPause = false;
 
 
 function ApiTest(props) {
-  // const [userState, setUserState] = useState([]);
-  // const [loading, setLoading] = useState(false);
-  // const [scanning, setScanning] = useState(false);
-
-  
   // 상위 context에서function 가져오기
   let {
     userList,
@@ -82,9 +75,7 @@ return (
       <br />
       <form className="insert_form" onSubmit={insertUser}>
         <UserInsertForm
-          // onInsertUser={insertUser}
           inputValue={userName}
-          // existValue={status}
           onChangeEvent={onChangeHandle}
         />
       </form>
@@ -93,7 +84,6 @@ return (
       <br />
       <div className="id-list"></div>
       <InGameStateView state={userState} loading={loading} />
-      {/* <CurrentMyState /> */}
     </>
   );
 }

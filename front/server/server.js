@@ -17,6 +17,7 @@ let asdList = [];
 app.use(cors());
 app.use(bodyParser.json());
 
+// 소환사 아이디로 기본 정보 찾기
 async function getUserData(userName) {
   return await axios.get(
     `https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${userName}?api_key=${riotApiKey}`
@@ -31,6 +32,8 @@ async function getUserInGameData(data) {
     `https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${userId}?api_key=${riotApiKey}`
   );
 }
+
+// 
 
 // 테스트용 임시 데이터
 async function getTempIdList() {
@@ -171,6 +174,14 @@ app.post("/userstatus", async (req, res) => {
 
   listing(userList);
 });
+
+// 전적 데이터 받기
+app.post("/usertotal", async (req, res)=> {
+  const userData = req.body;
+  const data = await new Promise((resolve, reject)=> {
+
+  })
+})
 
 app.listen(port, () => {
   console.log(`express is running on ${port}`);

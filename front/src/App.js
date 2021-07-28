@@ -95,11 +95,18 @@ function App() {
 
   // 리스트 추가 함수
   const addUserList = (addUser, saveValue, storageValue) => {
+    
+
+    // if(addUser.accountId === '') {
+    //   console.log("accountId 값이 없습니다")
+    //   // const result = searchUser(addUser.summonerName);
+    //   // console.log(result)
+    // }
 
     const user = {
           name: addUser.name || addUser.summonerName,
           id: addUser.id || addUser.summonerId,
-          // accountId: addUser.accountId
+          accountId: addUser.accountId
         };
 
     if(saveValue) {
@@ -191,7 +198,7 @@ function App() {
 
       setLoading(true);
       updateInGame(updateUserList)
-    },50000)
+    },60000)
   }
 
   // 스캐너 중지
@@ -205,11 +212,11 @@ function App() {
   }
 
   // todo User
-  const insertUser = (e) => {
-    e.preventDefault();
+  const insertUser = (getName) => {
+    // e.preventDefault();
 
     // -----id 적합성 검사
-    const trimmedUserName = userName.trim();
+    const trimmedUserName = getName.trim();
 
     if (!trimmedUserName || '') {
       alert("값이 없습니다");
@@ -237,7 +244,6 @@ function App() {
 
     onReset();
   };
-  
 
   return (
     <div className="wrapper">

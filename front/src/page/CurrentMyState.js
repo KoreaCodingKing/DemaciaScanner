@@ -13,7 +13,15 @@ function CurrentMyState() {
   const [aaa, setAaa] = useState();
   const [loading, setLoading] = useState(true);
 
-  let {onChangeHandle, addUserList,searchUser, onReset, userName, getUserDataInGame, getUserData } = useContext(UserListContext);
+  let {
+    onChangeHandle,
+    addUserList,
+    searchUser,
+    onReset,
+    userName,
+    getUserDataInGame,
+    getUserData
+    } = useContext(UserListContext);
 
   useEffect(()=> {
     const sessionStorageValue = sessionStorage.participantsData || null;
@@ -21,23 +29,17 @@ function CurrentMyState() {
     if (sessionStorageValue) {
       const userListInSession = JSON.parse(sessionStorageValue);
       setAaa(userListInSession)
-      console.log(userListInSession)
       setLoading(false)
     }
-    // findUser()
   }, [])
 
-  // 부모에서 받은 리스트값
-  // console.log(users)
-
-
- 
   // 서버로 부터 인게임 상태를 받아와 상태값 변경 함수
   function updateInGame(targetUserList) {
       const inGameData = getUserDataInGame(targetUserList);
       new Promise((resolve) => {
         resolve(inGameData);
       }).then((res) => {
+        console.log(res.data)
         setAaa(res.data[0]);
 
         sessionStorage.setItem(
