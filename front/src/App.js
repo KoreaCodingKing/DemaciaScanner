@@ -212,11 +212,21 @@ function App() {
   }
 
   // todo User
-  const insertUser = (getName) => {
-    // e.preventDefault();
+  const insertUser = (e) => {
+
+    // 메인에 insertUser 메서드는 onSubmit에 사용하기 때문에 e.preventDefault()처리가 필요함
+    // 하지만 currentMyGameView페이지에 게임중인 유저를 리스트에 추가 할경우 insertUser 메서드에 파라미터(유저 정보)를 전달하기때문에, 
+    // e.preventDefault()처리가 불필요.
+    // 따라서 그 값을 변경 해 주었음
+    // console.log(e)
+    if(typeof e !== 'string') {
+      //메인 리스트 등록
+      e.preventDefault();
+      e = userName;
+    } 
 
     // -----id 적합성 검사
-    const trimmedUserName = getName.trim();
+    const trimmedUserName = e.trim();
 
     if (!trimmedUserName || '') {
       alert("값이 없습니다");

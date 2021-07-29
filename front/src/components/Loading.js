@@ -11,11 +11,24 @@ function LayoutSkeleton({count}) {
   )
 }
 
-function Loading(props) {
+function Loading({userList}) {
 
+
+const rendering = () => {
+    const result = [];
+
+    for(let i = 0; i<userList.length; i++) {
+      result.push(<LayoutSkeleton key={i}/>)
+    }
+    return result;
+  }  
 
   return (
     <div>
+    {
+      rendering()
+    }
+      {/* <LayoutSkeleton />
       <LayoutSkeleton />
       <LayoutSkeleton />
       <LayoutSkeleton />
@@ -26,8 +39,7 @@ function Loading(props) {
       <LayoutSkeleton />
       <LayoutSkeleton />
       <LayoutSkeleton />
-      <LayoutSkeleton />
-      <LayoutSkeleton />
+      <LayoutSkeleton /> */}
     </div>
   );
 }
