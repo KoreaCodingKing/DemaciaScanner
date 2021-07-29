@@ -33,7 +33,13 @@ async function getUserInGameData(data) {
   );
 }
 
-// 
+// match v4 (v5로 변경될 예정)
+async function getUserTotalData(user) {
+  const accountId = user.accountId;
+  return await axios.get(
+    `https://kr.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}?api_key=${riotApiKey}`
+  );
+}
 
 // 테스트용 임시 데이터
 async function getTempIdList() {
@@ -175,12 +181,43 @@ app.post("/userstatus", async (req, res) => {
   listing(userList);
 });
 
-// 전적 데이터 받기
+// 전적 데이터 받기 (gameId 얻을 수 있음)
+  /*
+  {
+    "matches" : [
+      {
+          "platformId": "KR",
+          "gameId": 5357594542,
+          "champion": 523,
+          "queue": 420,
+          "season": 13,
+          "timestamp": 1627566726697,
+          "role": "DUO_SUPPORT",
+          "lane": "NONE"
+      },
+      {...},
+      {...},
+    ]
+  }
+  */
 app.post("/usertotal", async (req, res)=> {
-  const userData = req.body;
+  const userData = req.body.user;
+  
   const data = await new Promise((resolve, reject)=> {
-
+    resolve(getUserTotalData(userData));
   })
+  .then(result=> {
+    // console.log('유저의 데이타@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2',result.data.matches)
+    
+    return  {
+      matches : result.data.matches
+    }
+  })
+  .catch(()=> {
+    console.log("전적이 없네요?")
+  })
+
+  return res.json(data);
 })
 
 app.listen(port, () => {

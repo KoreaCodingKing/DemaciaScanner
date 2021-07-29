@@ -8,6 +8,7 @@ import About from "./page/About";
 import ApiTest from "./page/ApiTest";
 import CurrentMyState from './page/CurrentMyState';
 
+
 import dotenv from "dotenv";
 
 import "./assets/scss/common.scss";
@@ -24,6 +25,8 @@ function App() {
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
   const [scanning, setScanning] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [userTotal, setUserTotal] = useState([]);
 
   useEffect(() => {
     
@@ -135,6 +138,31 @@ function App() {
     return user
   }
 
+  // modal show, hide
+  const modalView = (target) => {
+    setModal(true)
+  }
+
+  // get user total data
+  const onTotalData = (userData) => {
+    const data = userData;
+    console.log(data)
+
+    const resultData = getUserTotalData(data)
+      .then(result=> {
+        // console.log(result.data.matches)
+        
+        // setUserTotal(result.data.matches)
+        const matches = result.data.matches;
+        return matches;
+        
+      })
+      .catch(()=> {
+        console.log("데이터를 받지 못했습니다.")
+      })
+    return resultData
+  }
+
   // remove User
   const onRemove = (targetId) => {
     
@@ -152,6 +180,17 @@ function App() {
       name: userName,
     });
   };
+
+  // 유저의 게임 전적 가져오기
+  // 보낼 필수 값 : accountId
+  // 추가로 보낼 값 : name
+  // 받을 값 : gameId = 해당 게임의 승패 여부를 알 수 있음
+  // champion, tiemstamp
+  const getUserTotalData = async (user) => {
+    return await axios.post("http://localhost:3001/usertotal", {
+      user
+    })
+  }
 
   // recive ingame data to server
   const getUserDataInGame = async (users) => {
@@ -279,7 +318,11 @@ function App() {
           userState,
           startScanner,
           stopScanner,
-          scanning
+          scanning,
+          modalView,
+          modal,
+          onTotalData,
+          userTotal
           }}>
           <ApiTest />
         </UserListContext.Provider>

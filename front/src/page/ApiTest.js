@@ -9,6 +9,7 @@ import UserList from "../components/UserList";
 import InGameStateView from "./InGameStateView";
 import CurrentMyState from "./CurrentMyState";
 import {UserListContext} from '../App';
+import UserTotal from "../components/UserTotal"
 
 
 let tempList = [];
@@ -32,7 +33,9 @@ function ApiTest(props) {
     updateInGame,
     startScanner,
     stopScanner,
-    scanning
+    scanning,
+    modalView,
+    modal,
      } = useContext(UserListContext);
 
   // 게임 종료 후 승패 결과, 게임 시간, 끝나고 난 뒤 시간 체크
@@ -72,7 +75,10 @@ return (
       {/* <button onClick={searchInGameState}>인게임 상태</button> */}
       <button onClick={startScanner}>인게임 스케너</button>
       <button onClick={stopScanner}>인게임 스캐너 중지</button>
+      <button onClick={modalView}>모달 버튼</button>
+
       <br />
+      {modal ? <UserTotal /> : <span></span>}
       <form className="insert_form" onSubmit={insertUser}>
         <UserInsertForm
           inputValue={userName}
@@ -80,7 +86,7 @@ return (
         />
       </form>
       <br />
-      <UserList users={userList}   />
+      <UserList users={userList} />
       <br />
       <div className="id-list"></div>
       <InGameStateView state={userState} loading={loading} />
