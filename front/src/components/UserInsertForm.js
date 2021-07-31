@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../assets/scss/userinsertform.scss";
 
-const status = false;
+// const status = false;
 
 const UserInsertForm = (props) => {
   // console.log(props.userValue)

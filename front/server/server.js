@@ -41,6 +41,14 @@ async function getUserTotalData(user) {
   );
 }
 
+// match 승패 여부 
+async function getUserTotalGameData(user) {
+  const gameId = user;
+  return await axios.get(
+    `https://kr.api.riotgames.com/lol/match/v4/matches/${gameId}?api_key=${riotApiKey}`
+  );
+}
+
 // 테스트용 임시 데이터
 async function getTempIdList() {
   return await axios.get(
@@ -167,9 +175,10 @@ app.post("/userstatus", async (req, res) => {
             })
             .finally(() => {
               if (userList.length === index + 1) {
-               
+               console.log("loading...", `${index+1}/${userList.length}`)
                 return res.json(asdList);
               }
+              console.log("loading...", `${index+1}/${userList.length}`)
             });
         }, 1000 * x);
       })(index);
@@ -203,21 +212,97 @@ app.post("/userstatus", async (req, res) => {
 app.post("/usertotal", async (req, res)=> {
   const userData = req.body.user;
   
+  let array1 = []
+  let array3 = []
+  
   const data = await new Promise((resolve, reject)=> {
     resolve(getUserTotalData(userData));
   })
   .then(result=> {
-    // console.log('유저의 데이타@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2',result.data.matches)
+   
+    return result.data.matches;
+  })
+  .then((matches)=> {
+    // console.log(matches)
+    const list = matches.slice(0, 10||matches.length)
+    list.map(matchesGameId => {
+      const gameId = matchesGameId.gameId;
+      
+      array1 = array1.concat(gameId)
+    })
     
-    return  {
-      matches : result.data.matches
-    }
+  })
+  .then(()=> {
+    // 받을 데이터 셋
+    /*
+    const data = [
+      {
+        gameCreation : '',
+        gameDuration : '',
+        queueId : '',
+        gameMode : '',
+        participants : [
+          {
+            participantId : number,
+            teamId : 100 or 200,
+            championId : number,
+            spell1Id : number,
+            spell2Id : number,
+            stats : {
+              win : bool,
+              kills : number,
+              deaths : number,
+              assists : number,
+            }
+          }
+        ]
+      },
+      {...},
+      {...}
+    ]
+     */
+    const data = array1.map((gameId, index) => {
+      (x => {
+        setTimeout(()=> {
+          new Promise((resolve, reject)=> {
+            resolve(getUserTotalGameData(gameId))
+          })
+          .then(result=> {
+            // result.data 
+            const data = {
+              gameCreation : result.data.gameCreation,
+              gameDuration : result.data.gameDuration,
+              queueId : result.data.queueId,
+              gameMode : result.data.gameMode,
+              participants : result.data.participants,
+            }
+
+            array3 = array3.concat(data)
+          })
+          .finally(()=> {
+            
+            if(array1.length === index+1) {
+              console.log("loading...", `${index+1}/${array1.length}`)
+              console.log("finished")
+              return res.json(array3)
+            }
+            console.log("loading...", `${index+1}/${array1.length}`)
+            
+          })
+        }, 100 * x);
+      })(index);
+      
+    })// map end
+    // array1.splice(0, array1.length);
+    array3.splice(0, array3.length);
+
+      // return data
   })
   .catch(()=> {
     console.log("전적이 없네요?")
   })
 
-  return res.json(data);
+  // return res.json(data);
 })
 
 app.listen(port, () => {

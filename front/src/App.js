@@ -1,6 +1,6 @@
 
 // import React from "react";
-import React, {createContext, Provider, useState, useEffect } from "react";
+import React, {createContext, Provider, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Link, Route } from "react-router-dom";
 import Home from "./page/Home";
@@ -44,9 +44,14 @@ function App() {
   };
 
   // 인풋 값 변경 확인
-  const onChangeHandle = (e) => {
+  // const onChangeHandle = (e) => {
+  //   setUserName(e.target.value);
+  // };
+  const onChangeHandle = useCallback((e)=> {
+    // const {name} = e.target.value
     setUserName(e.target.value);
-  };
+  }, [userName])
+
   const onReset = () => {
     setUserName("");
   };
@@ -82,7 +87,8 @@ function App() {
     return getUserData(userName)
             .then(res=> {
               if (res.data === null) {
-                  return false;
+                  alert("오류")
+                  return ;
                 }
 
                 const getUser = res.data;
@@ -105,6 +111,9 @@ function App() {
     //   // const result = searchUser(addUser.summonerName);
     //   // console.log(result)
     // }
+    if(addUser == null) {
+      return false;
+    }
 
     const user = {
           name: addUser.name || addUser.summonerName,
@@ -146,7 +155,6 @@ function App() {
   // get user total data
   const onTotalData = (userData) => {
     const data = userData;
-    console.log(data)
 
     const resultData = getUserTotalData(data)
       .then(result=> {
@@ -154,6 +162,8 @@ function App() {
         
         // setUserTotal(result.data.matches)
         const matches = result.data.matches;
+        console.log(result)
+        
         return matches;
         
       })
