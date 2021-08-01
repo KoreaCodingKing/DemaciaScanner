@@ -30,7 +30,7 @@ function App() {
   const [scanning, setScanning] = useState(false);
   // const [modal, setModal] = useState(false);
   const [userTotal, setUserTotal] = useState([]);
-  const [userTotalView, setUserTotalView] = useState(false);
+  const [championValue, setChampionValue] = useState("");
 
   useEffect(() => {
     const sessionStorageValue = sessionStorage.userList || null;
@@ -60,31 +60,6 @@ function App() {
 
   const onReset = () => {
     setUserName("");
-  };
-
-  const idValidate = (name) => {
-    console.log(name);
-
-    // function validate(name) {
-    //   const trimmedUserName = nameType.trim();
-
-    //   if (!trimmedUserName) {
-    //     alert("값이 없습니다");
-    //     return false;
-    //   }
-
-    //   const doesExistUserName = userList.some(
-    //     (id) =>
-    //       id.name.replace(/\s/gi, "").toUpperCase() ===
-    //       trimmedUserName.replace(/\s/gi, "").toUpperCase()
-    //   );
-
-    //   if (doesExistUserName) {
-    //     alert("중복된 소환사 닉네임이 있습니다.");
-    //     onReset();
-    //     return false;
-    //   }
-    // }
   };
 
   // 유저 찾기
@@ -197,6 +172,12 @@ function App() {
     });
   };
 
+  const getChampionName = async (championId) => {
+    return await axios.post("http://localhost:3001/champion", {
+      championId,
+    });
+  };
+
   // 서버로 부터 인게임 상태를 받아와 상태값 변경 함수
   function updateInGame(targetUserList) {
     if (!isPause) {
@@ -210,6 +191,14 @@ function App() {
     } else {
       console.log("isPause값은 true로 스캔을 정지합니다.!");
     }
+  }
+
+  function championName(championId) {
+    getChampionName(championId).then((res) => {
+      const data = res.data;
+      setChampionValue(data);
+      // console.log(data);
+    });
   }
 
   // 스캐너 시작
@@ -318,6 +307,8 @@ function App() {
             // modal,
             onTotalData,
             userTotal,
+            championName,
+            championValue,
           }}
         >
           <ApiTest />

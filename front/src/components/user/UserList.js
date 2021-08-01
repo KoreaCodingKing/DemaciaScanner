@@ -1,11 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
 import { UserListContext } from "../../App";
 
-function UserTotalView({ view, userTotal, user }) {
+function UserTotalView({ view, userTotal, user, championName, championValue }) {
   const targetUser = user.name;
-  // console.log(user);
-
-  const [aa, setAa] = useState("");
+  console.log(championValue);
 
   const rendering = (user) => {
     const result = [];
@@ -23,16 +21,10 @@ function UserTotalView({ view, userTotal, user }) {
         participantCount < userTotal[gameCount].participants.length;
         participantCount++
       ) {
-        // participantCount번의 플레이어 participantCountId
-        const participantIdValue =
-          userTotal[gameCount].participantIdentities[participantCount]
-            .participantId;
         // 소환사 이름
         const participantNameValue =
           userTotal[gameCount].participantIdentities[participantCount].player
             .summonerName;
-        // 승패 상태, true, false
-        // console.log(participantNameValue);
 
         let myParticipantId = "";
 
@@ -55,22 +47,17 @@ function UserTotalView({ view, userTotal, user }) {
               userTotal[gameCount].participants[findTotalValueCount]
                 .participantId
             ) {
+              // championName(
+              //   userTotal[gameCount].participants[findTotalValueCount]
+              //     .championId
+              // );
               statsValue =
                 userTotal[gameCount].participants[findTotalValueCount].stats
                   .win;
-              // console.log("롸");
-
-              // setAa(
-              //   userTotal[gameCount].participants[findTotalValueCount].stats.win
-              // );
 
               console.log(
                 `statsValue 값, ${statsValue == false ? "패배" : "승리"}`
               );
-            } else {
-              // console.log(
-              //   `${participantIdValue}와 ${userTotal[gameCount].participants[findTotalValueCount].participantId}가 맞지 않음`
-              // );
             }
           }
         }
@@ -78,7 +65,9 @@ function UserTotalView({ view, userTotal, user }) {
       }
 
       result.push(
-        <div key={gameCount}>{statsValue == true ? "승리" : "패배"}</div>
+        <div key={gameCount}>
+          사용챔피언({championValue}) - {statsValue == true ? "승리" : "패배"}
+        </div>
       );
     }
 
@@ -97,7 +86,7 @@ function UserTotalView({ view, userTotal, user }) {
 }
 
 function User({ user }) {
-  const { onRemove, onTotalData } = useContext(UserListContext);
+  const { onRemove, onTotalData, championName } = useContext(UserListContext);
   const [view, setView] = useState(false);
 
   const [totalData, setTotalData] = useState([]);
@@ -129,7 +118,12 @@ function User({ user }) {
           })
         } */}
       {view ? (
-        <UserTotalView view={view} userTotal={totalData} user={user} />
+        <UserTotalView
+          view={view}
+          userTotal={totalData}
+          championName={championName}
+          user={user}
+        />
       ) : (
         <span>false</span>
       )}

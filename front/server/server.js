@@ -55,6 +55,24 @@ async function getTempIdList() {
     `https://kr.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/CHALLENGER/I?page=1&api_key=${riotApiKey}`
   );
 }
+// 챔피언 이름 찾기
+async function getChampionName(id) {
+  return await axios.get(
+    "https://ddragon.leagueoflegends.com/cdn/11.15.1/data/ko_KR/champion.json",
+    function (body) {
+      console.log(body);
+      let list = JSON.parse(body);
+      let championList = list.data;
+
+      // for (let i = 0; i < championList.length; i++) {
+      //   if (championList[i].key == id) {
+      //     console.log(championList[i].id);
+      //   }
+      // }
+    }
+  );
+}
+
 // 테스트용 첼린저 데이터
 app.get("/testlist", async (req, res) => {
   const data = await new Promise((resolve, reject) => {
@@ -293,7 +311,7 @@ app.post("/usertotal", async (req, res) => {
                 }
                 console.log("loading...", `${index + 1}/${array1.length}`);
               });
-          }, 100 * x);
+          }, 200 * x);
         })(index);
       }); // map end
       // array1.splice(0, array1.length);
@@ -306,6 +324,37 @@ app.post("/usertotal", async (req, res) => {
     });
 
   // return res.json(data);
+});
+
+app.post("/champion", async (req, res) => {
+  const id = req.body.championId;
+  // console.log(id);
+
+  let myChamp = "";
+
+  function getChampName(id) {
+    return axios
+      .get(
+        "https://ddragon.leagueoflegends.com/cdn/11.15.1/data/ko_KR/champion.json"
+      )
+      .then((res) => {
+        const championList = res.data.data;
+        const convertToObjectChampionList = Object.entries(championList);
+
+        convertToObjectChampionList.map((item, index) => {
+          if (item[1].key == id) {
+            // console.log(item[1].name);
+            myChamp = item[1].name;
+          }
+        });
+      })
+      .finally(() => {
+        console.log("finally", myChamp);
+        return res.json(myChamp);
+      });
+  }
+
+  getChampName(id);
 });
 
 app.listen(port, () => {
