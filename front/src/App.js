@@ -234,7 +234,7 @@ function App() {
 
       setLoading(true);
       updateInGame(updateUserList);
-    }, 60000);
+    }, 20000);
   };
 
   // 스캐너 중지

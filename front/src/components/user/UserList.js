@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { UserListContext } from "../App";
+import { UserListContext } from "../../App";
 
 function UserTotalView({ view, userTotal }) {
   const rendering = (user) => {
