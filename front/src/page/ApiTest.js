@@ -1,196 +1,50 @@
 // 테스트중인 페이지
 // CORS policy 오류 ->브라우저에서 보내서 그럼, 서버에서 보내면 됨
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
 import Loading from "../components/Loading";
 import UserInsertForm from "../components/user/UserInsertForm";
 import UserList from "../components/user/UserList";
 import InGameStateView from "./InGameStateView";
+import CurrentMyState from "./CurrentMyState";
+import { UserListContext } from "../App";
+import UserTotal from "../components/UserTotal";
 
 let tempList = [];
-let timer;
-  let isPause = false;
 
-function ApiTest() {
-  const [status, setStatus] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [userList, setUserList] = useState([]);
-  const [userState, setUserState] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [scanning, setScanning] = useState(false);
-  
+function ApiTest(props) {
+  // 상위 context에서function 가져오기
+  let {
+    userList,
+    userName,
+    insertUser,
+    onReset,
+    searchUser,
+    onChangeHandle,
+    sessionStorageInit,
+    getUserDataInGame,
+    timer,
+    isPause,
+    userState,
+    loading,
+    updateInGame,
+    startScanner,
+    stopScanner,
+    scanning,
+    modalView,
+    modal,
+  } = useContext(UserListContext);
 
-  useEffect(() => {
-    const sessionStorageValue = sessionStorage.userList || null;
-
-    if (sessionStorageValue) {
-      const userListInSession = JSON.parse(sessionStorageValue);
-      setUserList(userListInSession);
-    }
-  }, []);
-
-  // 인풋 값 변경 확인
-  const onChangeHandle = (e) => {
-    setUserName(e.target.value);
-  };
-
-// 리스트 제거 함수
-  const onRemove = (id) => {
-    
-    setUserList(userList.filter(user=> user.id !== id))
-    const data = sessionStorage.getItem('userList')
-    const dataParse = JSON.parse(data);
-    const removeSesstionList = dataParse.filter(user=> user.id !== id);
-    sessionStorage.setItem('userList', JSON.stringify(removeSesstionList))
-
-  }
-
-  const onReset = () => {
-    setUserName("");
-  };
-
-  const sessionStorageInit = () => {
-    sessionStorage.clear();
-  };
-
-  // server.js에서 압력받은 id 값 가져오기
-  const getUserData = async (userName) => {
-    return await axios.post("http://localhost:3001/searchuser", {
-      name: userName,
-    });
-  };
-
-  // 인게임 상태 추출
-  const getUserDataInGame = async (users) => {
-    return await axios.post("http://localhost:3001/userstatus", {
-      users,
-    });
-  };
+  // 게임 종료 후 승패 결과, 게임 시간, 끝나고 난 뒤 시간 체크
+  const getUserDataGameResult = async (user) => {};
 
   // 테스트 리스트 사용하기
   const testList = async () => {
     return await axios.get("http://localhost:3001/testlist");
   };
 
-// 서버로 부터 인게임 상태를 받아와 상태값 변경 함수
-  function updateInGame(targetUserList) {
-    if (isPause) {
-      console.log("isPause값은 true로 스캔을 정지합니다.");
-      return;
-    }
-
-    const inGameData = getUserDataInGame(targetUserList);
-    new Promise((resolve) => {
-      resolve(inGameData);
-    }).then((res) => {
-      // console.log(res.data);
-      setUserState(res.data);
-      setLoading(false);
-    });
-  }
-
-  // 유저 검색
-  const insertUser = (e) => {
-    e.preventDefault();
-
-    const trimmedUserName = userName.trim();
-
-    if (!trimmedUserName) {
-      alert("값이 없습니다");
-      return;
-    }
-
-    const doesExistUserName = userList.some(
-      (id) =>
-        id.name.replace(/\s/gi, "").toUpperCase() ===
-        trimmedUserName.replace(/\s/gi, "").toUpperCase()
-    );
-    if (doesExistUserName) {
-      alert("중복된 소환사 닉네임이 있습니다.");
-      onReset();
-      return;
-    }
-
-    setUserName(e.target.value);
-
-    getUserData(trimmedUserName)
-      .then((res) => {
-        if (res.data === null) {
-          setStatus(false);
-          return false;
-        }
-
-        setStatus(true);
-
-        const user = {
-          name: res.data.name,
-          id: res.data.id,
-          revisionDate : res.data.revisionDate
-        };
-        // console.log(new Date(user.revisionDate))
-        setUserList(userList.concat(user));
-
-        sessionStorage.setItem(
-          "userList",
-          JSON.stringify(userList.concat(user))
-        );
-      })
-      .catch((err) => {
-        setUserList([...userList]);
-      });
-    onReset();
-  };
-
-  // 인게임 조회
-  const searchInGameState = (e) => {
-    e.preventDefault();
-    
-    setLoading(true);
-
-    if (!userList || userList.length === 0) {
-      alert("등록한 유저가 없습니다.");
-      return;
-    }
-    // 게임상태 업데이트
-    updateInGame(userList)
-  };
-  
-
-  // 인게임 조회 주기적인 실행
-  const startScanner = (e)=> {
-    e.preventDefault()
-    // 스캐너 플래그 상태
-     isPause = false;
-     // 로딩 상태
-     setLoading(true);
-     setScanning(true);
-
-    // 게임 진행 상태 체크 
-    updateInGame(userList)
-    // 주기적 실행 함수
-    timer = setInterval(()=> {
-
-      function updateList() {
-        return JSON.parse(sessionStorage.userList);
-      }
-      const updateUserList = updateList();
-
-      setLoading(true);
-      updateInGame(updateUserList)
-    },15000)
-  }
-
-  const stopScanner= () => {  
-      // 주시적 실행 정지
-      clearInterval(timer)
-      // 스캐너 플래그 상태 중지
-      isPause=true;
-
-      setScanning(false)
-  }
-
-// 테스트 리스트 반환
+  // 테스트 리스트 반환 - 나중에 나의 db에서 리스트를 받아올때 사용
   const getTestList = (e) => {
     e.preventDefault();
     testList().then((res) => {
@@ -203,9 +57,8 @@ function ApiTest() {
           id: id,
         };
         tempList = tempList.concat(data);
-        
       });
-      setUserList(tempList);
+      // setUserList(tempList);
       sessionStorage.setItem("userList", JSON.stringify(tempList));
     });
   };
@@ -218,20 +71,18 @@ function ApiTest() {
       <button onClick={searchInGameState}>인게임 상태</button>
       <button onClick={startScanner}>인게임 스케너</button>
       <button onClick={stopScanner}>인게임 스캐너 중지</button>
+      <button onClick={modalView}>모달 버튼</button>
+
       <br />
+      {modal ? <UserTotal /> : <span></span>}
       <form className="insert_form" onSubmit={insertUser}>
-        <UserInsertForm
-          onInsertUser={insertUser}
-          inputValue={userName}
-          existValue={status}
-          onChangeEvent={onChangeHandle}
-        />
+        <UserInsertForm inputValue={userName} onChangeEvent={onChangeHandle} />
       </form>
       <br />
-      <UserList users={userList} onRemove={onRemove}  />
+      <UserList users={userList} />
       <br />
       <div className="id-list"></div>
-      <InGameStateView state={userState} loading={loading} scanning={scanning} />
+      <InGameStateView state={userState} loading={loading} />
     </>
   );
 }
