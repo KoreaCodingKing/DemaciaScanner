@@ -19,19 +19,15 @@ function UserTotalView({ view, userTotal}) {
 
     // }
     for(let gameCount = 0; gameCount<userTotal.length; gameCount++) {
-      let team100 = '';
-      let team200 = ''
             
         // team100의 승패
-        const teamResult = userTotal[gameCount].team[0].win;
+        const team100 = userTotal[gameCount].team[0].win;
+        const team200 = userTotal[gameCount].team[1].win;
 
-        if(teamResult) {
-           team100 = true;
-           team200 = false
-        }
+        // const myTeamNumber = 
 
+        
         result.push(<div key={gameCount}>{team100 ? "WIN" : "LOSE"}</div>)
-
     }
 
 
