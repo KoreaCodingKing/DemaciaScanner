@@ -1,24 +1,85 @@
 import React, { useContext, useState, useEffect } from "react";
 import { UserListContext } from "../../App";
 
-function UserTotalView({ view, userTotal }) {
+function UserTotalView({ view, userTotal, user }) {
+  const targetUser = user.name;
+  // console.log(user);
+
+  const [aa, setAa] = useState("");
+
   const rendering = (user) => {
     const result = [];
+    let statsValue = "";
 
-    console.log("테스트 ", user);
-
-    // for(let i = 0; i<userTotal.length; i++) {
-    //   result.push(<div key={i}>{userTotal[i].gameCreation} - {userTotal[i].participants[i].stats.win ? "WIN" : "LOSE"}</div>)
-
-    // }
+    // 받은 게임리스트
     for (let gameCount = 0; gameCount < userTotal.length; gameCount++) {
       // team100의 승패
-      const team100 = userTotal[gameCount].team[0].win;
-      const team200 = userTotal[gameCount].team[1].win;
+      // const team100 = "";
 
-      // const myTeamNumber =
+      // 같이 게임한 플레이어들의 상태
+      console.log(`${gameCount} 번째 게임`);
+      for (
+        let participantCount = 0;
+        participantCount < userTotal[gameCount].participants.length;
+        participantCount++
+      ) {
+        // participantCount번의 플레이어 participantCountId
+        const participantIdValue =
+          userTotal[gameCount].participantIdentities[participantCount]
+            .participantId;
+        // 소환사 이름
+        const participantNameValue =
+          userTotal[gameCount].participantIdentities[participantCount].player
+            .summonerName;
+        // 승패 상태, true, false
+        // console.log(participantNameValue);
 
-      result.push(<div key={gameCount}>{team100 ? "WIN" : "LOSE"}</div>);
+        let myParticipantId = "";
+
+        if (targetUser !== participantNameValue) {
+          console.log(`${targetUser}와 ${participantNameValue}는 다릅니다.`);
+        } else {
+          myParticipantId =
+            userTotal[gameCount].participantIdentities[participantCount]
+              .participantId;
+
+          console.log(`나의 myParticipantId값은 : ${myParticipantId}입니다.`);
+
+          for (
+            let findTotalValueCount = 0;
+            findTotalValueCount < userTotal[gameCount].participants.length;
+            findTotalValueCount++
+          ) {
+            if (
+              myParticipantId ===
+              userTotal[gameCount].participants[findTotalValueCount]
+                .participantId
+            ) {
+              statsValue =
+                userTotal[gameCount].participants[findTotalValueCount].stats
+                  .win;
+              // console.log("롸");
+
+              // setAa(
+              //   userTotal[gameCount].participants[findTotalValueCount].stats.win
+              // );
+
+              console.log(
+                `statsValue 값, ${statsValue == false ? "패배" : "승리"}`
+              );
+            } else {
+              // console.log(
+              //   `${participantIdValue}와 ${userTotal[gameCount].participants[findTotalValueCount].participantId}가 맞지 않음`
+              // );
+            }
+          }
+        }
+        // 위에서 받은 value로 다시 for문
+      }
+
+      result.push(
+        <div key={gameCount}>{statsValue == true ? "승리" : "패배"}</div>
+      );
     }
 
     return result;
@@ -68,7 +129,7 @@ function User({ user }) {
           })
         } */}
       {view ? (
-        <UserTotalView view={view} userTotal={totalData} />
+        <UserTotalView view={view} userTotal={totalData} user={user} />
       ) : (
         <span>false</span>
       )}
