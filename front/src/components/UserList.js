@@ -2,52 +2,73 @@ import React, {useContext, useState, useEffect} from 'react';
 import {UserListContext} from "../App"
 
 function UserTotalView({ view, userTotal}) {
-  // setTimeout(()=> {
-    console.log(userTotal)
-  // }, 5000)
+  
+  
 
+  
 
   const rendering = (user) => {
     const result = [];
 
-    for(let i = 0; i<userTotal.length; i++) {
-      result.push(<div key={i}>{user.name}{userTotal[i].gameId}</div>)
+    
+
+    console.log("테스트 ",user)
+
+    // for(let i = 0; i<userTotal.length; i++) {
+    //   result.push(<div key={i}>{userTotal[i].gameCreation} - {userTotal[i].participants[i].stats.win ? "WIN" : "LOSE"}</div>)
+
+    // }
+    for(let gameCount = 0; gameCount<userTotal.length; gameCount++) {
+      let team100 = '';
+      let team200 = ''
+            
+        // team100의 승패
+        const teamResult = userTotal[gameCount].team[0].win;
+
+        if(teamResult) {
+           team100 = true;
+           team200 = false
+        }
+
+        result.push(<div key={gameCount}>{team100 ? "WIN" : "LOSE"}</div>)
+
     }
+
+
     return result ;
   }
   
   return (
     <div>
+    {/* {
+      userTotal[0].participants[0].stats.win ? "win" : "lose"
+    } */}
       {rendering(userTotal)}
+      {/* asd */}
     </div>
   )
 }
 
 function User({user}) {
-  const {onRemove, onTotalData, userTotal} = useContext(UserListContext)
+  const {onRemove, onTotalData} = useContext(UserListContext)
   const [view, setView] = useState(false);
 
   const [totalData, setTotalData] = useState([]);
 
   
-  // console.log('유저 토탈 상태값',userTotal)
 
-  // const rendering = (user) => {
-  //   const result = [];
-
-  //   for(let i = 0; i<userTotal.length; i++) {
-  //     result.push(<div key={i}>{user.name}{userTotal[i].gameId}</div>)
-  //   }
-  //   return result ;
-  // }
-  // console.log(userTotal)
 
   const test = (user) => {
-    const data = []
     
-    onTotalData(user).then(res=> setTotalData(res))
+    onTotalData(user).then(res=> {
+      setTotalData(res)
+      setView(true)
+    })
     // view 주석 해제하면 보임
-    // setView(true)
+    // setTimeout(()=> {
+      // setView(true)
+    // },3000)
+    
   }
 
     return (
@@ -56,6 +77,15 @@ function User({user}) {
         <button onClick={()=> onRemove(user.id)}>제거</button>
         <button onClick={()=> test(user)}>전적 확인하기</button>
         {/* { rendering(user)} */}
+        {/* {
+          userTotal.map((item, index)=> {
+            (x=> {
+              setTimeout(()=> {
+                <UserTotalView  view={view} userTotal={totalData} />
+              }, 100*x)
+            })(index)
+          })
+        } */}
         {view ? <UserTotalView  view={view} userTotal={totalData} /> : <span>false</span>}
         </div>
     )

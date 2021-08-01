@@ -229,6 +229,7 @@ app.post("/usertotal", async (req, res)=> {
       const gameId = matchesGameId.gameId;
       
       array1 = array1.concat(gameId)
+      
     })
     
   })
@@ -261,6 +262,7 @@ app.post("/usertotal", async (req, res)=> {
       {...}
     ]
      */
+     console.log(array1)
     const data = array1.map((gameId, index) => {
       (x => {
         setTimeout(()=> {
@@ -274,10 +276,13 @@ app.post("/usertotal", async (req, res)=> {
               gameDuration : result.data.gameDuration,
               queueId : result.data.queueId,
               gameMode : result.data.gameMode,
+              team : result.data.teams,
               participants : result.data.participants,
+              participantIdentities : result.data.participantIdentities
             }
 
             array3 = array3.concat(data)
+            console.log(array3)
           })
           .finally(()=> {
             

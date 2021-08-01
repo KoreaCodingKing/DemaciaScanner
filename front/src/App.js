@@ -25,8 +25,9 @@ function App() {
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
   const [scanning, setScanning] = useState(false);
-  const [modal, setModal] = useState(false);
+  // const [modal, setModal] = useState(false);
   const [userTotal, setUserTotal] = useState([]);
+  const [userTotalView, setUserTotalView] = useState(false);
 
   useEffect(() => {
     
@@ -148,9 +149,9 @@ function App() {
   }
 
   // modal show, hide
-  const modalView = (target) => {
-    setModal(true)
-  }
+  // const modalView = (target) => {
+  //   setModal(true)
+  // }
 
   // get user total data
   const onTotalData = (userData) => {
@@ -161,8 +162,8 @@ function App() {
         // console.log(result.data.matches)
         
         // setUserTotal(result.data.matches)
-        const matches = result.data.matches;
-        console.log(result)
+        const matches = result.data;
+        console.log(matches)
         
         return matches;
         
@@ -329,11 +330,11 @@ function App() {
           startScanner,
           stopScanner,
           scanning,
-          modalView,
-          modal,
+          // modalView,
+          // modal,
           onTotalData,
           userTotal
-          }}>
+          }}> 
           <ApiTest />
         </UserListContext.Provider>
       </Route>
