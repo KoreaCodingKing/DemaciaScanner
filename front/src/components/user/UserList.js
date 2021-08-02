@@ -3,7 +3,7 @@ import { UserListContext } from "../../App";
 
 function UserTotalView({ view, userTotal, user, championName, championValue }) {
   const targetUser = user.name;
-  console.log(championValue);
+  // console.log(championValue);
 
   const rendering = (user) => {
     const result = [];
@@ -47,10 +47,10 @@ function UserTotalView({ view, userTotal, user, championName, championValue }) {
               userTotal[gameCount].participants[findTotalValueCount]
                 .participantId
             ) {
-              // championName(
-              //   userTotal[gameCount].participants[findTotalValueCount]
-              //     .championId
-              // );
+              championName(
+                userTotal[gameCount].participants[findTotalValueCount]
+                  .championId
+              );
               statsValue =
                 userTotal[gameCount].participants[findTotalValueCount].stats
                   .win;

@@ -233,6 +233,7 @@ app.post("/userstatus", async (req, res) => {
   */
 app.post("/usertotal", async (req, res) => {
   const userData = req.body.user;
+  console.log("타겟 유저", userData);
 
   let array1 = [];
   let array3 = [];
@@ -253,34 +254,6 @@ app.post("/usertotal", async (req, res) => {
       });
     })
     .then(() => {
-      // 받을 데이터 셋
-      /*
-    const data = [
-      {
-        gameCreation : '',
-        gameDuration : '',
-        queueId : '',
-        gameMode : '',
-        participants : [
-          {
-            participantId : number,
-            teamId : 100 or 200,
-            championId : number,
-            spell1Id : number,
-            spell2Id : number,
-            stats : {
-              win : bool,
-              kills : number,
-              deaths : number,
-              assists : number,
-            }
-          }
-        ]
-      },
-      {...},
-      {...}
-    ]
-     */
       //  console.log(array1)
       const data = array1.map((gameId, index) => {
         ((x) => {
@@ -307,7 +280,38 @@ app.post("/usertotal", async (req, res) => {
                 if (array1.length === index + 1) {
                   console.log("loading...", `${index + 1}/${array1.length}`);
                   console.log("finished");
-                  return res.json(array3);
+                  // console.log(array3);
+
+                  // const myParticipantId = "";
+                  // let myParticipantNameValue
+
+                  array3.map((item, index) => {
+                    // console.log(`${index}번 아이템 ->`, item);
+                    // console.log(item.participantIdentities.participantId);
+                    const length = item.participantIdentities.length;
+                    for (let i = 0; i < length; i++) {
+                      console.log(
+                        item.participantIdentities[i].player.summonerName,
+                        item.participants[i].stats.kills,
+                        item.participants[i].stats.deaths,
+                        item.participants[i].stats.assists,
+                        item.participants[i].stats.win ? "WIN" : "LOSE"
+                      );
+                    }
+
+                    // console.log(
+                    //   item.participantIdentities[index].participantId,
+                    //   item.participantIdentities[index].player.summonerName,
+                    //   item.participants[index].participantId,
+                    //   item.participants[index].championId,
+                    //   item.participants[index].stats.kills,
+                    //   item.participants[index].stats.deaths,
+                    //   item.participants[index].stats.assists,
+                    //   item.participants[index].stats.win ? "WIN" : "LOSE"
+                    // );
+                  });
+
+                  // return res.json(array3);
                 }
                 console.log("loading...", `${index + 1}/${array1.length}`);
               });
@@ -331,6 +335,7 @@ app.post("/champion", async (req, res) => {
   // console.log(id);
 
   let myChamp = "";
+  let array1 = [];
 
   function getChampName(id) {
     return axios
@@ -345,12 +350,13 @@ app.post("/champion", async (req, res) => {
           if (item[1].key == id) {
             // console.log(item[1].name);
             myChamp = item[1].name;
+            array1 = array1.concat(myChamp);
           }
         });
       })
       .finally(() => {
-        console.log("finally", myChamp);
-        return res.json(myChamp);
+        console.log("finally", array1);
+        // return res.json(myChamp);
       });
   }
 
