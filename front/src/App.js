@@ -124,11 +124,8 @@ function App() {
 
     const resultData = getUserTotalData(data)
       .then((result) => {
-        // console.log(result.data.matches)
-
-        // setUserTotal(result.data.matches)
         const matches = result.data;
-        console.log(matches);
+        // console.log(matches);
 
         return matches;
       })

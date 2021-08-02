@@ -278,7 +278,6 @@ app.post("/usertotal", async (req, res) => {
                 };
 
                 array3 = array3.concat(data);
-                // console.log(array3)
               })
               .finally(() => {
                 if (array1.length === index + 1) {
@@ -293,7 +292,6 @@ app.post("/usertotal", async (req, res) => {
                     let dataList = [];
 
                     for (let i = 0; i < length1; i++) {
-                      let output = [];
                       // const championIdValue = item.participants[i].championId;
 
                       // eslint-disable-next-line no-loop-func
@@ -325,8 +323,6 @@ app.post("/usertotal", async (req, res) => {
 
                       dataList = dataList.concat([data]);
 
-                      // resultArray2.push(data);
-
                       if (i + 1 == length1) {
                         resultArray = resultArray.concat({
                           dataList,
@@ -337,14 +333,8 @@ app.post("/usertotal", async (req, res) => {
                         console.log(index, "번째임");
                       }
                     }
-
-                    // console.log(resultArray);
-
-                    // resultArray2 = resultArray2.concat((index = [resultArray]));
-                    // resultArray.splice(0, resultArray.length);
                   });
 
-                  // console.log(resultArray2);
                   return res.json(resultArray);
                 }
                 console.log("loading...", `${index + 1}/${array1.length}`);
