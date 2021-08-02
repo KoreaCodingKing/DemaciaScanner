@@ -58,19 +58,20 @@ async function getTempIdList() {
 // 챔피언 이름 찾기
 async function getChampionName(id) {
   return await axios.get(
-    "https://ddragon.leagueoflegends.com/cdn/11.15.1/data/ko_KR/champion.json",
-    function (body) {
-      console.log(body);
-      let list = JSON.parse(body);
-      let championList = list.data;
-
-      // for (let i = 0; i < championList.length; i++) {
-      //   if (championList[i].key == id) {
-      //     console.log(championList[i].id);
-      //   }
-      // }
-    }
+    "https://ddragon.leagueoflegends.com/cdn/11.15.1/data/ko_KR/champion.json"
   );
+  // .then((res) => {
+  //   const championList = res.data.data;
+  //   const convertToObjectChampionList = Object.entries(championList);
+  //   const champ = "";
+
+  //   convertToObjectChampionList.map((item, index) => {
+  //     if (item[1].key == id) {
+  //       // console.log(item[1].name);
+  //         item[1].name;
+  //     }
+  //   });
+  // });
 }
 
 // 테스트용 첼린저 데이터
@@ -238,6 +239,9 @@ app.post("/usertotal", async (req, res) => {
   let array1 = [];
   let array3 = [];
 
+  let resultArray = [];
+  let resultArray2 = [];
+
   const data = await new Promise((resolve, reject) => {
     resolve(getUserTotalData(userData));
   })
@@ -282,36 +286,66 @@ app.post("/usertotal", async (req, res) => {
                   console.log("finished");
                   // console.log(array3);
 
-                  // const myParticipantId = "";
-                  // let myParticipantNameValue
+                  let champData = "";
 
                   array3.map((item, index) => {
-                    // console.log(`${index}번 아이템 ->`, item);
-                    // console.log(item.participantIdentities.participantId);
-                    const length = item.participantIdentities.length;
-                    for (let i = 0; i < length; i++) {
-                      console.log(
-                        item.participantIdentities[i].player.summonerName,
-                        item.participants[i].stats.kills,
-                        item.participants[i].stats.deaths,
-                        item.participants[i].stats.assists,
-                        item.participants[i].stats.win ? "WIN" : "LOSE"
-                      );
+                    const length1 = item.participantIdentities.length;
+                    let dataList = [];
+
+                    for (let i = 0; i < length1; i++) {
+                      let output = [];
+                      // const championIdValue = item.participants[i].championId;
+
+                      // eslint-disable-next-line no-loop-func
+                      // getChampionName(championIdValue).then((res) => {
+                      //   const championList = res.data.data;
+                      //   const convertToObjectChampionList =
+                      //     Object.entries(championList);
+                      //   // const champ = "";
+
+                      //   convertToObjectChampionList.map((item, index) => {
+                      //     if (item[1].key == championIdValue) {
+                      //       // console.log(item[1].name);
+                      //       champData = item[1].name;
+                      //       // item[1].name;
+                      //     }
+                      //   });
+                      // });
+
+                      const data = {
+                        summonerName:
+                          item.participantIdentities[i].player.summonerName,
+                        championId: item.participants[i].championId,
+                        // championId: champData,
+                        kills: item.participants[i].stats.kills,
+                        deaths: item.participants[i].stats.deaths,
+                        assists: item.participants[i].stats.assists,
+                        win: item.participants[i].stats.win ? "WIN" : "LOSE",
+                      };
+
+                      dataList = dataList.concat([data]);
+
+                      // resultArray2.push(data);
+
+                      if (i + 1 == length1) {
+                        resultArray = resultArray.concat({
+                          dataList,
+                        });
+                        console.log(resultArray);
+                        console.log("끝");
+                      } else {
+                        console.log(index, "번째임");
+                      }
                     }
 
-                    // console.log(
-                    //   item.participantIdentities[index].participantId,
-                    //   item.participantIdentities[index].player.summonerName,
-                    //   item.participants[index].participantId,
-                    //   item.participants[index].championId,
-                    //   item.participants[index].stats.kills,
-                    //   item.participants[index].stats.deaths,
-                    //   item.participants[index].stats.assists,
-                    //   item.participants[index].stats.win ? "WIN" : "LOSE"
-                    // );
+                    // console.log(resultArray);
+
+                    // resultArray2 = resultArray2.concat((index = [resultArray]));
+                    // resultArray.splice(0, resultArray.length);
                   });
 
-                  // return res.json(array3);
+                  // console.log(resultArray2);
+                  return res.json(resultArray);
                 }
                 console.log("loading...", `${index + 1}/${array1.length}`);
               });
@@ -320,6 +354,7 @@ app.post("/usertotal", async (req, res) => {
       }); // map end
       // array1.splice(0, array1.length);
       array3.splice(0, array3.length);
+      resultArray.splice(0, resultArray.length);
 
       // return data
     })

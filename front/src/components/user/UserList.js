@@ -93,8 +93,8 @@ function User({ user }) {
 
   const test = (user) => {
     onTotalData(user).then((res) => {
-      setTotalData(res);
-      setView(true);
+      // setTotalData(res);
+      // setView(true);
     });
     // view 주석 해제하면 보임
     // setTimeout(()=> {
