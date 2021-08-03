@@ -1,8 +1,17 @@
 .user_state__block {
-  background: hotpink;
+  //   padding: 10px;
+  width: 550px;
+  background: rgb(255, 179, 0);
+  outline: 1px solid #222;
+  box-sizing: border-box;
 }
 
 .user_state__item {
+  padding: 5px 0 5px 10px;
+  outline: 1px solid #222;
+  box-sizing: border-box;
+  font-weight: 600;
+
   &--WIN {
     background: rgb(17, 154, 31);
   }

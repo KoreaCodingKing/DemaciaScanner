@@ -250,7 +250,7 @@ app.post("/usertotal", async (req, res) => {
     })
     .then((matches) => {
       // console.log(matches)
-      const list = matches.slice(0, 10 || matches.length);
+      const list = matches.slice(0, 4 || matches.length);
       list.map((matchesGameId) => {
         const gameId = matchesGameId.gameId;
 
@@ -272,10 +272,41 @@ app.post("/usertotal", async (req, res) => {
                   gameDuration: result.data.gameDuration,
                   queueId: result.data.queueId,
                   gameMode: result.data.gameMode,
+                  gameType: result.data.gameType,
                   team: result.data.teams,
                   participants: result.data.participants,
                   participantIdentities: result.data.participantIdentities,
                 };
+
+                if (result.data.gameMode == "CLASSIC") {
+                  data.gameMode = "소환사의 협곡";
+                } else if (result.data.gameMode == "ARAM") {
+                  data.gameMode = "칼바람 나락";
+                } else if (result.data.gameMode == "URF") {
+                  data.gameMode = "우르프";
+                } else if (result.data.gameMode == "SIEGE") {
+                  data.gameMode = "돌격 넥서스";
+                } else if (result.data.gameMode == "ONEFORALL") {
+                  data.gameMode = "단일 챔피언";
+                } else if (result.data.gameMode == "ULTBOOK") {
+                  data.gameMode = "궁극기 모드";
+                }
+
+                if (result.data.gameType == "MATCHED_GAME") {
+                  if (result.data.queueId == 420) {
+                    data.gameType = "솔로 랭크";
+                  } else if (result.data.queueId == 430) {
+                    data.gameType = "일반 게임";
+                  } else if (result.data.queueId == 450) {
+                    data.gameType = "칼바람 나락";
+                  } else if (result.data.queueId == 1400) {
+                    data.gameType = "궁극기 모드";
+                  } else {
+                    data.gameType = "자유 랭크";
+                  }
+                } else if (result.data.gameType == "CUSTOM_GAME") {
+                  data.gameType = "사용자 설정 게임";
+                }
 
                 array3 = array3.concat(data);
               })
@@ -318,6 +349,10 @@ app.post("/usertotal", async (req, res) => {
                         kills: item.participants[i].stats.kills,
                         deaths: item.participants[i].stats.deaths,
                         assists: item.participants[i].stats.assists,
+                        gameCreation: item.gameCreation,
+                        gameMode: item.gameMode,
+                        gameType: item.gameType,
+                        queueId: item.queueId,
                         win: item.participants[i].stats.win ? "WIN" : "LOSE",
                       };
 

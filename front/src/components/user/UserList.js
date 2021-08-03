@@ -3,93 +3,44 @@ import { UserListContext } from "../../App";
 import "../../assets/scss/userList.scss";
 
 function UserTotalView({ userTotal, championName, championValue }) {
-  // console.log(userTotal);
-
   const rendering = (user) => {
-    const result = [];
-    const result2 = [];
-    let statsValue = "";
+    const result3 = [];
+    console.log(user);
 
-    user.map((item, index1) => {
+    // let statsValue = "";
+
+    const gameNumber = user.map((item, index1) => {
+      const result2 = [];
+      const result = [];
       const gameUsers = Object.entries(item);
-      // console.log(gameUsers[0][1]);
 
-      console.log(`#${index1}번째 게임의 유저목록`);
-
-      gameUsers[0][1].map((user, index2) => {
-        console.log(user.summonerName);
+      const users = gameUsers[0][1].map((user, index2) => {
+        console.log(index1, index2);
 
         result.push(
-          // <ul className="user_state__block">
-          <li className={`user_state__item--${user.win}`} key={index1}>
+          <li
+            className={`user_state__item user_state__item--${user.win}`}
+            key={`${index1}${index2}`}
+          >
             {index1} - {user.summonerName} - {user.kills} / {user.deaths} /{" "}
-            {user.assists} - {user.win}
+            {user.assists} - {user.win} -{" "}
+            {user.gameMode !== "소환사의 협곡"
+              ? user.gameMode
+              : `${user.gameMode} - ${user.gameType}`}
           </li>
-          // </ul>
         );
+
+        if (index2 == 9) {
+          result2.push(result);
+          // console.log(`${result2}`);
+        } else {
+          // console.log(result);
+        }
       });
+
+      return <ul className="user_state__block">{result2}</ul>;
     });
-
-    // 받은 게임리스트
-    for (let gameCount = 0; gameCount < userTotal.length; gameCount++) {
-      // const summonerName = userTotal.dataList[userTotal.length].summonerName;
-      // team100의 승패
-      // const team100 = "";
-      // 같이 게임한 플레이어들의 상태
-      // console.log(`${gameCount} 번째 게임`);
-      // for (
-      //   let participantCount = 0;
-      //   participantCount < userTotal[gameCount].participants.length;
-      //   participantCount++
-      // ) {
-      //   // 소환사 이름
-      //   const participantNameValue =
-      //     userTotal[gameCount].participantIdentities[participantCount].player
-      //       .summonerName;
-      //   let myParticipantId = "";
-      //   if (targetUser !== participantNameValue) {
-      //     console.log(`${targetUser}와 ${participantNameValue}는 다릅니다.`);
-      //   } else {
-      //     myParticipantId =
-      //       userTotal[gameCount].participantIdentities[participantCount]
-      //         .participantId;
-      //     console.log(`나의 myParticipantId값은 : ${myParticipantId}입니다.`);
-      //     for (
-      //       let findTotalValueCount = 0;
-      //       findTotalValueCount < userTotal[gameCount].participants.length;
-      //       findTotalValueCount++
-      //     ) {
-      //       if (
-      //         myParticipantId ===
-      //         userTotal[gameCount].participants[findTotalValueCount]
-      //           .participantId
-      //       ) {
-      //         championName(
-      //           userTotal[gameCount].participants[findTotalValueCount]
-      //             .championId
-      //         );
-      //         statsValue =
-      //           userTotal[gameCount].participants[findTotalValueCount].stats
-      //             .win;
-      //         console.log(
-      //           `statsValue 값, ${statsValue == false ? "패배" : "승리"}`
-      //         );
-      //       }
-      //     }
-      //   }
-      //   // 위에서 받은 value로 다시 for문
-      // }
-      // result.push(
-      //   <div key={gameCount}>리스트 뿌려야하다, 데이터는 받아옴</div>
-      // );
-    }
-
-    // if (user.length == 10) {
-    //   console.log("10");
-    //   result2.push(result)
-    // }
-
-    return result;
+    return gameNumber;
   };
 
   return <div>{rendering(userTotal)}</div>;
