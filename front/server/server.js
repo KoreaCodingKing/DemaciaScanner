@@ -327,19 +327,21 @@ app.post("/usertotal", async (req, res) => {
                         resultArray = resultArray.concat({
                           dataList,
                         });
-                        console.log(resultArray);
+                        // console.log(resultArray);
+
                         console.log("끝");
                       } else {
                         console.log(index, "번째임");
                       }
                     }
+                    // dataList.splice(0, dataList.length);
                   });
 
                   return res.json(resultArray);
                 }
                 console.log("loading...", `${index + 1}/${array1.length}`);
               });
-          }, 200 * x);
+          }, 100 * x);
         })(index);
       }); // map end
       // array1.splice(0, array1.length);

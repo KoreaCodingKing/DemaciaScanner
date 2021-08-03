@@ -1,0 +1,12 @@
+.user_state__block {
+  background: hotpink;
+}
+
+.user_state__item {
+  &--WIN {
+    background: rgb(17, 154, 31);
+  }
+  &--LOSE {
+    background: rgb(221, 5, 5);
+  }
+}
