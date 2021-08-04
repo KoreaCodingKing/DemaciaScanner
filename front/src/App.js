@@ -70,8 +70,17 @@ function App() {
           alert("오류");
           return;
         }
+        let getUser = "";
 
-        const getUser = res.data;
+        if (res.data[0] || res.data[1]) {
+          getUser = res.data[0] ? res.data[0] : res.data[1];
+        } else {
+          getUser = res.data;
+        }
+
+        // const getUser = res.data[0] ? res.data[0] : res.data[1];
+        // console.log("데이터는 있지?? -- ", res.data)
+        // console.log(getUser);
 
         return getUser;
       })
@@ -87,6 +96,7 @@ function App() {
     //   // const result = searchUser(addUser.summonerName);
     //   // console.log(result)
     // }
+    // console.log(addUser);
     if (addUser == null) {
       return false;
     }
@@ -95,6 +105,7 @@ function App() {
       name: addUser.name || addUser.summonerName,
       id: addUser.id || addUser.summonerId,
       accountId: addUser.accountId,
+      tier: addUser.tier,
     };
 
     if (saveValue) {
@@ -107,7 +118,7 @@ function App() {
       sessionStorage.setItem("userList", JSON.stringify(userList.concat(user)));
     } else {
       sessionStorage.setItem("userList", JSON.stringify(userList.concat(user)));
-      sessionStorage.setItem(`${user.name}`, JSON.stringify(user));
+      // sessionStorage.setItem(`${user.name}`, JSON.stringify(user));
     }
 
     return user;

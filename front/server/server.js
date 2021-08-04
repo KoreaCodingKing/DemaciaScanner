@@ -23,6 +23,12 @@ async function getUserData(userName) {
     `https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${userName}?api_key=${riotApiKey}`
   );
 }
+// 랭크 및 티어 찾기
+async function getUserRankData(summonerId) {
+  return await axios.get(
+    `https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}?api_key=${riotApiKey}`
+  );
+}
 
 // 인게임 정보 axios 사용
 async function getUserInGameData(data) {
@@ -87,15 +93,56 @@ app.get("/testlist", async (req, res) => {
 //post요청 - 클라이언트에서 보낸 아이디
 app.post("/searchuser", async (req, res) => {
   const userName = req.body.name;
+
   const data = await new Promise((resolve, reject) => {
     resolve(getUserData(encodeURI(userName)));
   })
     .then((result) => {
-      return {
+      let data = {
         id: result.data.id,
         name: result.data.name,
         accountId: result.data.accountId,
+        tier: {
+          flex: {
+            tier: "",
+            rank: "",
+          },
+          solo: {
+            tier: "",
+            rank: "",
+          },
+        },
       };
+      console.log(data);
+
+      return data;
+    })
+    .then((resData) => {
+      // console.log(resData);
+      return getUserRankData(resData.id).then((res) => {
+        const dataLength = res.data.length;
+        // console.log(dataLength);
+
+        if (dataLength !== 0) {
+          return res.data.map((item, index) => {
+            if (item.queueType == "RANKED_FLEX_SR") {
+              resData.tier.flex.tier = item.tier;
+              resData.tier.flex.rank = item.rank;
+            } else if (item.queueType == "RANKED_SOLO_5x5") {
+              resData.tier.solo.tier = item.tier;
+              resData.tier.solo.rank = item.rank;
+            }
+
+            if (dataLength == index + 1) {
+              console.log(`티어 랭크 삽입 부분 - ${resData}`);
+              return resData;
+            }
+          });
+        } else {
+          console.log("랭크 플레이를 안했네요 -- ", resData);
+          return resData;
+        }
+      });
     })
     .catch((err) => {
       console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
@@ -103,6 +150,8 @@ app.post("/searchuser", async (req, res) => {
         return null;
       }
     });
+
+  console.log(`전달 할 data ${JSON.stringify(data)}`);
   return res.json(data);
 });
 
@@ -250,7 +299,7 @@ app.post("/usertotal", async (req, res) => {
     })
     .then((matches) => {
       // console.log(matches)
-      const list = matches.slice(0, 4 || matches.length);
+      const list = matches.slice(0, 10 || matches.length);
       list.map((matchesGameId) => {
         const gameId = matchesGameId.gameId;
 
@@ -391,7 +440,7 @@ app.post("/usertotal", async (req, res) => {
 
   // return res.json(data);
 });
-
+// 챔피언 이름 가져오기(작업 완료 설정 대기중)
 app.post("/champion", async (req, res) => {
   const id = req.body.championId;
   // console.log(id);
