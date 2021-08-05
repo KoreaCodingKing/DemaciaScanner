@@ -5,7 +5,7 @@ import "../../assets/scss/userList.scss";
 function UserTotalView({ userTotal, championName, championValue }) {
   const rendering = (user) => {
     const result3 = [];
-    console.log(user);
+    // console.log(user);
 
     // let statsValue = "";
 
@@ -13,9 +13,22 @@ function UserTotalView({ userTotal, championName, championValue }) {
       const result2 = [];
       const result = [];
       const gameUsers = Object.entries(item);
+      let beforeTime = "";
 
       const users = gameUsers[0][1].map((user, index2) => {
-        console.log(index1, index2);
+        // console.log(index1, index2);
+
+        const test2 = new Date(user.gameCreation) - new Date();
+
+        console.log(
+          `${new Date(user.gameCreation).getFullYear()}년,${
+            new Date(user.gameCreation).getMonth() + 1
+          }월, ${new Date(user.gameCreation).getDate()}일, ${new Date(
+            user.gameCreation
+          ).getHours()}시, ${new Date(user.gameCreation).getMinutes()}분`
+        );
+
+        beforeTime = `${new Date(test2).getHours()}시간 전`;
 
         result.push(
           <li
@@ -38,7 +51,23 @@ function UserTotalView({ userTotal, championName, championValue }) {
         }
       });
 
-      return <ul className="user_state__block">{result2}</ul>;
+      // console.log(result);
+
+      return (
+        <ul className="user_state__block">
+          {result2}
+          <button
+            onClick={() =>
+              alert(
+                "상세 오픈 = 티어, 점수, kda등 자세하게 표기 sessionStorage.totalData에 넣어둠"
+              )
+            }
+          >
+            상세보기
+          </button>
+          - {beforeTime}
+        </ul>
+      );
     });
     return gameNumber;
   };
@@ -52,32 +81,30 @@ function User({ user }) {
 
   const [totalData, setTotalData] = useState([]);
 
+  console.log("찾은 유저의 데이터->", user);
+
   const test = (user) => {
     onTotalData(user).then((res) => {
       setTotalData(res);
+
       setView(true);
+
+      sessionStorage.setItem(`totalData_${user.name}`, JSON.stringify(res));
     });
-    // view 주석 해제하면 보임
-    // setTimeout(()=> {
-    // setView(true)
-    // },3000)
   };
 
   return (
     <div>
-      <span>({user.name})</span>
+      <span>
+        ({user.name} - 자유랭크 :{" "}
+        {user.tier.flex.tier !== "" ? user.tier.flex.tier : "-"}, 점수 :{" "}
+        {user.tier.flex.rank !== "" ? user.tier.flex.rank : "-"} / 솔로랭크 :{" "}
+        {user.tier.solo.tier !== "" ? user.tier.solo.tier : "-"}, 점수 :{" "}
+        {user.tier.solo.rank !== "" ? user.tier.solo.rank : "-"} )
+      </span>
       <button onClick={() => onRemove(user.id)}>제거</button>
       <button onClick={() => test(user)}>전적 확인하기</button>
-      {/* { rendering(user)} */}
-      {/* {
-          userTotal.map((item, index)=> {
-            (x=> {
-              setTimeout(()=> {
-                <UserTotalView  view={view} userTotal={totalData} />
-              }, 100*x)
-            })(index)
-          })
-        } */}
+
       {view ? (
         <UserTotalView
           view={view}
@@ -96,9 +123,9 @@ function UserList({ users }) {
   // [0 : {accountId, id, name}, 1: {...}, 2: {...}]
   // console.log("유저 정보",users)
 
-  useEffect(() => {
-    console.log("랜더");
-  });
+  // useEffect(() => {
+  //   console.log("랜더");
+  // });
 
   return (
     <div>

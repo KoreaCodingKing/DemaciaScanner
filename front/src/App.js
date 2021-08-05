@@ -135,8 +135,8 @@ function App() {
 
     const resultData = getUserTotalData(data)
       .then((result) => {
+        console.log(result);
         const matches = result.data;
-        // console.log(matches);
 
         return matches;
       })
@@ -145,6 +145,31 @@ function App() {
       });
     return resultData;
   };
+
+  // // 티어를 알아낼 코드
+  // const onTotalData = (userData) => {
+  //   const data = userData;
+  //   console.log(data);
+
+  //   const resultData = getUserTotalData(data)
+  //     .then((result) => {
+  //       const matches = result.data;
+  //       console.log(matches[0].dataList);
+  // // 한개의 데이터를 사용해서 데이터를 가져옴, map한번더 필요함
+  //       matches[0].dataList.map((item, index) => {
+  //         const asd = searchUser(item.summonerName);
+
+  //       });
+
+  //       // searchUser();
+
+  //       return matches;
+  //     })
+  //     .catch(() => {
+  //       console.log("데이터를 받지 못했습니다.");
+  //     });
+  //   return resultData;
+  // };
 
   // remove User
   const onRemove = (targetId) => {

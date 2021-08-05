@@ -66,18 +66,36 @@ async function getChampionName(id) {
   return await axios.get(
     "https://ddragon.leagueoflegends.com/cdn/11.15.1/data/ko_KR/champion.json"
   );
-  // .then((res) => {
-  //   const championList = res.data.data;
-  //   const convertToObjectChampionList = Object.entries(championList);
-  //   const champ = "";
+}
 
-  //   convertToObjectChampionList.map((item, index) => {
-  //     if (item[1].key == id) {
-  //       // console.log(item[1].name);
-  //         item[1].name;
-  //     }
-  //   });
-  // });
+// 유저의 티어 랭크 알아내는 상수 함수
+function getUserRankTier(objData) {
+  const getId = objData.id || objData.summonerId;
+
+  return getUserRankData(getId).then((res) => {
+    const dataLength = res.data.length;
+    // console.log(dataLength);
+
+    if (dataLength !== 0) {
+      return res.data.map((item, index) => {
+        if (item.queueType == "RANKED_FLEX_SR") {
+          objData.tier.flex.tier = item.tier;
+          objData.tier.flex.rank = item.rank;
+        } else if (item.queueType == "RANKED_SOLO_5x5") {
+          objData.tier.solo.tier = item.tier;
+          objData.tier.solo.rank = item.rank;
+        }
+
+        if (dataLength == index + 1) {
+          // console.log(`티어 랭크 삽입 부분 - ${JSON.stringify(objData)}`);
+          return objData;
+        }
+      });
+    } else {
+      // console.log("랭크 플레이를 안했네요 -- ", objData);
+      return objData;
+    }
+  });
 }
 
 // 테스트용 첼린저 데이터
@@ -119,30 +137,9 @@ app.post("/searchuser", async (req, res) => {
     })
     .then((resData) => {
       // console.log(resData);
-      return getUserRankData(resData.id).then((res) => {
-        const dataLength = res.data.length;
-        // console.log(dataLength);
 
-        if (dataLength !== 0) {
-          return res.data.map((item, index) => {
-            if (item.queueType == "RANKED_FLEX_SR") {
-              resData.tier.flex.tier = item.tier;
-              resData.tier.flex.rank = item.rank;
-            } else if (item.queueType == "RANKED_SOLO_5x5") {
-              resData.tier.solo.tier = item.tier;
-              resData.tier.solo.rank = item.rank;
-            }
-
-            if (dataLength == index + 1) {
-              console.log(`티어 랭크 삽입 부분 - ${resData}`);
-              return resData;
-            }
-          });
-        } else {
-          console.log("랭크 플레이를 안했네요 -- ", resData);
-          return resData;
-        }
-      });
+      // 유저의 랜크 티어 알아내는 함수
+      return getUserRankTier(resData);
     })
     .catch((err) => {
       console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
@@ -299,7 +296,7 @@ app.post("/usertotal", async (req, res) => {
     })
     .then((matches) => {
       // console.log(matches)
-      const list = matches.slice(0, 10 || matches.length);
+      const list = matches.slice(0, 2 || matches.length);
       list.map((matchesGameId) => {
         const gameId = matchesGameId.gameId;
 
@@ -390,22 +387,34 @@ app.post("/usertotal", async (req, res) => {
                       //   });
                       // });
 
-                      const data = {
+                      let data = {
                         summonerName:
                           item.participantIdentities[i].player.summonerName,
+                        summonerId:
+                          item.participantIdentities[i].player.summonerId,
                         championId: item.participants[i].championId,
-                        // championId: champData,
                         kills: item.participants[i].stats.kills,
                         deaths: item.participants[i].stats.deaths,
                         assists: item.participants[i].stats.assists,
                         gameCreation: item.gameCreation,
+                        gameDuration: item.gameDuration,
                         gameMode: item.gameMode,
                         gameType: item.gameType,
                         queueId: item.queueId,
                         win: item.participants[i].stats.win ? "WIN" : "LOSE",
+                        tier: {
+                          flex: {
+                            tier: "",
+                            rank: "",
+                          },
+                          solo: {
+                            tier: "",
+                            rank: "",
+                          },
+                        },
                       };
 
-                      dataList = dataList.concat([data]);
+                      dataList = dataList.concat(data);
 
                       if (i + 1 == length1) {
                         resultArray = resultArray.concat({
