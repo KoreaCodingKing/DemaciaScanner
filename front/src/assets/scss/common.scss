@@ -1,11 +1,39 @@
 $black: #444;
 $blue: #228be6;
 
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-decoration: none;
+}
+
 body {
   color: $black;
 }
 
 .header {
+  background: #ddd;
   display: flex;
   flex-direction: column;
+
+  a {
+    color: #000;
+  }
+}
+
+.header__list {
+  display: flex;
+  margin-left: 10px;
+}
+
+.header__item {
+  margin-top: 10px;
+  padding: 5px;
+}
+
+.header__link {
+  padding: 5px;
+  background: coral;
+  border-radius: 5px;
 }

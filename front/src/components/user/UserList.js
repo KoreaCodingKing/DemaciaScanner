@@ -111,7 +111,7 @@ function User({ user }) {
   };
 
   return (
-    <div>
+    <div className="user__list--item">
       <span>
         ({user.name} - 자유랭크 :{" "}
         {user.tier.flex.tier !== "" ? user.tier.flex.tier : "-"}, 점수 :{" "}
@@ -152,7 +152,7 @@ function UserList({ users }) {
   // });
 
   return (
-    <div>
+    <div className="user__list_view">
       {users.map((user, index) => (
         <User user={user} key={index} />
       ))}

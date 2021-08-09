@@ -1,20 +1,18 @@
-// 테스트중인 페이지
-// CORS policy 오류 ->브라우저에서 보내서 그럼, 서버에서 보내면 됨
-
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
-import Loading from "../components/Loading";
+// import Loading from "../components/Loading";
 import UserInsertForm from "../components/user/UserInsertForm";
-import UserList from "../components/user/UserList";
-import InGameStateView from "./InGameStateView";
-import CurrentMyState from "./CurrentMyState";
+// import UserList from "../components/user/UserList";
+// import InGameStateView from "../page/InGameStateView";
+// import CurrentMyState from "../page/CurrentMyState";
 import { UserListContext } from "../App";
-import UserTotal from "../components/UserTotal";
+
+// style
+import "../assets/scss/header.scss";
 
 let tempList = [];
 
-function ApiTest(props) {
-  // 상위 context에서function 가져오기
+const Header = (props) => {
   let {
     userList,
     userName,
@@ -64,27 +62,26 @@ function ApiTest(props) {
   };
 
   return (
-    <>
+    <div className="header__search">
       <hr />
-      {/* <button onClick={getTestList}>테스트 리스트 갱신</button>
-      <button onClick={sessionStorageInit}>로컬스토리지 초기화</button> */}
-      {/* <button onClick={searchInGameState}>인게임 상태</button> */}
-      {/* <button onClick={startScanner}>인게임 스케너</button>
-      <button onClick={stopScanner}>인게임 스캐너 중지</button>
-      <button onClick={modalView}>모달 버튼</button> */}
-
-      {/* <br /> */}
-      {/* {modal ? <UserTotal /> : <span></span>} */}
-      {/* <form className="insert_form" onSubmit={insertUser}>
+      <div className="header__control">
+        {/* <button onClick={getTestList}>테스트 리스트 갱신</button> */}
+        {/* <button onClick={searchInGameState}>인게임 상태</button> */}
+        {/* <button onClick={modalView}>모달 버튼</button> */}
+        <button onClick={sessionStorageInit}>로컬스토리지 초기화</button>
+        <button onClick={startScanner}>인게임 스케너</button>
+        <button onClick={stopScanner}>인게임 스캐너 중지</button>
+      </div>
+      <form className="insert_form" onSubmit={insertUser}>
         <UserInsertForm inputValue={userName} onChangeEvent={onChangeHandle} />
-      </form> */}
+      </form>
       {/* <br /> */}
-      <UserList users={userList} />
+      {/* <UserList users={userList} /> */}
       {/* <br /> */}
-      <div className="id-list"></div>
-      <InGameStateView state={userState} loading={loading} />
-    </>
+      {/* <div className="id-list"></div> */}
+      {/* <InGameStateView state={userState} loading={loading} /> */}
+    </div>
   );
-}
+};
 
-export default ApiTest;
+export default Header;

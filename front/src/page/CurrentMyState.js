@@ -54,13 +54,13 @@ function CurrentMyState() {
   const findUser = (e) => {
     e.preventDefault();
 
-    if (!userName || "") {
+    if (!userName.current_game_name || "") {
       alert("값이 없다");
       onReset();
       return;
     }
 
-    const trimmedUserName = userName.trim();
+    const trimmedUserName = userName.current_game_name.trim();
 
     if (!trimmedUserName) {
       alert("값이 없습니다");
@@ -103,7 +103,11 @@ function CurrentMyState() {
       <hr />
       <h1>내 상태입니다</h1>
       <form onSubmit={findUser}>
-        <input onChange={onChangeHandle} value={userName || ""} />
+        <input
+          name="current_game_name"
+          onChange={onChangeHandle}
+          value={userName.current_game_name || ""}
+        />
       </form>
       {`${loading}`}
       <br />

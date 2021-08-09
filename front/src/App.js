@@ -12,6 +12,7 @@ import Home from "./page/Home";
 import CurrentMyGame from "./page/CurrentMyGame";
 import ApiTest from "./page/ApiTest";
 import CurrentMyState from "./page/CurrentMyState";
+import Header from "./components/Header";
 
 import dotenv from "dotenv";
 
@@ -24,7 +25,12 @@ let isPause = false;
 
 function App() {
   const [userList, setUserList] = useState([]);
-  const [userName, setUserName] = useState("");
+  // const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState({
+    current_game_name: "",
+    search_name: "",
+  });
+  const { current_game_name, search_name } = userName;
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
   const [scanning, setScanning] = useState(false);
@@ -50,16 +56,29 @@ function App() {
   // const onChangeHandle = (e) => {
   //   setUserName(e.target.value);
   // };
-  const onChangeHandle = useCallback(
-    (e) => {
-      // const {name} = e.target.value
-      setUserName(e.target.value);
-    },
-    [userName]
-  );
+  // const onChangeHandle = useCallback(
+  //   (e) => {
+  //     // const {name} = e.target.value
+  //     setUserName(e.target.value);
+  //   },
+  //   [userName]
+  // );
+
+  const onChangeHandle = (e) => {
+    const { value, name } = e.target;
+    // setUserName(e.target.value);
+    setUserName({
+      ...userName,
+      [name]: value,
+    });
+  };
 
   const onReset = () => {
-    setUserName("");
+    // setUserName("");
+    setUserName({
+      current_game_name: "",
+      search_name: "",
+    });
   };
 
   // 유저 찾기
@@ -279,7 +298,7 @@ function App() {
     if (typeof e !== "string") {
       //메인 리스트 등록
       e.preventDefault();
-      e = userName;
+      e = userName.search_name;
     }
 
     // -----id 적합성 검사
@@ -313,10 +332,57 @@ function App() {
   return (
     <div className="wrapper">
       <div className="header">
-        <Link to="/">Home</Link>
-        <Link to="/currentmygame">CurrentMyGame</Link>
-        <Link to="/apitest">apiTest</Link>
-        <Link to="/currentmystate">나의 게임</Link>
+        <ul className="header__list">
+          <li className="header__item">
+            <Link className="header__link" to="/">
+              Home
+            </Link>
+          </li>
+          <li className="header__item">
+            <Link className="header__link" to="/currentmygame">
+              CurrentMyGame
+            </Link>
+          </li>
+          <li className="header__item">
+            <Link className="header__link" to="/apitest">
+              apiTest
+            </Link>
+          </li>
+          <li className="header__item">
+            <Link className="header__link" to="/currentmystate">
+              나의 게임
+            </Link>
+          </li>
+        </ul>
+
+        {/* 서치바 및 버튼 */}
+        <UserListContext.Provider
+          value={{
+            userList,
+            addUserList,
+            onRemove,
+            sessionStorageInit,
+            onChangeHandle,
+            insertUser,
+            getUserDataInGame,
+            userName,
+            isPause,
+            timer,
+            loading,
+            userState,
+            startScanner,
+            stopScanner,
+            scanning,
+            // modalView,
+            // modal,
+            onTotalData,
+            userTotal,
+            championName,
+            championValue,
+          }}
+        >
+          <Header />
+        </UserListContext.Provider>
       </div>
       <Route path="/apiTest">
         <UserListContext.Provider
