@@ -18,17 +18,34 @@ function UserTotalView({ userTotal, championName, championValue }) {
       const users = gameUsers[0][1].map((user, index2) => {
         // console.log(index1, index2);
 
+        let date = user.gameCreation;
+        let w_date = new Date(date.valueOf());
+        let w_time = w_date.getTime();
+
+        let cur = new Date();
+        var c_time = cur.getTime();
+
+        var chai = c_time - w_time;
+
+        if (chai < 1000 * 60) beforeTime += Math.floor(chai / 1000) + " 초전";
+        else if (chai < 1000 * 60 * 60)
+          beforeTime += Math.floor(chai / (1000 * 60)) + " 분전";
+        else if (chai < 1000 * 60 * 60 * 24)
+          beforeTime += Math.floor(chai / (1000 * 60 * 60)) + " 시간전";
+        else if (chai < 1000 * 60 * 60 * 24 * 30)
+          beforeTime += Math.floor(chai / (1000 * 60 * 60 * 24)) + " 일전";
+        else if (chai < 1000 * 60 * 60 * 24 * 30 * 12)
+          beforeTime += Math.floor(chai / (1000 * 60 * 60 * 24 * 30)) + " 달전";
+
         const test2 = new Date(user.gameCreation) - new Date();
 
-        console.log(
-          `${new Date(user.gameCreation).getFullYear()}년,${
-            new Date(user.gameCreation).getMonth() + 1
-          }월, ${new Date(user.gameCreation).getDate()}일, ${new Date(
-            user.gameCreation
-          ).getHours()}시, ${new Date(user.gameCreation).getMinutes()}분`
-        );
-
-        beforeTime = `${new Date(test2).getHours()}시간 전`;
+        // console.log(
+        //   `${new Date(user.gameCreation).getFullYear()}년,${
+        //     new Date(user.gameCreation).getMonth() + 1
+        //   }월, ${new Date(user.gameCreation).getDate()}일, ${new Date(
+        //     user.gameCreation
+        //   ).getHours()}시, ${new Date(user.gameCreation).getMinutes()}분`
+        // );
 
         result.push(
           <li
@@ -72,7 +89,7 @@ function UserTotalView({ userTotal, championName, championValue }) {
     return gameNumber;
   };
 
-  return <div>{rendering(userTotal)}</div>;
+  return <div className={``}>{rendering(userTotal)}</div>;
 }
 
 function User({ user }) {
@@ -102,18 +119,25 @@ function User({ user }) {
         {user.tier.solo.tier !== "" ? user.tier.solo.tier : "-"}, 점수 :{" "}
         {user.tier.solo.rank !== "" ? user.tier.solo.rank : "-"} )
       </span>
-      <button onClick={() => onRemove(user.id)}>제거</button>
+      <button
+        onClick={() => {
+          onRemove(user.id);
+          // setView(false);
+        }}
+      >
+        제거
+      </button>
       <button onClick={() => test(user)}>전적 확인하기</button>
 
-      {view ? (
-        <UserTotalView
-          view={view}
-          userTotal={totalData}
-          championName={championName}
-        />
-      ) : (
+      {/* {view ? ( */}
+      <UserTotalView
+        view={view}
+        userTotal={totalData}
+        championName={championName}
+      />
+      {/* ) : (
         <span>false</span>
-      )}
+      )} */}
     </div>
   );
 }
