@@ -45,24 +45,18 @@ function App() {
       const userListInSession = JSON.parse(sessionStorageValue);
       setUserList(userListInSession);
     }
+
+    if (userList == "") {
+      return;
+    } else {
+      console.log("스캔할 수 있음");
+    }
   }, []);
 
   // 세션 스토리지 초기화
   const sessionStorageInit = () => {
     sessionStorage.clear();
   };
-
-  // 인풋 값 변경 확인
-  // const onChangeHandle = (e) => {
-  //   setUserName(e.target.value);
-  // };
-  // const onChangeHandle = useCallback(
-  //   (e) => {
-  //     // const {name} = e.target.value
-  //     setUserName(e.target.value);
-  //   },
-  //   [userName]
-  // );
 
   const onChangeHandle = (e) => {
     const { value, name } = e.target;
@@ -110,12 +104,6 @@ function App() {
 
   // 리스트 추가 함수
   const addUserList = (addUser, saveValue, storageValue) => {
-    // if(addUser.accountId === '') {
-    //   console.log("accountId 값이 없습니다")
-    //   // const result = searchUser(addUser.summonerName);
-    //   // console.log(result)
-    // }
-    // console.log(addUser);
     if (addUser == null) {
       return false;
     }
@@ -127,26 +115,66 @@ function App() {
       tier: addUser.tier,
     };
 
-    if (saveValue) {
-      setUserList(userList.concat(user));
-    }
+    const confirm = (addUser, onConfirm, onCancel) => {
+      if (!onConfirm || typeof onConfirm !== "function") {
+        return;
+      }
+      if (onCancel && typeof onCancel !== "function") {
+        return;
+      }
 
-    if (!storageValue) {
+      const confirmAction = () => {
+        if (window.confirm(addUser)) {
+          onConfirm();
+        } else {
+          onCancel();
+        }
+      };
+
+      return confirmAction;
+    };
+
+    const addConfirm = () => {
+      if (saveValue) {
+        setUserList(userList.concat(user));
+      }
+
+      if (!storageValue) {
+        return false;
+      } else if (storageValue === "userList") {
+        sessionStorage.setItem(
+          "userList",
+          JSON.stringify(userList.concat(user))
+        );
+      }
+    };
+    const cancelConfirm = () => {
       return false;
-    } else if (storageValue === "userList") {
-      sessionStorage.setItem("userList", JSON.stringify(userList.concat(user)));
-    } else {
-      sessionStorage.setItem("userList", JSON.stringify(userList.concat(user)));
-      // sessionStorage.setItem(`${user.name}`, JSON.stringify(user));
-    }
+    };
+
+    const confirmAdd = confirm(
+      `${addUser.name} - (${addUser.tier.solo.tier} - ${addUser.tier.solo.rank}) 소환사를 추가하겠습니까?`,
+      addConfirm,
+      cancelConfirm
+    );
+
+    confirmAdd();
+
+    // if (saveValue) {
+    //   setUserList(userList.concat(user));
+    // }
+
+    // if (!storageValue) {
+    //   return false;
+    // } else if (storageValue === "userList") {
+    //   sessionStorage.setItem("userList", JSON.stringify(userList.concat(user)));
+    // } else {
+    //   // sessionStorage.setItem("userList", JSON.stringify(userList.concat(user)));
+    //   // sessionStorage.setItem(`${user.name}`, JSON.stringify(user));
+    // }
 
     return user;
   };
-
-  // modal show, hide
-  // const modalView = (target) => {
-  //   setModal(true)
-  // }
 
   // get user total data
   const onTotalData = (userData) => {
@@ -384,6 +412,9 @@ function App() {
           <Header />
         </UserListContext.Provider>
       </div>
+      <Route exact={true} path="/">
+        <Home />
+      </Route>
       <Route path="/apiTest">
         <UserListContext.Provider
           value={{

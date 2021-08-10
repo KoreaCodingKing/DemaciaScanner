@@ -44,7 +44,7 @@ function CurrentMyState() {
         setLoading(false);
       })
       .catch((e) => {
-        console.log(e);
+        console.log("에러야!! 에러!!");
         onReset();
         return;
       });
