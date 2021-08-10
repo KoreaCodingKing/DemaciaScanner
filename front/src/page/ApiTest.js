@@ -10,6 +10,8 @@ import InGameStateView from "./InGameStateView";
 import CurrentMyState from "./CurrentMyState";
 import { UserListContext } from "../App";
 import UserTotal from "../components/UserTotal";
+import "../assets/scss/common.scss";
+import SearchTotal from "../components/SearchTotal";
 
 let tempList = [];
 
@@ -34,6 +36,8 @@ function ApiTest(props) {
     scanning,
     modalView,
     modal,
+    onTotalData,
+    totalData,
   } = useContext(UserListContext);
 
   // 게임 종료 후 승패 결과, 게임 시간, 끝나고 난 뒤 시간 체크
@@ -64,8 +68,7 @@ function ApiTest(props) {
   };
 
   return (
-    <>
-      <hr />
+    <div className="contents">
       {/* <button onClick={getTestList}>테스트 리스트 갱신</button>
       <button onClick={sessionStorageInit}>로컬스토리지 초기화</button> */}
       {/* <button onClick={searchInGameState}>인게임 상태</button> */}
@@ -73,17 +76,23 @@ function ApiTest(props) {
       <button onClick={stopScanner}>인게임 스캐너 중지</button>
       <button onClick={modalView}>모달 버튼</button> */}
 
-      {/* <br /> */}
       {/* {modal ? <UserTotal /> : <span></span>} */}
       {/* <form className="insert_form" onSubmit={insertUser}>
         <UserInsertForm inputValue={userName} onChangeEvent={onChangeHandle} />
       </form> */}
-      {/* <br /> */}
-      <UserList users={userList} />
-      {/* <br /> */}
-      <div className="id-list"></div>
-      <InGameStateView state={userState} loading={loading} />
-    </>
+
+      <div className="contents__wrap">
+        <UserList users={userList} />
+        <InGameStateView state={userState} loading={loading} />
+      </div>
+      <div className="contents__wrap">
+        <SearchTotal
+          users={userList}
+          onTotalData={onTotalData}
+          totalData={totalData}
+        />
+      </div>
+    </div>
   );
 }
 

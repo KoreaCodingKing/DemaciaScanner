@@ -296,7 +296,7 @@ app.post("/usertotal", async (req, res) => {
     })
     .then((matches) => {
       // console.log(matches)
-      const list = matches.slice(0, 1 || matches.length);
+      const list = matches.slice(0, 10 || matches.length);
       list.map((matchesGameId) => {
         const gameId = matchesGameId.gameId;
 

@@ -37,3 +37,12 @@ body {
   background: coral;
   border-radius: 5px;
 }
+
+// contents
+.contents {
+  display: flex;
+}
+
+.contents__wrap {
+  width: 50%;
+}

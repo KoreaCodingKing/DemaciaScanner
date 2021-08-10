@@ -17,6 +17,7 @@ import Header from "./components/Header";
 import dotenv from "dotenv";
 
 import "./assets/scss/common.scss";
+import SearchTotal from "./components/SearchTotal";
 
 export const UserListContext = createContext();
 
@@ -37,6 +38,7 @@ function App() {
   // const [modal, setModal] = useState(false);
   const [userTotal, setUserTotal] = useState([]);
   const [championValue, setChampionValue] = useState("");
+  const [totalData1, setTotalData1] = useState([]);
 
   useEffect(() => {
     const sessionStorageValue = sessionStorage.userList || null;
@@ -184,6 +186,8 @@ function App() {
       .then((result) => {
         console.log(result);
         const matches = result.data;
+
+        setTotalData1(matches);
 
         return matches;
       })
@@ -366,11 +370,11 @@ function App() {
               Home
             </Link>
           </li>
-          <li className="header__item">
-            <Link className="header__link" to="/currentmygame">
-              CurrentMyGame
+          {/* <li className="header__item">
+            <Link className="header__link" to="/searchtotal">
+              전적검색하기
             </Link>
-          </li>
+          </li> */}
           <li className="header__item">
             <Link className="header__link" to="/apitest">
               apiTest
@@ -439,6 +443,7 @@ function App() {
             userTotal,
             championName,
             championValue,
+            totalData1,
           }}
         >
           <ApiTest />
@@ -464,6 +469,36 @@ function App() {
           <CurrentMyState />
         </UserListContext.Provider>
       </Route>
+      {/* <Route path="/searchtotal">
+        <UserListContext.Provider
+          value={{
+            userList,
+            addUserList,
+            onRemove,
+            sessionStorageInit,
+            onChangeHandle,
+            insertUser,
+            getUserDataInGame,
+            userName,
+            isPause,
+            timer,
+            loading,
+            userState,
+            startScanner,
+            stopScanner,
+            scanning,
+            // modalView,
+            // modal,
+            onTotalData,
+            userTotal,
+            championName,
+            championValue,
+          }}
+        >
+          <SearchTotal />
+        </UserListContext.Provider>
+      </Route> */}
+
       {/* <UserListContext.Provider value={{ userList}}>
         <Route path="/" exact component={Home} />
         <Route path="/about" component={About} />
