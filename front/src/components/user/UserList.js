@@ -111,23 +111,38 @@ function User({ user }) {
 
   return (
     <div className="user__list--item">
-      <span>
-        ({user.name} - 자유랭크 :{" "}
-        {user.tier.flex.tier !== "" ? user.tier.flex.tier : "-"}, 점수 :{" "}
-        {user.tier.flex.rank !== "" ? user.tier.flex.rank : "-"} / 솔로랭크 :{" "}
-        {user.tier.solo.tier !== "" ? user.tier.solo.tier : "-"}, 점수 :{" "}
-        {user.tier.solo.rank !== "" ? user.tier.solo.rank : "-"} )
-      </span>
-      <button
-        onClick={() => {
-          onRemove(user.id);
-          // setView(false);
-        }}
-      >
-        제거
-      </button>
-      <button onClick={() => test(user)}>전적 확인하기</button>
-      {totalLoading ? "loading..." : " "}
+      <div className="user__title">
+        <div className="thumb">
+          <img
+            style={{ width: "50px", height: "50px", borderRadius: "25px" }}
+            src={`http://ddragon.leagueoflegends.com/cdn/11.16.1/img/profileicon/${user.profileIconId}.png`}
+          ></img>
+        </div>
+        <div className="info">
+          <p>이름 : {user.name}</p>
+          <p>
+            자유 랭크 : {user.tier.flex.tier !== "" ? user.tier.flex.tier : "-"}
+            - {user.tier.flex.rank !== "" ? user.tier.flex.rank : "-"}
+          </p>
+          <p>
+            솔로랭크 : {user.tier.solo.tier !== "" ? user.tier.solo.tier : "-"}{" "}
+            - : {user.tier.solo.rank !== "" ? user.tier.solo.rank : "-"}
+          </p>
+        </div>
+        <div className="func">
+          <button
+            onClick={() => {
+              onRemove(user.id);
+              // setView(false);
+            }}
+          >
+            제거
+          </button>
+          <br />
+          <button onClick={() => test(user)}>전적 확인하기</button>
+          {totalLoading ? "loading..." : " "}
+        </div>
+      </div>
 
       {/* <UserTotalView
         view={view}
@@ -149,7 +164,7 @@ function UserList({ users }) {
 
   return (
     <div className="user__list_view">
-      <h1>트롤 리스트</h1>
+      <h1>트롤 리스트 - {users.length}명</h1>
       {users.map((user, index) => (
         <User user={user} key={index} />
       ))}

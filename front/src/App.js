@@ -83,6 +83,7 @@ function App() {
   const searchUser = (userName) => {
     return getUserData(userName)
       .then((res) => {
+        // console.log(res.data);
         if (res.data === null) {
           alert("오류");
           return;
@@ -117,6 +118,8 @@ function App() {
       id: addUser.id || addUser.summonerId,
       accountId: addUser.accountId,
       tier: addUser.tier,
+      profileIconId: addUser.profileIconId,
+      summonerLevel: addUser.summonerLevel,
     };
 
     const confirm = (addUser, onConfirm, onCancel) => {

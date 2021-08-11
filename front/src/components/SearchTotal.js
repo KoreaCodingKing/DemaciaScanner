@@ -111,9 +111,21 @@ const UserDetail = ({ userInfo }) => {
       <br />
       <h4>{userInfo ? userInfo.name : " "}</h4>
       <p>
-        티어 : {userInfo ? userInfo.tier.solo.tier : ""} -{" "}
-        {userInfo ? userInfo.tier.solo.rank : ""}
+        티어 :{" "}
+        {userInfo ? (
+          <img
+            style={{ width: "100px", height: "100px" }}
+            src={`/images/ranked-emblems/Emblem_${userInfo.tier.solo.tier}.png`}
+          />
+        ) : (
+          ""
+        )}{" "}
+        - {userInfo ? userInfo.tier.solo.rank : ""}
+        <br />
+        {userInfo ? userInfo.tier.solo.leaguePoints : ""}포인트
       </p>
+      <p>승리 : {userInfo ? userInfo.tier.solo.wins : ""}</p>
+      <p>패배 : {userInfo ? userInfo.tier.solo.losses : ""}</p>
       <br />
     </div>
   );

@@ -55,6 +55,14 @@ async function getUserTotalGameData(user) {
   );
 }
 
+// 유저 리그 정보 알아내기
+async function getUserLeageInfo(user) {
+  const userId = user;
+  return await axios.get(
+    `https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/${userId}?api_key=${riotApiKey}`
+  );
+}
+
 // 테스트용 임시 데이터
 async function getTempIdList() {
   return await axios.get(
@@ -74,16 +82,22 @@ function getUserRankTier(objData) {
 
   return getUserRankData(getId).then((res) => {
     const dataLength = res.data.length;
-    // console.log(dataLength);
+    console.log("리그정보가 잇었네?? --->", res.data);
 
     if (dataLength !== 0) {
       return res.data.map((item, index) => {
         if (item.queueType == "RANKED_FLEX_SR") {
           objData.tier.flex.tier = item.tier;
           objData.tier.flex.rank = item.rank;
+          objData.tier.flex.leaguePoints = item.leaguePoints;
+          objData.tier.flex.wins = item.wins;
+          objData.tier.flex.losses = item.losses;
         } else if (item.queueType == "RANKED_SOLO_5x5") {
           objData.tier.solo.tier = item.tier;
           objData.tier.solo.rank = item.rank;
+          objData.tier.solo.leaguePoints = item.leaguePoints;
+          objData.tier.solo.wins = item.wins;
+          objData.tier.solo.losses = item.losses;
         }
 
         if (dataLength == index + 1) {
@@ -116,18 +130,27 @@ app.post("/searchuser", async (req, res) => {
     resolve(getUserData(encodeURI(userName)));
   })
     .then((result) => {
+      console.log(result.data);
       let data = {
         id: result.data.id,
         name: result.data.name,
         accountId: result.data.accountId,
+        profileIconId: result.data.profileIconId,
+        summonerLevel: result.data.summonerLevel,
         tier: {
           flex: {
             tier: "",
             rank: "",
+            leaguePoints: "",
+            wins: "",
+            losses: "",
           },
           solo: {
             tier: "",
             rank: "",
+            leaguePoints: "",
+            wins: "",
+            losses: "",
           },
         },
       };
@@ -135,6 +158,12 @@ app.post("/searchuser", async (req, res) => {
 
       return data;
     })
+    // .then((resData2) => {
+    //   console.log("asdasdasd ->", resData2);
+    //   getUserLeageInfo(resData2.id).then((res) => {
+    //     console.log(res.data);
+    //   });
+    // })
     .then((resData) => {
       // console.log(resData);
 
