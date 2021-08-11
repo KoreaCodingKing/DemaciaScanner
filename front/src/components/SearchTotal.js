@@ -14,8 +14,14 @@ function UserTotalView({ userTotal, championName, championValue }) {
       const gameUsers = Object.entries(item);
       let beforeTime = "";
 
+      let gameInfoMode = "";
+      let gameInfoType = "";
+
       const users = gameUsers[0][1].map((user, index2) => {
         // console.log(index1, index2);
+
+        gameInfoMode = user.gameMode;
+        gameInfoType = user.gameType;
 
         let date = user.gameCreation;
         let w_date = new Date(date.valueOf());
@@ -28,13 +34,13 @@ function UserTotalView({ userTotal, championName, championValue }) {
 
         if (chai < 1000 * 60) beforeTime += Math.floor(chai / 1000) + " 초전";
         else if (chai < 1000 * 60 * 60)
-          beforeTime += Math.floor(chai / (1000 * 60)) + " 분전";
+          beforeTime = Math.floor(chai / (1000 * 60)) + " 분전";
         else if (chai < 1000 * 60 * 60 * 24)
-          beforeTime += Math.floor(chai / (1000 * 60 * 60)) + " 시간전";
+          beforeTime = Math.floor(chai / (1000 * 60 * 60)) + " 시간전";
         else if (chai < 1000 * 60 * 60 * 24 * 30)
-          beforeTime += Math.floor(chai / (1000 * 60 * 60 * 24)) + " 일전";
+          beforeTime = Math.floor(chai / (1000 * 60 * 60 * 24)) + " 일전";
         else if (chai < 1000 * 60 * 60 * 24 * 30 * 12)
-          beforeTime += Math.floor(chai / (1000 * 60 * 60 * 24 * 30)) + " 달전";
+          beforeTime = Math.floor(chai / (1000 * 60 * 60 * 24 * 30)) + " 달전";
 
         const test2 = new Date(user.gameCreation) - new Date();
 
@@ -52,10 +58,10 @@ function UserTotalView({ userTotal, championName, championValue }) {
             key={`${index1}${index2}`}
           >
             {index1} - {user.summonerName} - {user.kills} / {user.deaths} /{" "}
-            {user.assists} - {user.win} -{" "}
-            {user.gameMode !== "소환사의 협곡"
+            {user.assists} - {user.win}
+            {/* {user.gameMode !== "소환사의 협곡"
               ? user.gameMode
-              : `${user.gameMode} - ${user.gameType}`}
+              : `${user.gameMode} - ${user.gameType}`} */}
           </li>
         );
 
@@ -70,9 +76,16 @@ function UserTotalView({ userTotal, championName, championValue }) {
       // console.log(result);
 
       return (
-        <ul className="user_state__block">
+        <ul
+          className="user_state__block"
+          style={{ padding: `1%`, marginTop: `2%` }}
+        >
+          {gameInfoMode !== "소환사의 협곡"
+            ? gameInfoMode
+            : `${gameInfoMode} - ${gameInfoType}`}
+          - {beforeTime}
           {result2}
-          <button
+          {/* <button
             onClick={() =>
               alert(
                 "상세 오픈 = 티어, 점수, kda등 자세하게 표기 sessionStorage.totalData에 넣어둠"
@@ -80,8 +93,7 @@ function UserTotalView({ userTotal, championName, championValue }) {
             }
           >
             상세보기
-          </button>
-          - {beforeTime}
+          </button> */}
         </ul>
       );
     });
@@ -91,11 +103,28 @@ function UserTotalView({ userTotal, championName, championValue }) {
   return <div className={``}>{rendering(userTotal)}</div>;
 }
 
+const UserDetail = ({ userInfo }) => {
+  console.log(userInfo);
+  return (
+    <div>
+      <h3>유저의 정보</h3>
+      <br />
+      <h4>{userInfo ? userInfo.name : " "}</h4>
+      <p>
+        티어 : {userInfo ? userInfo.tier.solo.tier : ""} -{" "}
+        {userInfo ? userInfo.tier.solo.rank : ""}
+      </p>
+      <br />
+    </div>
+  );
+};
+
 const SearchTotal = () => {
-  const { totalData1 } = useContext(UserListContext);
+  const { totalData1, userInfo } = useContext(UserListContext);
   return (
     <>
       <h1>유저 전적 페이지입니다.</h1>
+      <UserDetail userInfo={userInfo} />
       <UserTotalView userTotal={totalData1} />
     </>
   );

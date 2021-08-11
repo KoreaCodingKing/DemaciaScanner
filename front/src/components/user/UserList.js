@@ -93,7 +93,8 @@ import "../../assets/scss/userList.scss";
 // }
 
 function User({ user }) {
-  const { onRemove, onTotalData, championName } = useContext(UserListContext);
+  const { onRemove, onTotalData, championName, totalLoading } =
+    useContext(UserListContext);
   // const [view, setView] = useState(false);
 
   // const [totalData, setTotalData] = useState([]);
@@ -126,6 +127,7 @@ function User({ user }) {
         제거
       </button>
       <button onClick={() => test(user)}>전적 확인하기</button>
+      {totalLoading ? "loading..." : " "}
 
       {/* <UserTotalView
         view={view}

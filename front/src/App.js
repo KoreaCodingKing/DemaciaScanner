@@ -39,6 +39,8 @@ function App() {
   const [userTotal, setUserTotal] = useState([]);
   const [championValue, setChampionValue] = useState("");
   const [totalData1, setTotalData1] = useState([]);
+  const [totalLoading, setTotalLoding] = useState(false);
+  const [userInfo, setUserInfo] = useState();
 
   useEffect(() => {
     const sessionStorageValue = sessionStorage.userList || null;
@@ -182,12 +184,16 @@ function App() {
   const onTotalData = (userData) => {
     const data = userData;
 
+    setTotalLoding(true);
+
     const resultData = getUserTotalData(data)
       .then((result) => {
         console.log(result);
         const matches = result.data;
 
         setTotalData1(matches);
+        setUserInfo(data);
+        setTotalLoding(false);
 
         return matches;
       })
@@ -444,6 +450,8 @@ function App() {
             championName,
             championValue,
             totalData1,
+            totalLoading,
+            userInfo,
           }}
         >
           <ApiTest />
