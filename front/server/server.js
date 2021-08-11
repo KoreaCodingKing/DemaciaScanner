@@ -278,7 +278,7 @@ app.post("/userstatus", async (req, res) => {
               }
               console.log("loading...", `${index + 1}/${userList.length}`);
             });
-        }, 1000 * x);
+        }, 500 * x);
       })(index);
     });
 

@@ -121,12 +121,14 @@ function User({ user }) {
         <div className="info">
           <p>이름 : {user.name}</p>
           <p>
-            자유 랭크 : {user.tier.flex.tier !== "" ? user.tier.flex.tier : "-"}
-            - {user.tier.flex.rank !== "" ? user.tier.flex.rank : "-"}
+            자유 랭크 :{" "}
+            {user.tier.flex.tier !== "" ? user.tier.flex.tier : "없음"}-{" "}
+            {user.tier.flex.rank !== "" ? user.tier.flex.rank : "없음"}
           </p>
           <p>
-            솔로랭크 : {user.tier.solo.tier !== "" ? user.tier.solo.tier : "-"}{" "}
-            - : {user.tier.solo.rank !== "" ? user.tier.solo.rank : "-"}
+            솔로랭크 :{" "}
+            {user.tier.solo.tier !== "" ? user.tier.solo.tier : "없음"} - :{" "}
+            {user.tier.solo.rank !== "" ? user.tier.solo.rank : "없음"}
           </p>
         </div>
         <div className="func">
@@ -138,7 +140,7 @@ function User({ user }) {
           >
             제거
           </button>
-          <br />
+
           <button onClick={() => test(user)}>전적 확인하기</button>
           {totalLoading ? "loading..." : " "}
         </div>

@@ -16,12 +16,22 @@
   }
 }
 
+.thumb {
+  flex: 0.15;
+}
+
+.info {
+  flex: 0.55;
+}
+
 .func {
+  flex: 0.3;
   display: flex;
+  justify-content: flex-end;
   margin-left: 5%;
 }
 .func button {
-  width: 70px;
+  width: 100px;
   height: 100%;
 }
 

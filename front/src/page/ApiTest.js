@@ -68,7 +68,7 @@ function ApiTest(props) {
   };
 
   return (
-    <div className="contents">
+    <div className="contents" style={{ height: "1000px", overflow: "hidden" }}>
       {/* <button onClick={getTestList}>테스트 리스트 갱신</button>
       <button onClick={sessionStorageInit}>로컬스토리지 초기화</button> */}
       {/* <button onClick={searchInGameState}>인게임 상태</button> */}
@@ -85,7 +85,7 @@ function ApiTest(props) {
         <UserList users={userList} />
         <InGameStateView state={userState} loading={loading} />
       </div>
-      <div className="contents__wrap">
+      <div className="contents__wrap" style={{ overflowY: "auto" }}>
         <SearchTotal
           users={userList}
           onTotalData={onTotalData}
