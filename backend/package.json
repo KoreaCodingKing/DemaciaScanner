@@ -1,0 +1,11 @@
+{
+  "name": "scanner-backend",
+  "version": "1.0.0",
+  "description": "demacia-scanner-backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC"
+}
