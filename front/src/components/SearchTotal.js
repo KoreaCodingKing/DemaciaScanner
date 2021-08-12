@@ -107,7 +107,7 @@ const UserDetail = ({ userInfo }) => {
   console.log(userInfo);
   return (
     <div>
-      <h2>유저 {userInfo.name}의 정보</h2>
+      <h2>유저 {userInfo ? userInfo.name : ""}의 정보</h2>
       <br />
       {/* <h4>{userInfo ? userInfo.name : " "}</h4> */}
       <p>
@@ -134,8 +134,9 @@ const UserDetail = ({ userInfo }) => {
 const SearchTotal = () => {
   const { totalData1, userInfo } = useContext(UserListContext);
   return (
-    <div className="info__wrap">
+    <div className="info__wrap" style={{ background: "#ccc" }}>
       <h1>유저 전적 페이지입니다.</h1>
+      <hr />
       <UserDetail userInfo={userInfo} />
       <UserTotalView userTotal={totalData1} />
     </div>

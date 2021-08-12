@@ -116,7 +116,7 @@ function User({ user }) {
           <img
             style={{ width: "50px", height: "50px", borderRadius: "25px" }}
             src={`http://ddragon.leagueoflegends.com/cdn/11.16.1/img/profileicon/${user.profileIconId}.png`}
-          ></img>
+          />
         </div>
         <div className="info">
           <p>이름 : {user.name}</p>

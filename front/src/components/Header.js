@@ -32,6 +32,7 @@ const Header = (props) => {
     scanning,
     modalView,
     modal,
+    searchLoading,
   } = useContext(UserListContext);
 
   // 게임 종료 후 승패 결과, 게임 시간, 끝나고 난 뒤 시간 체크
@@ -73,8 +74,13 @@ const Header = (props) => {
         <button onClick={stopScanner}>인게임 스캐너 중지</button>
       </div>
       <form className="insert_form" onSubmit={insertUser}>
-        <UserInsertForm inputValue={userName} onChangeEvent={onChangeHandle} />
+        <UserInsertForm
+          inputValue={userName}
+          onChangeEvent={onChangeHandle}
+          loading={searchLoading}
+        />
       </form>
+
       {/* <br /> */}
       {/* <UserList users={userList} /> */}
       {/* <br /> */}

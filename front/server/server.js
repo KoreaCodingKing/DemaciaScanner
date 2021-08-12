@@ -82,7 +82,7 @@ function getUserRankTier(objData) {
 
   return getUserRankData(getId).then((res) => {
     const dataLength = res.data.length;
-    console.log("리그정보가 잇었네?? --->", res.data);
+    // console.log("리그정보가 잇었네?? --->", res.data);
 
     if (dataLength !== 0) {
       return res.data.map((item, index) => {
@@ -177,7 +177,7 @@ app.post("/searchuser", async (req, res) => {
       }
     });
 
-  console.log(`전달 할 data ${JSON.stringify(data)}`);
+  // console.log(`전달 할 data ${JSON.stringify(data)}`);
   return res.json(data);
 });
 
@@ -451,9 +451,9 @@ app.post("/usertotal", async (req, res) => {
                         });
                         // console.log(resultArray);
 
-                        console.log("끝");
+                        // console.log("끝");
                       } else {
-                        console.log(index, "번째임");
+                        // console.log(index, "번째임");
                       }
                     }
                     // dataList.splice(0, dataList.length);

@@ -34,6 +34,7 @@ function App() {
   const { current_game_name, search_name } = userName;
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [scanning, setScanning] = useState(false);
   // const [modal, setModal] = useState(false);
   const [userTotal, setUserTotal] = useState([]);
@@ -362,9 +363,12 @@ function App() {
     }
     // -----id 적합성 검사
 
+    setSearchLoading(true);
+
     searchUser(trimmedUserName).then((getUserData) => {
       const data = getUserData;
       addUserList(data, true, "userList");
+      setSearchLoading(false);
     });
 
     onReset();
@@ -420,6 +424,7 @@ function App() {
             userTotal,
             championName,
             championValue,
+            searchLoading,
           }}
         >
           <Header />
@@ -475,6 +480,7 @@ function App() {
             updateInGame,
             getUserData,
             userName,
+            searchLoading,
           }}
         >
           <CurrentMyState />
