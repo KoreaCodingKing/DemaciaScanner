@@ -41,10 +41,14 @@ body {
 // contents
 .contents {
   display: flex;
+  justify-content: space-between;
   margin: 0 auto;
   width: 1200px;
 }
 
 .contents__wrap {
-  width: 50%;
+  width: 100%;
+  & + & {
+    width: 100%;
+  }
 }

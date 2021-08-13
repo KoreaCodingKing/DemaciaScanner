@@ -103,10 +103,10 @@ function UserTotalView({ userTotal, championName, championValue }) {
   return <div className={``}>{rendering(userTotal)}</div>;
 }
 
-const UserDetail = ({ userInfo }) => {
-  console.log(userInfo);
+const UserDetail = ({ userInfo, addUserList }) => {
+  //   console.log(addUserList);
   return (
-    <div>
+    <div style={{ borderRadius: "25px", padding: "10px", background: "#ccc" }}>
       <h2>유저 {userInfo ? userInfo.name : ""}의 정보</h2>
       <br />
       {/* <h4>{userInfo ? userInfo.name : " "}</h4> */}
@@ -126,18 +126,21 @@ const UserDetail = ({ userInfo }) => {
       </p>
       <p>승리 : {userInfo ? userInfo.tier.solo.wins : ""}</p>
       <p>패배 : {userInfo ? userInfo.tier.solo.losses : ""}</p>
+      <button onClick={() => addUserList(userInfo, true, "userList")}>
+        리스트 추가하기
+      </button>
+      {/* <button onClick={() => console.log(userInfo)}>asd</button> */}
       <br />
     </div>
   );
 };
 
 const SearchTotal = () => {
-  const { totalData1, userInfo } = useContext(UserListContext);
+  const { totalData1, userInfo, addUserList } = useContext(UserListContext);
   return (
-    <div className="info__wrap" style={{ background: "#ccc" }}>
+    <div className="info__wrap" style={{ padding: "10px" }}>
       <h1>유저 전적 페이지입니다.</h1>
-      <hr />
-      <UserDetail userInfo={userInfo} />
+      <UserDetail userInfo={userInfo} addUserList={addUserList} />
       <UserTotalView userTotal={totalData1} />
     </div>
   );

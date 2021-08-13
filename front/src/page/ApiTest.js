@@ -38,6 +38,8 @@ function ApiTest(props) {
     modal,
     onTotalData,
     totalData,
+    userInfo,
+    addUserList,
   } = useContext(UserListContext);
 
   // 게임 종료 후 승패 결과, 게임 시간, 끝나고 난 뒤 시간 체크
@@ -85,13 +87,17 @@ function ApiTest(props) {
         <UserList users={userList} />
         <InGameStateView state={userState} loading={loading} />
       </div>
-      <div className="contents__wrap" style={{ overflowY: "auto" }}>
-        <SearchTotal
-          users={userList}
-          onTotalData={onTotalData}
-          totalData={totalData}
-        />
-      </div>
+      {userInfo ? (
+        <div className="contents__wrap" style={{ overflowY: "auto" }}>
+          <SearchTotal
+            users={userList}
+            onTotalData={onTotalData}
+            totalData={totalData}
+          />
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

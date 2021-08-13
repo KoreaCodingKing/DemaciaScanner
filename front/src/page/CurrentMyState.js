@@ -70,15 +70,6 @@ function CurrentMyState() {
     searchUser(trimmedUserName)
       .then((getUserData) => {
         const data = getUserData;
-        // 랭크 및 티어를 가져올 코드를 삽입예정
-        // 로그인시)
-        // 나의 캐릭터 네임을 등록 해두면, 일정 시간마다 체크함.
-        // 게임 중이라면 매칭된 10명을 보여줌.
-        // --------------
-        // 비로그인시)
-        // 나의 이름을 사용자로부터 받음.
-        // 위와 같은 프로세스 실행.
-        // 새로고침 시 초기화
 
         return data;
       })

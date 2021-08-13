@@ -113,6 +113,23 @@ function App() {
     if (addUser == null) {
       return false;
     }
+    const trimmedUserName = addUser.name.trim();
+
+    if (!trimmedUserName || "") {
+      alert("값이 없습니다");
+      return;
+    }
+
+    const doesExistUserName = userList.some(
+      (id) =>
+        id.name.replace(/\s/gi, "").toUpperCase() ===
+        trimmedUserName.replace(/\s/gi, "").toUpperCase()
+    );
+    if (doesExistUserName) {
+      alert("중복된 소환사 닉네임이 있습니다.");
+      onReset();
+      return;
+    }
 
     const user = {
       name: addUser.name || addUser.summonerName,
@@ -168,19 +185,6 @@ function App() {
 
     confirmAdd();
 
-    // if (saveValue) {
-    //   setUserList(userList.concat(user));
-    // }
-
-    // if (!storageValue) {
-    //   return false;
-    // } else if (storageValue === "userList") {
-    //   sessionStorage.setItem("userList", JSON.stringify(userList.concat(user)));
-    // } else {
-    //   // sessionStorage.setItem("userList", JSON.stringify(userList.concat(user)));
-    //   // sessionStorage.setItem(`${user.name}`, JSON.stringify(user));
-    // }
-
     return user;
   };
 
@@ -198,6 +202,7 @@ function App() {
         setTotalData1(matches);
         setUserInfo(data);
         setTotalLoding(false);
+        setSearchLoading(false);
 
         return matches;
       })
@@ -331,16 +336,19 @@ function App() {
   };
 
   // todo User
-  const insertUser = (e) => {
+  const insertUser = (e, addon) => {
+    let testAlign = false;
     // 메인에 insertUser 메서드는 onSubmit에 사용하기 때문에 e.preventDefault()처리가 필요함
     // 하지만 currentMyGameView페이지에 게임중인 유저를 리스트에 추가 할경우 insertUser 메서드에 파라미터(유저 정보)를 전달하기때문에,
     // e.preventDefault()처리가 불필요.
     // 따라서 그 값을 변경 해 주었음
     // console.log(e)
+
     if (typeof e !== "string") {
       //메인 리스트 등록
       e.preventDefault();
       e = userName.search_name;
+      testAlign = true;
     }
 
     // -----id 적합성 검사
@@ -367,8 +375,15 @@ function App() {
 
     searchUser(trimmedUserName).then((getUserData) => {
       const data = getUserData;
-      addUserList(data, true, "userList");
-      setSearchLoading(false);
+
+      if (testAlign) {
+        onTotalData(data);
+      } else {
+        addUserList(data, true, "userList");
+      }
+
+      // 리스트 추가
+      // addUserList(data, true, "userList");
     });
 
     onReset();

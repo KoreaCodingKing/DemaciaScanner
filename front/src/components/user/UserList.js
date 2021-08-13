@@ -141,8 +141,16 @@ function User({ user }) {
             제거
           </button>
 
-          <button onClick={() => test(user)}>전적 확인하기</button>
-          {totalLoading ? "loading..." : " "}
+          <button
+            disabled={totalLoading}
+            onClick={(e) => {
+              // e.target.disabled = true;
+              test(user);
+            }}
+          >
+            전적 확인하기
+          </button>
+          {/* {totalLoading ? "loading..." : " "} */}
         </div>
       </div>
 

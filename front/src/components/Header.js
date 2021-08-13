@@ -70,8 +70,12 @@ const Header = (props) => {
         {/* <button onClick={searchInGameState}>인게임 상태</button> */}
         {/* <button onClick={modalView}>모달 버튼</button> */}
         <button onClick={sessionStorageInit}>로컬스토리지 초기화</button>
-        <button onClick={startScanner}>인게임 스케너</button>
-        <button onClick={stopScanner}>인게임 스캐너 중지</button>
+        <button disabled={scanning} onClick={startScanner}>
+          인게임 스케너
+        </button>
+        <button disabled={!scanning} onClick={stopScanner}>
+          인게임 스캐너 중지
+        </button>
       </div>
       <form className="insert_form" onSubmit={insertUser}>
         <UserInsertForm

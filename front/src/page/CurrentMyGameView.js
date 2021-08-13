@@ -16,7 +16,9 @@ function CurrentMyGameView({ users }) {
           <div key={i}>
             {users.participants[i].summonerName}
             <button
-              onClick={() => insertUser(users.participants[i].summonerName)}
+              onClick={() =>
+                insertUser(users.participants[i].summonerName, true)
+              }
             >
               추가
             </button>
