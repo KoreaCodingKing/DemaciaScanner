@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import firebase from 'firebase';
 
+const functions = firebase.functions();
 function SignUp() {
-    const id = 'scanner-sign-up'
+    const id = 'scanner-sign-up';
     const [didSuccessedSignUp, setDidSuccessedSignUp] = useState(false);
     const [sendEmailLoading, setSendEmailLoading] = useState(false);
     const [userInfo, setUserInfo] = useState({
@@ -30,7 +32,8 @@ function SignUp() {
             return;
         }
 
-        
+        const registerSendPin = functions.httpsCallable('registerSendPin');
+        registerSendPin(email);
     }
 
     return (
