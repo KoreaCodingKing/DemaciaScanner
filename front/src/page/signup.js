@@ -18,15 +18,15 @@ function SignUp() {
     });
 
     const checkValidityEmailAndSendEmailForAuth = (email) => {
-        this.setSendEmailLoading(true);
+        setSendEmailLoading(true);
         if (!email || email.length === 0) {
-            this.setErrors({...errors, errorMessageFromEmail: '이메일을 입력해 주세요.'});
+            setErrors({...errors, errorMessageFromEmail: '이메일을 입력해 주세요.'});
             return;
         }
 
         const emailRegularExpression = new RegExp('^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$');
         if (!emailRegularExpression.test(email)) {
-            this.setErrors({...errors, errorMessageFromEmail: '이메일 형식에 맞지 않습니다. 다시 확인해 주세요.'});
+            setErrors({...errors, errorMessageFromEmail: '이메일 형식에 맞지 않습니다. 다시 확인해 주세요.'});
             return;
         }
 
