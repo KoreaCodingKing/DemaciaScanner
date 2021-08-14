@@ -3,8 +3,17 @@ import React, { useState } from 'react';
 function SignUp() {
     const id = 'scanner-sign-up'
     const [didSuccessedSignUp, setDidSuccessedSignUp] = useState(false);
+    const [userInfo, setUserInfo] = useState({
+        id: '',
+        lolId: '',
+        password: ''
+    });
+    const [errors, setErrors] = useState({
+        errorMessageFromIdField: '',
+        errorMessageFromPasswordField: '',
+        errorMessageFromPasswordReConfirmField: ''
+    });
 
-    // ToDo: 회원가입 기능 구현
     return (
         <div id={id}>
             { didSuccessedSignUp &&
