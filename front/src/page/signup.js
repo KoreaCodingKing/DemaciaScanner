@@ -3,16 +3,35 @@ import React, { useState } from 'react';
 function SignUp() {
     const id = 'scanner-sign-up'
     const [didSuccessedSignUp, setDidSuccessedSignUp] = useState(false);
+    const [sendEmailLoading, setSendEmailLoading] = useState(false);
     const [userInfo, setUserInfo] = useState({
         id: '',
         lolId: '',
-        password: ''
+        password: '',
+        email: ''
     });
     const [errors, setErrors] = useState({
         errorMessageFromIdField: '',
         errorMessageFromPasswordField: '',
-        errorMessageFromPasswordReConfirmField: ''
+        errorMessageFromPasswordReConfirmField: '',
+        errorMessageFromEmail: '',
     });
+
+    const checkValidityEmailAndSendEmailForAuth = (email) => {
+        this.setSendEmailLoading(true);
+        if (!email || email.length === 0) {
+            this.setErrors({...errors, errorMessageFromEmail: '이메일을 입력해 주세요.'});
+            return;
+        }
+
+        const emailRegularExpression = new RegExp('^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$');
+        if (!emailRegularExpression.test(email)) {
+            this.setErrors({...errors, errorMessageFromEmail: '이메일 형식에 맞지 않습니다. 다시 확인해 주세요.'});
+            return;
+        }
+
+        
+    }
 
     return (
         <div id={id}>
@@ -24,7 +43,7 @@ function SignUp() {
                     <div className="inputs">
                         <div className="input_container">
                             <label className="form_label">아이디</label>
-                            <input id="id-input" />
+                            <input id="id-input" onBlur={(event) => {check}}/>
                         </div>
                         <div className="input_container">
                             <label className="form_label">롤 아이디</label>
@@ -43,6 +62,11 @@ function SignUp() {
                         <button className="btn_signup"
                             label="회원가입">
                         </button>
+                    </div>
+                    <div className="input_container">
+                        <label className="form_label">이메일 인증</label>
+                        <input id="email-input" onChange={(event) => {this.setUserInfo({ ...userInfo, email: event.target.value})}}/>
+                        <button onClick={() => checkValidityEmailAndSendEmailForAuth(this.userInfo.email)}>이메일 인증하기</button>
                     </div>
                     <div className="signin_button_container">
                         <button className="signin_button">
