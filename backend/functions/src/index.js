@@ -1,9 +1,13 @@
 import * as functions from "firebase-functions";
 import * as admin from 'firebase-admin';
 
+import registerSendPin from './register';
 
 admin.initializeApp();
 
+exports.registerSendPin = functions.https.onCall((data, context) => {
+    return registerSendPin(data);
+})
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
