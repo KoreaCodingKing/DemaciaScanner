@@ -135,6 +135,7 @@ app.post("/searchuser", async (req, res) => {
         id: result.data.id,
         name: result.data.name,
         accountId: result.data.accountId,
+        revisionDate: result.data.revisionDate,
         profileIconId: result.data.profileIconId,
         summonerLevel: result.data.summonerLevel,
         tier: {
@@ -158,16 +159,7 @@ app.post("/searchuser", async (req, res) => {
 
       return data;
     })
-    // .then((resData2) => {
-    //   console.log("asdasdasd ->", resData2);
-    //   getUserLeageInfo(resData2.id).then((res) => {
-    //     console.log(res.data);
-    //   });
-    // })
     .then((resData) => {
-      // console.log(resData);
-
-      // 유저의 랜크 티어 알아내는 함수
       return getUserRankTier(resData);
     })
     .catch((err) => {
@@ -325,7 +317,7 @@ app.post("/usertotal", async (req, res) => {
     })
     .then((matches) => {
       // console.log(matches)
-      const list = matches.slice(0, 10 || matches.length);
+      const list = matches.slice(0, 5 || matches.length);
       list.map((matchesGameId) => {
         const gameId = matchesGameId.gameId;
 
@@ -463,7 +455,7 @@ app.post("/usertotal", async (req, res) => {
                 }
                 console.log("loading...", `${index + 1}/${array1.length}`);
               });
-          }, 100 * x);
+          }, 250 * x);
         })(index);
       }); // map end
       // array1.splice(0, array1.length);

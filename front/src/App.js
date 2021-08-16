@@ -110,6 +110,7 @@ function App() {
 
   // 리스트 추가 함수
   const addUserList = (addUser, saveValue, storageValue) => {
+    console.log("revisionData", addUser);
     if (addUser == null) {
       return false;
     }
@@ -136,6 +137,7 @@ function App() {
       id: addUser.id || addUser.summonerId,
       accountId: addUser.accountId,
       tier: addUser.tier,
+      revisionDate: addUser.revisionDate,
       profileIconId: addUser.profileIconId,
       summonerLevel: addUser.summonerLevel,
     };
@@ -184,6 +186,7 @@ function App() {
     );
 
     confirmAdd();
+    setSearchLoading(false);
 
     return user;
   };
@@ -196,7 +199,7 @@ function App() {
 
     const resultData = getUserTotalData(data)
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         const matches = result.data;
 
         setTotalData1(matches);
@@ -337,6 +340,7 @@ function App() {
 
   // todo User
   const insertUser = (e, addon) => {
+    // testAlign - 나의 게임 서치랑 일반 서치 차이
     let testAlign = false;
     // 메인에 insertUser 메서드는 onSubmit에 사용하기 때문에 e.preventDefault()처리가 필요함
     // 하지만 currentMyGameView페이지에 게임중인 유저를 리스트에 추가 할경우 insertUser 메서드에 파라미터(유저 정보)를 전달하기때문에,

@@ -6,10 +6,10 @@ import Scanning from "../components/Scanning";
 import { UserListContext } from "../App";
 
 const InGameStateView = (props) => {
-  let { scanning, userList } = useContext(UserListContext);
+  let { scanning, userList, totalData1 } = useContext(UserListContext);
 
   const users = props.state;
-  console.log("스캐닝 값 -> ", scanning);
+  // console.log(userList);
 
   return (
     <>
@@ -22,7 +22,11 @@ const InGameStateView = (props) => {
         {props.loading ? (
           <Loading userList={userList} />
         ) : (
-          <UserListInGame users={users} />
+          <UserListInGame
+            users={users}
+            userList={userList}
+            totalData={totalData1}
+          />
         )}
       </div>
     </>

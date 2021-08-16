@@ -44,14 +44,6 @@ function UserTotalView({ userTotal, championName, championValue }) {
 
         const test2 = new Date(user.gameCreation) - new Date();
 
-        // console.log(
-        //   `${new Date(user.gameCreation).getFullYear()}년,${
-        //     new Date(user.gameCreation).getMonth() + 1
-        //   }월, ${new Date(user.gameCreation).getDate()}일, ${new Date(
-        //     user.gameCreation
-        //   ).getHours()}시, ${new Date(user.gameCreation).getMinutes()}분`
-        // );
-
         result.push(
           <li
             className={`user_state__item user_state__item--${user.win}`}

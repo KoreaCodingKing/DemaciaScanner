@@ -68,13 +68,13 @@ function TimeView({ gameTime, gameLength }) {
   );
 }
 
-function User({ user, state, runningTime, numb }) {
+function User({ user, state, runningTime, numb, revisionData }) {
   const [show, setShow] = useState(false);
   const [gameStart, setGameStart] = useState(false);
 
   const gameLength = user.gameLength;
 
-  console.log(user);
+  console.log(revisionData);
 
   return (
     <div className="user_block" style={{ animationDelay: `0.${numb}s` }}>
@@ -86,7 +86,7 @@ function User({ user, state, runningTime, numb }) {
                 ? user.gameMode
                 : `${user.gameMode} - ${user.gameType}`
             }`
-          : "대기중 - 몇분전 체크 해야함"}
+          : `대기중 - 몇분전 체크 해야함`}
       </span>
       {gameLength != 0 && state ? (
         <TimeView gameTime={runningTime} gameLength={gameLength} />
@@ -98,11 +98,12 @@ function User({ user, state, runningTime, numb }) {
   );
 }
 
-function UserListInGame({ users }) {
+function UserListInGame({ users, userList }) {
+  // console.log(userList);
   useEffect(() => {
-    users.map((user) => {
-      console.log(`${user.name} - ${user.currentTimeStamp}`);
-    });
+    // users.map((user) => {
+    //   console.log(`${user.name} - ${user.currentTimeStamp}`);
+    // });
 
     return () => console.log("없어짐");
   }, []);
@@ -116,6 +117,7 @@ function UserListInGame({ users }) {
           key={index}
           numb={index}
           state={user.state}
+          revisionData={userList[index]}
           runningTime={user.currentTimeStamp}
         />
       ))}

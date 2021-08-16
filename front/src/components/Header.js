@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
-// import Loading from "../components/Loading";
 import UserInsertForm from "../components/user/UserInsertForm";
-// import UserList from "../components/user/UserList";
-// import InGameStateView from "../page/InGameStateView";
-// import CurrentMyState from "../page/CurrentMyState";
+
 import { UserListContext } from "../App";
 
 // style

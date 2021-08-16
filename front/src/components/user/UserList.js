@@ -99,7 +99,7 @@ function User({ user }) {
 
   // const [totalData, setTotalData] = useState([]);
 
-  console.log("찾은 유저의 데이터->", user);
+  // console.log("찾은 유저의 데이터->", user);
 
   const test = (user) => {
     onTotalData(user).then((res) => {
