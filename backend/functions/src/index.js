@@ -1,17 +1,21 @@
-import * as functions from "firebase-functions";
-import * as admin from 'firebase-admin';
+const express = require("express");
+const cors = require("cors");
+const bodyparser = require("body-parser");
+const dotenv = require("dotenv").config();
 
-import registerSendPin from './register';
+const router = require('router');
+const db = require('mongoose');
+const app = express();
+const port = process.env.PORT || 3001;
 
-admin.initializeApp();
+app.use(cors());
+app.use(bodyparser.json());
+db.connect(process.env.MONGODB_CONNECTOR, {useNewUrlParser: true})
+    .then(() => console.log('Successfully connected to mongodb'))
+    .catch(e => console.error(e));
 
-exports.registerSendPin = functions.https.onCall((data, context) => {
-    return registerSendPin(data);
-})
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+app.listen(port, () => {
+    console.log(`Express App on port ${port}!`);
+});
+
+module.exports = app;
