@@ -10,10 +10,12 @@ const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(bodyparser.json());
-db.connect(process.env.MONGODB_CONNECTOR, {useNewUrlParser: true})
+db.connect(process.env.MONGODB_CONNECTOR, { useNewUrlParser: true })
     .then(() => console.log('Successfully connected to mongodb'))
-    .catch(e => console.error(e));
+    .catch((err: any) => console.error(err)
+);
 
+app.get('/user')
 app.listen(port, () => {
     console.log(`Express App on port ${port}!`);
 });
