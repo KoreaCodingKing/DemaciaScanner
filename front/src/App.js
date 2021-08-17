@@ -199,7 +199,7 @@ function App() {
 
     const resultData = getUserTotalData(data)
       .then((result) => {
-        // console.log(result);
+        console.log(result.data);
         const matches = result.data;
 
         setTotalData1(matches);

@@ -112,6 +112,28 @@ function getUserRankTier(objData) {
   });
 }
 
+function getChampInfo(objData, championIdValue) {
+  // let getValue = objData;
+  // console.log(getValue);
+
+  return getChampionName().then((res) => {
+    // console.log(res.data);
+    const championList = res.data.data;
+    const convertToObjectChampionList = Object.entries(championList);
+    // console.log(convertToObjectChampionList);
+
+    return convertToObjectChampionList.map((item, index) => {
+      if (item[1].key == championIdValue) {
+        objData.championId = item[1];
+        // console.log(item[1].name);
+        // console.log(item[1].image.full);
+      }
+      // console.log(objData.championId);
+      return objData;
+    });
+  });
+}
+
 // 테스트용 첼린저 데이터
 app.get("/testlist", async (req, res) => {
   const data = await new Promise((resolve, reject) => {
@@ -242,17 +264,17 @@ app.post("/userstatus", async (req, res) => {
                 accountId: user.accountId,
                 participants: res.data.participants,
               });
-              console.log(
-                user.name,
-                "게임 진입 후 소요된 시간 : ",
-                parseInt(res.data.gameLength / 60) + "분",
-                parseInt(res.data.gameLength % 60) + "초",
-                "게임 잡힌 시간 : ",
-                timeStamp.getDate(),
-                timeStamp.getHours(),
-                timeStamp.getMinutes(),
-                timeStamp.getSeconds()
-              );
+              // console.log(
+              //   user.name,
+              //   "게임 진입 후 소요된 시간 : ",
+              //   parseInt(res.data.gameLength / 60) + "분",
+              //   parseInt(res.data.gameLength % 60) + "초",
+              //   "게임 잡힌 시간 : ",
+              //   timeStamp.getDate(),
+              //   timeStamp.getHours(),
+              //   timeStamp.getMinutes(),
+              //   timeStamp.getSeconds()
+              // );
             })
             .catch((err) => {
               console.log(`${user.name}은(는) 게임 중이지 않습니다.`);
@@ -317,7 +339,7 @@ app.post("/usertotal", async (req, res) => {
     })
     .then((matches) => {
       // console.log(matches)
-      const list = matches.slice(0, 5 || matches.length);
+      const list = matches.slice(0, 2 || matches.length);
       list.map((matchesGameId) => {
         const gameId = matchesGameId.gameId;
 
@@ -334,6 +356,7 @@ app.post("/usertotal", async (req, res) => {
             })
               .then((result) => {
                 // result.data
+                // console.log(result.data);
                 const data = {
                   gameCreation: result.data.gameCreation,
                   gameDuration: result.data.gameDuration,
@@ -383,37 +406,21 @@ app.post("/usertotal", async (req, res) => {
                   console.log("finished");
                   // console.log(array3);
 
-                  let champData = "";
-
                   array3.map((item, index) => {
                     const length1 = item.participantIdentities.length;
                     let dataList = [];
 
                     for (let i = 0; i < length1; i++) {
-                      // const championIdValue = item.participants[i].championId;
+                      const championIdValue = item.participants[i].championId;
 
-                      // eslint-disable-next-line no-loop-func
-                      // getChampionName(championIdValue).then((res) => {
-                      //   const championList = res.data.data;
-                      //   const convertToObjectChampionList =
-                      //     Object.entries(championList);
-                      //   // const champ = "";
-
-                      //   convertToObjectChampionList.map((item, index) => {
-                      //     if (item[1].key == championIdValue) {
-                      //       // console.log(item[1].name);
-                      //       champData = item[1].name;
-                      //       // item[1].name;
-                      //     }
-                      //   });
-                      // });
-
+                      // let champData;
+                      // console.log(championIdValue);
                       let data = {
                         summonerName:
                           item.participantIdentities[i].player.summonerName,
                         summonerId:
                           item.participantIdentities[i].player.summonerId,
-                        championId: item.participants[i].championId,
+                        championId: championIdValue,
                         kills: item.participants[i].stats.kills,
                         deaths: item.participants[i].stats.deaths,
                         assists: item.participants[i].stats.assists,
@@ -434,21 +441,36 @@ app.post("/usertotal", async (req, res) => {
                           },
                         },
                       };
+                      // getChampInfo(data, championIdValue);
+                      // data.championId = getChampInfo(data, championIdValue);
+
+                      // eslint-disable-next-line no-loop-func
+                      // getChampionName().then((res) => {
+                      //   const championList = res.data.data;
+                      //   const convertToObjectChampionList =
+                      //     Object.entries(championList);
+                      //   // const champ = "";
+
+                      //   convertToObjectChampionList.map((item, index) => {
+                      //     if (item[1].key == championIdValue) {
+                      //       // console.log(item[1].name);
+                      //       // console.log(item[1].image.full);
+                      //     }
+                      //   });
+                      // });
+                      // console.log(champData);
 
                       dataList = dataList.concat(data);
+                      console.log(dataList);
 
                       if (i + 1 == length1) {
                         resultArray = resultArray.concat({
                           dataList,
                         });
-                        // console.log(resultArray);
-
-                        // console.log("끝");
                       } else {
                         // console.log(index, "번째임");
                       }
                     }
-                    // dataList.splice(0, dataList.length);
                   });
 
                   return res.json(resultArray);
