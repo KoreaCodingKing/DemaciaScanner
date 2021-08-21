@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGODB_CONNECTOR, {
     useCreateIndex: true 
 })
 .then(() => console.log('Successfully connected to mongodb'))
-.catch((err: any) => { console.log('iserror?'); console.error('1', err)});
+.catch((err: any) => { console.error(err)});
 
 const connection = mongoose.connection;
 connection.once('open', () => {
@@ -28,7 +28,7 @@ connection.once('open', () => {
 app.get('/login', (req: any, res: any) => {
     // Todo: 테스트 해보기 및 login 기능 추가
     User.findOne({ id: 'yrkim' }, (err: any, user: any) => {
-        return res.json({ login: true })
+        return res.json({ login: true });
     });
 });
 
