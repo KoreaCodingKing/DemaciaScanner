@@ -30,7 +30,7 @@ app.get('/login', (req: any, res: any) => {
     User.findOne({ id: 'yrkim' }, (err: any, user: any) => {
         return res.json({ login: true })
     });
-})
+});
 
 app.post('/signup', (req: any, res: any) => {
     // Todo: 테스트 해보기 및 signup 기능 추가
@@ -46,8 +46,8 @@ app.post('/signup', (req: any, res: any) => {
         return res.status(200).json({
             success: true,
         });
-    })
-})
+    });
+});
 
 app.listen(port, () => {
     console.log(`Express App on port ${port}!`);
