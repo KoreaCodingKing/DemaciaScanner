@@ -26,12 +26,14 @@ connection.once('open', () => {
 });
 
 app.get('/login', (req: any, res: any) => {
+    // Todo: 테스트 해보기 및 login 기능 추가
     User.findOne({ id: 'yrkim' }, (err: any, user: any) => {
         return res.json({ login: true })
     });
 })
 
 app.post('/signup', (req: any, res: any) => {
+    // Todo: 테스트 해보기 및 signup 기능 추가
     const newUser = new User({
         id: 'yrkim',
         lolid: '저렴한 핫바',
