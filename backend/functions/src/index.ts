@@ -34,15 +34,13 @@ interface signInData {
 
 app.get('/login', (req: any, res: any, next: any) => {
     const signInData = {
-        userId: req.body.userId,
+        userId: req.body.id,
         pw: req.body.pw
     } as signInData;
 
     // todo 에러 핸들링, 로그인 구현
-    User.findOne({ id: signInData.userId }, (err: any, user: any) => {
-        if (err) {
-            return res.send(err);
-        }
+    User.findOne({ id: signInData.userId, pw: signInData.pw }).exec((err: any, result: any) => {
+        console.log(result);
     });
 });
 
