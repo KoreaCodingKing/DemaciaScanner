@@ -15,4 +15,14 @@ const userSchema = new Schema({
     created: {type: Date}
 });
 
+
+// https://mongoosejs.com/docs/middleware.html#error-handling-middleware
+userSchema.post('save', (err: any, doc: any, next: any) => {
+    if (err.name === 'MongoError' && err.code === 11000) {
+        next(new Error('There was a duplicate key error'));
+      } else {
+        next(new Error('unknown error'));
+      }
+})
+
 export default mongoose.model<User>('User', userSchema);

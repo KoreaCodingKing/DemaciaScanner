@@ -1,4 +1,5 @@
 import User from './models/user';
+
 const express = require("express");
 const cors = require("cors");
 const bodyparser = require("body-parser");
@@ -11,6 +12,7 @@ const port = 8080;
 app.use(cors());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
+
 mongoose.connect(process.env.MONGODB_CONNECTOR, { 
     useNewUrlParser: true,
     useFindAndModify: false,
@@ -44,18 +46,17 @@ app.get('/login', (req: any, res: any, next: any) => {
     });
 });
 
-app.post('/signup', (req: any, res: any) => {
+app.post('/signup', (req: any, res: any, next: any) => {
     const newUser = new User(req.body);
 
-    // todo: error handling
-    return newUser.save((err: any) => {
+    newUser.save((err) => {
         if (err) {
-            console.log(err.message)
-            return res.send;
+            if (err.message === 'There was a duplicate key error') {
+                return res.status(409).send({ error: err.message });
+            }
+            return res.status(500).send({ error: 'unknown error' });
         }
-        return res.status(200).json({
-            success: true,
-        });
+        return res.status(200).json({ success: true });
     });
 });
 
