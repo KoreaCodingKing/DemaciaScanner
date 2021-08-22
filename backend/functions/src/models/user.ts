@@ -9,10 +9,10 @@ interface User {
 };
 
 const userSchema = new Schema({
-    id: {type: String, required: true, unique: true},
+    id: {type: String, index:true, required: true, unique: true},
     lolid: {type: String},
     pw: {type: String, required: true},
-    created: {type: Date, required: true,}
+    created: {type: Date}
 });
 
 export default mongoose.model<User>('User', userSchema);

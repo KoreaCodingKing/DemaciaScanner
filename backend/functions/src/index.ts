@@ -33,15 +33,9 @@ app.get('/login', (req: any, res: any) => {
 });
 
 app.post('/signup', (req: any, res: any) => {
-    // Todo: 테스트 해보기 및 signup 기능 추가
-    const newUser = new User({
-        id: 'yrkim',
-        lolid: '저렴한 핫바',
-        pw: 'zxaser1325!',
-        created: new Date()
-    });
+    const newUser = new User(req.body);
 
-    newUser.save((err, userInfo) => {
+    return newUser.save((err, userInfo) => {
         if (err) return res.json({ success: false, err });
         return res.status(200).json({
             success: true,
