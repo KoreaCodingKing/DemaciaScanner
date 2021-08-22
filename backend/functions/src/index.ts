@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const app = express();
 const port = 8080;
 
-// app.use(cors());
+app.use(cors());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 mongoose.connect(process.env.MONGODB_CONNECTOR, { 
@@ -25,18 +25,34 @@ connection.once('open', () => {
     console.log('mongoDB connection success')
 });
 
-app.get('/login', (req: any, res: any) => {
-    // Todo: 테스트 해보기 및 login 기능 추가
-    User.findOne({ id: 'yrkim' }, (err: any, user: any) => {
-        return res.json({ login: true });
+interface signInData {
+    userId: string,
+    pw: string
+};
+
+app.get('/login', (req: any, res: any, next: any) => {
+    const signInData = {
+        userId: req.body.userId,
+        pw: req.body.pw
+    } as signInData;
+
+    // todo 에러 핸들링, 로그인 구현
+    User.findOne({ id: signInData.userId }, (err: any, user: any) => {
+        if (err) {
+            return res.send(err);
+        }
     });
 });
 
 app.post('/signup', (req: any, res: any) => {
     const newUser = new User(req.body);
 
-    return newUser.save((err, userInfo) => {
-        if (err) return res.json({ success: false, err });
+    // todo: error handling
+    return newUser.save((err: any) => {
+        if (err) {
+            console.log(err.message)
+            return res.send;
+        }
         return res.status(200).json({
             success: true,
         });
