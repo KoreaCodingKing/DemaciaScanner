@@ -3,7 +3,7 @@ import User from './models/user';
 const express = require("express");
 const cors = require("cors");
 const bodyparser = require("body-parser");
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 
 const mongoose = require('mongoose');
 const app = express();
@@ -38,9 +38,8 @@ app.get('/login', (req: any, res: any, next: any) => {
         pw: req.body.pw
     } as signInData;
 
-    // todo 에러 핸들링, 로그인 구현
     User.findOne({ id: signInData.userId, pw: signInData.pw }).exec((err: any, result: any) => {
-        console.log(result);
+        return res.status(200).json({ success: true, result });
     });
 });
 

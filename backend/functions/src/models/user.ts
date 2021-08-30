@@ -23,6 +23,6 @@ userSchema.post('save', (err: any, doc: any, next: any) => {
       } else {
         next(new Error('unknown error'));
       }
-})
+});
 
 export default mongoose.model<User>('User', userSchema);
