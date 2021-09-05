@@ -10,6 +10,17 @@ $blue: #228be6;
 
 body {
   color: $black;
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+.wrapper {
+  width: 100%;
+  height: 100%;
 }
 
 .header {
@@ -28,8 +39,9 @@ body {
 }
 
 .header__item {
+  flex: 0.1;
   margin-top: 10px;
-  padding: 5px;
+  padding: 0.5%;
 }
 
 .header__link {

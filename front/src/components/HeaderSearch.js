@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import axios from "axios";
-import UserInsertForm from "../components/user/UserInsertForm";
+import UserInsertForm from "./user/UserInsertForm";
 
 import { UserListContext } from "../App";
 
@@ -9,7 +9,7 @@ import "../assets/scss/header.scss";
 
 let tempList = [];
 
-const Header = (props) => {
+const HeaderSearch = (props) => {
   let {
     userList,
     userName,
@@ -91,4 +91,4 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+export default HeaderSearch;

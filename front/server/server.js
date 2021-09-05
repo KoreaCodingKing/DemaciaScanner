@@ -12,6 +12,8 @@ const riotApiKey = process.env.REACT_APP_TEST_API_KEY;
 let globalList = [];
 let globalListState = [];
 
+let champInfoList = [];
+
 let asdList = [];
 
 app.use(cors());
@@ -70,10 +72,15 @@ async function getTempIdList() {
   );
 }
 // 챔피언 이름 찾기
-async function getChampionName(id) {
-  return await axios.get(
-    "https://ddragon.leagueoflegends.com/cdn/11.15.1/data/ko_KR/champion.json"
-  );
+function getChampionName() {
+  const result = axios
+    .get(
+      "https://ddragon.leagueoflegends.com/cdn/11.15.1/data/ko_KR/champion.json"
+    )
+    .then((res) => {
+      // console.log(res.data)
+      return res.data;
+    });
 }
 
 // 유저의 티어 랭크 알아내는 상수 함수
@@ -112,26 +119,18 @@ function getUserRankTier(objData) {
   });
 }
 
-function getChampInfo(objData, championIdValue) {
-  // let getValue = objData;
-  // console.log(getValue);
-
-  return getChampionName().then((res) => {
-    // console.log(res.data);
-    const championList = res.data.data;
-    const convertToObjectChampionList = Object.entries(championList);
-    // console.log(convertToObjectChampionList);
-
-    return convertToObjectChampionList.map((item, index) => {
-      if (item[1].key == championIdValue) {
-        objData.championId = item[1];
-        // console.log(item[1].name);
-        // console.log(item[1].image.full);
-      }
-      // console.log(objData.championId);
-      return objData;
-    });
-  });
+function getChampInfo(champId) {
+  // getChampionName();
+  // console.log("상수 챔프 정보 값", getChampionName());
+  // const championList = res.data.data;
+  // const convertToObjectChampionList = Object.entries(championList);
+  // console.log(convertToObjectChampionList);
+  // return convertToObjectChampionList.map((item, index) => {
+  //   if (item[1].key == champId) {
+  //     console.log("리턴할 챔프 이름", item[1].name);
+  //     return item[1];
+  //   }
+  // });
 }
 
 // 테스트용 첼린저 데이터
@@ -330,6 +329,7 @@ app.post("/usertotal", async (req, res) => {
 
   let resultArray = [];
   let resultArray2 = [];
+  let resultArray3 = [];
 
   const data = await new Promise((resolve, reject) => {
     resolve(getUserTotalData(userData));
@@ -441,7 +441,9 @@ app.post("/usertotal", async (req, res) => {
                           },
                         },
                       };
-                      // getChampInfo(data, championIdValue);
+                      // data.championId = getChampInfo(data, championIdValue);
+
+                      // console.log("정제된 데이터", data);
                       // data.championId = getChampInfo(data, championIdValue);
 
                       // eslint-disable-next-line no-loop-func
@@ -461,7 +463,7 @@ app.post("/usertotal", async (req, res) => {
                       // console.log(champData);
 
                       dataList = dataList.concat(data);
-                      console.log(dataList);
+                      // console.log("return이후 콘솔");
 
                       if (i + 1 == length1) {
                         resultArray = resultArray.concat({
@@ -472,6 +474,28 @@ app.post("/usertotal", async (req, res) => {
                       }
                     }
                   });
+                  // console.log(resultArray[0].dataList[0]);
+                  // return res.json(
+                  // resultArray.map((gameCount, index) => {
+                  //   // console.log(gameCount.dataList);
+                  //   // let champId = gameCount.dataList.champId;
+                  //   // console.log(gameCount.dataList);
+                  //   gameCount.dataList.map((user, index) => {
+                  //     let champId = user.championId;
+                  //     console.log(user.championId);
+                  //     user.championId = getChampInfo(champId);
+                  //   });
+                  //   // return (gameCount.dataList.championId =
+                  //   //   getChampInfo(champId));
+                  // });
+
+                  // console.log(resultArray[0].dataList[0].championId);
+
+                  // resultArray[0].dataList[0].championId.then((res) =>
+                  //   console.log(res)
+                  // );
+
+                  // );
 
                   return res.json(resultArray);
                 }
@@ -525,7 +549,8 @@ app.post("/champion", async (req, res) => {
 
   getChampName(id);
 });
-
+getChampionName();
+console.log(getChampionName());
 app.listen(port, () => {
   console.log(`express is running on ${port}`);
 });

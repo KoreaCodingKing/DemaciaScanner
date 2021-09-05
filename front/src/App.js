@@ -12,14 +12,17 @@ import Home from "./page/Home";
 import CurrentMyGame from "./page/CurrentMyGame";
 import ApiTest from "./page/ApiTest";
 import CurrentMyState from "./page/CurrentMyState";
-import Header from "./components/Header";
+import HeaderSearch from "./components/HeaderSearch";
 
 import dotenv from "dotenv";
 
 import "./assets/scss/common.scss";
 import SearchTotal from "./components/SearchTotal";
+import Signup from "./page/Signup";
 
 export const UserListContext = createContext();
+
+const tempUser = "Demacia 1";
 
 let timer;
 let isPause = false;
@@ -30,8 +33,17 @@ function App() {
   const [userName, setUserName] = useState({
     current_game_name: "",
     search_name: "",
+    user_email: "",
+    user_password: "",
+    user_nickname: "",
   });
-  const { current_game_name, search_name } = userName;
+  const {
+    current_game_name,
+    search_name,
+    user_email,
+    user_password,
+    user_nickname,
+  } = userName;
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -66,6 +78,7 @@ function App() {
   const onChangeHandle = (e) => {
     const { value, name } = e.target;
     // setUserName(e.target.value);
+    console.log(value, name);
     setUserName({
       ...userName,
       [name]: value,
@@ -199,7 +212,7 @@ function App() {
 
     const resultData = getUserTotalData(data)
       .then((result) => {
-        console.log(result.data);
+        console.log(result);
         const matches = result.data;
 
         setTotalData1(matches);
@@ -393,8 +406,8 @@ function App() {
     onReset();
   };
 
-  return (
-    <div className="wrapper">
+  const Header = () => {
+    return (
       <div className="header">
         <ul className="header__list">
           <li className="header__item">
@@ -416,6 +429,19 @@ function App() {
             <Link className="header__link" to="/currentmystate">
               나의 게임
             </Link>
+          </li>
+          <li className="header__item auth_box">
+            <div className="header_item__auth_info">
+              <div className="auth_info__thumb">
+                <img src="http://ddragon.leagueoflegends.com/cdn/11.13.1/img/champion/Aatrox.png" />
+              </div>
+              <div className="auth_info__name">{tempUser}</div>
+              <div className="auth_info__login_state">
+                <button onClick={() => alert("로그인 아웃 버튼입니다")}>
+                  Logout
+                </button>
+              </div>
+            </div>
           </li>
         </ul>
 
@@ -446,13 +472,20 @@ function App() {
             searchLoading,
           }}
         >
-          <Header />
+          <HeaderSearch />
         </UserListContext.Provider>
       </div>
+    );
+  };
+
+  return (
+    <div className="wrapper">
       <Route exact={true} path="/">
+        <Header />
         <Home />
       </Route>
       <Route path="/apiTest">
+        <Header />
         <UserListContext.Provider
           value={{
             userList,
@@ -485,6 +518,7 @@ function App() {
         </UserListContext.Provider>
       </Route>
       <Route path="/currentMyState">
+        <Header />
         <UserListContext.Provider
           value={{
             userList,
@@ -503,6 +537,27 @@ function App() {
           }}
         >
           <CurrentMyState />
+        </UserListContext.Provider>
+      </Route>
+      <Route path="/signup">
+        <UserListContext.Provider
+          value={{
+            userList,
+            searchUser,
+            addUserList,
+            onRemove,
+            onReset,
+            sessionStorageInit,
+            onChangeHandle,
+            insertUser,
+            getUserDataInGame,
+            updateInGame,
+            getUserData,
+            userName,
+            searchLoading,
+          }}
+        >
+          <Signup />
         </UserListContext.Provider>
       </Route>
       {/* <Route path="/searchtotal">
