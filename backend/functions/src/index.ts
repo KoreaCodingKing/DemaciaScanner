@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGODB_CONNECTOR, {
     useFindAndModify: false,
     useUnifiedTopology: true,
     useCreateIndex: true 
-}).catch((err: any) => { console.error(err)});
+}).then(() => console.log('connecting...')).catch((err: any) => { console.error(err)});
 
 const connection = mongoose.connection;
 connection.once('open', () => {
