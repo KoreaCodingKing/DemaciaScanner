@@ -1,3 +1,4 @@
+const Realm = require('realm');
 import User from './models/user';
 
 const express = require("express");
@@ -7,6 +8,7 @@ require("dotenv").config();
 
 const mongoose = require('mongoose');
 const app = express();
+const realmApp = new Realm.App({ id: process.env.REALM_ID });
 const port = 8080;
 
 app.use(cors());
@@ -26,33 +28,25 @@ connection.once('open', () => {
 });
 
 interface signInData {
-    userId: string,
+    email: string,
     pw: string
 };
 
 app.get('/login', (req: any, res: any, next: any) => {
     const signInData = {
-        userId: req.body.id,
+        email: req.body.email,
         pw: req.body.pw
     } as signInData;
 
-    User.findOne({ id: signInData.userId, pw: signInData.pw }).exec((err: any, result: any) => {
+    User.findOne({ email: signInData.email, pw: signInData.pw }).exec((err: any, result: any) => {
         return res.status(200).json({ success: true, result });
     });
 });
 
 app.post('/signup', (req: any, res: any, next: any) => {
-    const newUser = new User(req.body);
-
-    newUser.save((err) => {
-        if (err) {
-            if (err.message === 'There was a duplicate key error') {
-                return res.status(409).send({ error: err.message });
-            }
-            return res.status(500).send({ error: 'unknown error' });
-        }
-        return res.status(200).json({ success: true });
-    });
+    realmApp.emailPasswordAuth.registerUser(req.body.email, req.body.pw).then((result: any) => {
+        console.log(result)
+    }).catch((err: any) => console.log('err', err))
 });
 
 app.listen(port, () => {

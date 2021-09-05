@@ -10,11 +10,17 @@ import InGameStateView from "./InGameStateView";
 import CurrentMyState from "./CurrentMyState";
 import { UserListContext } from "../App";
 import UserTotal from "../components/UserTotal";
+import * as RealmWeb from "realm-web";
 
 let tempList = [];
 
+const appRealm = new RealmWeb.App({ id: "demaciascanner-0-nylor" });
+
 function ApiTest(props) {
   // 상위 context에서function 가져오기
+  const currentURI = decodeURI(window.location.href);
+  console.log(currentURI)
+  
   let {
     userList,
     userName,
@@ -35,6 +41,23 @@ function ApiTest(props) {
     modalView,
     modal,
   } = useContext(UserListContext);
+
+  useState(() => {
+    
+    const aa = new URLSearchParams(currentURI.split('?')[1]).toString();
+    
+    const token = aa.split('token=')
+    const tokenValue = token[1].split("&");
+    
+    const tokenId = tokenValue[1].split("tokenId=")
+    console.log(`token=${tokenValue[0]}-------------/ tokenId=${tokenId[1]}` )
+
+    if (token && tokenId) {
+      appRealm.emailPasswordAuth.confirmUser(tokenValue[0], tokenId[1]).then((result) => {
+        console.log(result)
+      }).catch((err) => console.log('err', err))
+    }
+  }, [])
 
   // 게임 종료 후 승패 결과, 게임 시간, 끝나고 난 뒤 시간 체크
   const getUserDataGameResult = async (user) => {};
