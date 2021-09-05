@@ -1,18 +1,23 @@
 import React, { useEffect, useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { UserListContext } from "../App";
 
 import "../assets/scss/signup.scss";
 
-const Signup = ({ props }) => {
-  console.log(props);
+const Signup = ({ props, history }) => {
   let { onChangeHandle, userName } = useContext(UserListContext);
-  //   useEffect(() => {
 
-  //   }, []);
+  const goBack = () => {
+    history.goBack();
+  };
 
-  const [emailState, setEmailState] = useState(false);
-  const [passwordState, setPasswordState] = useState(false);
-  const [nicknameState, setNicknameState] = useState(false);
+  useEffect(() => {
+    // console.log(history);
+    // const unblock = history.block("정말 떠나실건가요 ㅠㅠ?");
+    // return () => {
+    //   unblock();
+    // };
+  }, [history]);
 
   function emailRuleTest(target) {
     const emailRule =
@@ -61,11 +66,12 @@ const Signup = ({ props }) => {
                 <input
                   id="member-input--email"
                   name="user_email"
-                  autocomplete="off"
+                  autoComplete="off"
+                  autoFocus
                   onChange={onChangeHandle}
                   value={userName.user_email}
                 />
-                <label for="member-input--email">이메일 주소</label>
+                <label htmlFor="member-input--email">이메일 주소</label>
 
                 <div className="rule_wrap">
                   {userName.user_email ? (
@@ -91,12 +97,12 @@ const Signup = ({ props }) => {
                 <input
                   id="member-input--password"
                   name="user_password"
-                  autocomplete="new-password"
+                  autoComplete="new-password"
                   onChange={onChangeHandle}
                   value={userName.user_password}
                   type="password"
                 />
-                <label for="member-input--password">비밀번호</label>
+                <label htmlFor="member-input--password">비밀번호</label>
                 <div className="rule_wrap">
                   {userName.user_password ? (
                     <div>
@@ -121,11 +127,11 @@ const Signup = ({ props }) => {
                 <input
                   id="member-input--nickname"
                   name="user_nickname"
-                  autocomplete="off"
+                  autoComplete="off"
                   onChange={onChangeHandle}
                   value={userName.user_nickname}
                 />
-                <label for="member-input--nickname">닉네임</label>
+                <label htmlFor="member-input--nickname">닉네임</label>
                 <div className="rule_wrap">
                   {userName.user_nickname ? (
                     <div>
@@ -145,6 +151,7 @@ const Signup = ({ props }) => {
                 <button
                   type="button"
                   className="signup__button signup__button--cancle"
+                  onClick={goBack}
                 >
                   취소
                 </button>
@@ -161,6 +168,12 @@ const Signup = ({ props }) => {
                 >
                   가입하기
                 </button>
+              </div>
+              <div className="signup__link">
+                이미 회원 이신가요?{" "}
+                <Link to="/login" className="link__login">
+                  로그인
+                </Link>
               </div>
             </form>
           </div>
