@@ -55,6 +55,7 @@ function App() {
   const [totalData1, setTotalData1] = useState([]);
   const [totalLoading, setTotalLoding] = useState(false);
   const [userInfo, setUserInfo] = useState();
+  const [headerState, setHeaderState] = useState(false);
 
   useEffect(() => {
     const sessionStorageValue = sessionStorage.userList || null;
@@ -62,6 +63,14 @@ function App() {
     if (sessionStorageValue) {
       const userListInSession = JSON.parse(sessionStorageValue);
       setUserList(userListInSession);
+    }
+
+    // header 노출 여부
+    if (
+      window.location.pathname !== "/signup" &&
+      window.location.pathname !== "/login"
+    ) {
+      setHeaderState(true);
     }
 
     if (userList == "") {
@@ -415,76 +424,74 @@ function App() {
 
   return (
     <div className="wrapper">
-      <div className="header">
-        {window.location.pathname === "/signup" ? null : (
-          <div>
-            <ul className="header__list">
-              <li className="header__item">
-                <Link className="header__link" to="/">
-                  Home
-                </Link>
-              </li>
-              {/* <li className="header__item">
-            <Link className="header__link" to="/searchtotal">
-              전적검색하기
-            </Link>
-          </li> */}
-              <li className="header__item">
-                <Link className="header__link" to="/apitest">
-                  apiTest
-                </Link>
-              </li>
-              <li className="header__item">
-                <Link className="header__link" to="/currentmystate">
-                  나의 게임
-                </Link>
-              </li>
-              <li className="header__item auth_box">
-                <div className="header_item__auth_info">
-                  <div className="auth_info__thumb">
-                    <img src="http://ddragon.leagueoflegends.com/cdn/11.13.1/img/champion/Aatrox.png" />
-                  </div>
-                  <div className="auth_info__name">{tempUser}</div>
-                  <div className="auth_info__login_state">
-                    <button onClick={() => alert("로그인 아웃 버튼입니다")}>
-                      Logout
-                    </button>
-                  </div>
+      {headerState ? (
+        <div className="header">
+          <ul className="header__list">
+            <li className="header__item">
+              <Link className="header__link" to="/">
+                Home
+              </Link>
+            </li>
+            {/* <li className="header__item">
+          <Link className="header__link" to="/searchtotal">
+            전적검색하기
+          </Link>
+        </li> */}
+            <li className="header__item">
+              <Link className="header__link" to="/apitest">
+                apiTest
+              </Link>
+            </li>
+            <li className="header__item">
+              <Link className="header__link" to="/currentmystate">
+                나의 게임
+              </Link>
+            </li>
+            <li className="header__item auth_box">
+              <div className="header_item__auth_info">
+                <div className="auth_info__thumb">
+                  <img src="http://ddragon.leagueoflegends.com/cdn/11.13.1/img/champion/Aatrox.png" />
                 </div>
-              </li>
-            </ul>
+                <div className="auth_info__name">{tempUser}</div>
+                <div className="auth_info__login_state">
+                  <button onClick={() => alert("로그인 아웃 버튼입니다")}>
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </li>
+          </ul>
 
-            <UserListContext.Provider
-              value={{
-                userList,
-                addUserList,
-                onRemove,
-                sessionStorageInit,
-                onChangeHandle,
-                insertUser,
-                getUserDataInGame,
-                userName,
-                isPause,
-                timer,
-                loading,
-                userState,
-                startScanner,
-                stopScanner,
-                scanning,
-                // modalView,
-                // modal,
-                onTotalData,
-                userTotal,
-                championName,
-                championValue,
-                searchLoading,
-              }}
-            >
-              <HeaderSearch />
-            </UserListContext.Provider>
-          </div>
-        )}
-      </div>
+          <UserListContext.Provider
+            value={{
+              userList,
+              addUserList,
+              onRemove,
+              sessionStorageInit,
+              onChangeHandle,
+              insertUser,
+              getUserDataInGame,
+              userName,
+              isPause,
+              timer,
+              loading,
+              userState,
+              startScanner,
+              stopScanner,
+              scanning,
+              // modalView,
+              // modal,
+              onTotalData,
+              userTotal,
+              championName,
+              championValue,
+              searchLoading,
+            }}
+          >
+            <HeaderSearch />
+          </UserListContext.Provider>
+        </div>
+      ) : null}
 
       <Route exact={true} path="/">
         {/* <Header /> */}
@@ -585,9 +592,28 @@ function App() {
           <Signup />
         </UserListContext.Provider>
       </Route> */}
-      <Route path="/login">
+      {/* <Route path="/login">
         <Login />
-      </Route>
+      </Route> */}
+      <UserListContext.Provider
+        value={{
+          userList,
+          searchUser,
+          addUserList,
+          onRemove,
+          onReset,
+          sessionStorageInit,
+          onChangeHandle,
+          insertUser,
+          getUserDataInGame,
+          updateInGame,
+          getUserData,
+          userName,
+          searchLoading,
+        }}
+      >
+        <Route path="/login" component={Login} />
+      </UserListContext.Provider>
       {/* <Route path="/searchtotal">
         <UserListContext.Provider
           value={{

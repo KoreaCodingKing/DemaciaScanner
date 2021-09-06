@@ -74,31 +74,36 @@ html {
 }
 
 // signup button
-.signup__button_group {
+.signup__button {
+  cursor: pointer;
+  width: 100%;
+}
+.signup__button.signup__button--group {
   display: flex;
   justify-content: space-between;
   margin-top: 60px;
-  width: 100%;
 }
 
-.signup__button_group .signup__button {
-  cursor: pointer;
+.signup__button.signup__button--group button {
+  width: 210px;
+}
+
+.signup__button .signup__button--point {
   display: block;
   padding: 20px 0px;
-  width: 210px;
   font-size: 1.25rem;
   color: #fff;
   border: none;
   background: #268aee;
 }
-.signup__button_group .signup__button.signup__button.signup__button--cancle {
+.signup__button .signup__button.signup__button.signup__button--cancle {
   border: 1px solid #dddfe4;
   font-size: 1.25rem;
   color: #000;
   background: transparent;
 }
 
-.signup__button_group button:disabled {
+.signup__button button:disabled {
   cursor: default !important;
   background: #dddfe4 !important;
   color: #fff;

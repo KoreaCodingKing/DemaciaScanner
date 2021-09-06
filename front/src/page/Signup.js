@@ -147,7 +147,7 @@ const Signup = ({ props, history }) => {
                 </div>
               </div>
 
-              <div className="signup__button_group">
+              <div className="signup__button signup__button--group">
                 <button
                   type="button"
                   className="signup__button signup__button--cancle"
@@ -157,7 +157,7 @@ const Signup = ({ props, history }) => {
                 </button>
                 <button
                   type="submit"
-                  className="signup__button signup__button--submit"
+                  className="signup__button signup__button--point"
                   disabled={
                     !emailRuleTest(userName.user_email) &&
                     !passwordRuleTest(userName.user_password) &&
