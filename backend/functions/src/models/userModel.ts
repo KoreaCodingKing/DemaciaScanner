@@ -1,15 +1,10 @@
 import * as mongoose from 'mongoose';
 import { Schema } from 'mongoose';
-
-interface User {
-    id: string,
-    lolid: string,
-    pw: string,
-    created: Date
-};
+import { UserData } from '../interface/user';
 
 const userSchema = new Schema({
     id: {type: String, index:true, required: true, unique: true},
+    email: {type: String, index:true, required: true, unique: true},
     lolid: {type: String},
     pw: {type: String, required: true},
     created: {type: Date}
@@ -25,4 +20,4 @@ userSchema.post('save', (err: any, doc: any, next: any) => {
       }
 });
 
-export default mongoose.model<User>('User', userSchema);
+export default mongoose.model<UserData>('User', userSchema);
