@@ -68,7 +68,7 @@ app.post('/signup/confirmed', (req: any, res: any, next: any) => {
         }
         return res.status(200).json({ success: true });
     });
-})
+});
 
 app.listen(port, () => {
     console.log(`Express App on port ${port}!`);
