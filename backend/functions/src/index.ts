@@ -28,20 +28,18 @@ connection.once('open', () => {
     console.log('mongoDB connection success')
 });
 
-interface signInData {
-    email: string,
-    pw: string
-};
+app.get('/login', async (req: any, res: any, next: any) => {
+    const loginInfo = Realm.Credentials.emailPassword(
+        `${req.body.email}`,
+        `${req.body.pw}`
+    );
 
-app.get('/login', (req: any, res: any, next: any) => {
-    const signInData = {
-        email: req.body.email,
-        pw: req.body.pw
-    } as signInData;
-
-    User.findOne({ email: signInData.email, pw: signInData.pw }).exec((err: any, result: any) => {
-        return res.status(200).json({ success: true, result });
-    });
+    try {
+        const user = await realmApp.logIn(loginInfo);
+        console.log('success', user)
+    } catch(err) {
+        console.error('err', err)
+    }
 });
 
 app.post('/signup', (req: any, res: any, next: any) => {

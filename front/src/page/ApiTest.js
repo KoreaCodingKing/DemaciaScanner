@@ -19,7 +19,6 @@ const appRealm = new RealmWeb.App({ id: "demaciascanner-0-nylor" });
 function ApiTest(props) {
   // 상위 context에서function 가져오기
   const currentURI = decodeURI(window.location.href);
-  console.log(currentURI)
   
   let {
     userList,
@@ -43,9 +42,11 @@ function ApiTest(props) {
   } = useContext(UserListContext);
 
   useState(() => {
-    
     const aa = new URLSearchParams(currentURI.split('?')[1]).toString();
-    
+    console.log('aa', aa)
+    if (!aa || aa.length === 0) {
+      return;
+    }
     const token = aa.split('token=')
     const tokenValue = token[1].split("&");
     
