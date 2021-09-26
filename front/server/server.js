@@ -49,11 +49,26 @@ async function getUserTotalData(user) {
   );
 }
 
+// match v5 puuid를 이용해 matchid 도출
+async function getUserTotalDataV5(user) {
+  // https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/_YEq3JBqTAj_UJGtzcTlrf8rDHQasl4zZoJDk8SOcPhMCVsLCndRpWtDmyZrMVZtr8-3kI842lm5wg/ids?start=0&count=20&api_key=RGAPI-9f0b7ca9-e4b9-472a-a949-bd6c302d3038
+  const puuid = user.puuid;
+  return await axios.get(
+    `https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=20&api_key=${riotApiKey}`
+  );
+}
+
 // match 승패 여부
 async function getUserTotalGameData(user) {
   const gameId = user;
+  // return await axios.get(
+  //   `https://kr.api.riotgames.com/lol/match/v4/matches/${gameId}?api_key=${riotApiKey}`
+  // );
+
+  console.log("받은 게임 아이디 값->", gameId);
+  // match v5 변경코드
   return await axios.get(
-    `https://kr.api.riotgames.com/lol/match/v4/matches/${gameId}?api_key=${riotApiKey}`
+    `https://asia.api.riotgames.com/lol/match/v5/matches/${gameId}?api_key=${riotApiKey}`
   );
 }
 
@@ -151,10 +166,11 @@ app.post("/searchuser", async (req, res) => {
     resolve(getUserData(encodeURI(userName)));
   })
     .then((result) => {
-      console.log(result.data);
+      console.log("검색 유저의 정보", result.data);
       let data = {
         id: result.data.id,
         name: result.data.name,
+        puuid: result.data.puuid,
         accountId: result.data.accountId,
         revisionDate: result.data.revisionDate,
         profileIconId: result.data.profileIconId,
@@ -202,7 +218,7 @@ app.post("/userstatus", async (req, res) => {
     userList.map((user, index) => {
       ((x) => {
         setTimeout(() => {
-          // console.log(user.accountId)
+          // console.log("유저 account id", user.accountId);
           new Promise((resolve) => {
             resolve(getUserInGameData(user));
           })
@@ -332,22 +348,26 @@ app.post("/usertotal", async (req, res) => {
   let resultArray3 = [];
 
   const data = await new Promise((resolve, reject) => {
-    resolve(getUserTotalData(userData));
+    // resolve(getUserTotalData(userData));
+    // match V5 적용
+    resolve(getUserTotalDataV5(userData));
   })
     .then((result) => {
-      return result.data.matches;
+      // console.log(result.data);
+      return result.data;
     })
     .then((matches) => {
-      // console.log(matches)
+      // console.log(matches);
       const list = matches.slice(0, 2 || matches.length);
       list.map((matchesGameId) => {
-        const gameId = matchesGameId.gameId;
+        const gameId = matchesGameId;
 
         array1 = array1.concat(gameId);
+        // console.log(array1);
       });
     })
     .then(() => {
-      //  console.log(array1)
+      // console.log("받은 array1 값 ->", array1);
       const data = array1.map((gameId, index) => {
         ((x) => {
           setTimeout(() => {
@@ -355,81 +375,75 @@ app.post("/usertotal", async (req, res) => {
               resolve(getUserTotalGameData(gameId));
             })
               .then((result) => {
-                // result.data
-                // console.log(result.data);
                 const data = {
-                  gameCreation: result.data.gameCreation,
-                  gameDuration: result.data.gameDuration,
-                  queueId: result.data.queueId,
-                  gameMode: result.data.gameMode,
-                  gameType: result.data.gameType,
-                  team: result.data.teams,
-                  participants: result.data.participants,
-                  participantIdentities: result.data.participantIdentities,
+                  gameCreation: result.data.info.gameCreation,
+                  gameDuration: result.data.info.gameDuration,
+                  queueId: result.data.info.queueId,
+                  gameMode: result.data.info.gameMode,
+                  gameType: result.data.info.gameType,
+                  team: result.data.info.teams,
+                  participants: result.data.info.participants,
+                  // participantIdentities: result.data.info.participantIdentities,
                 };
 
-                if (result.data.gameMode == "CLASSIC") {
+                if (data.gameMode == "CLASSIC") {
                   data.gameMode = "소환사의 협곡";
-                } else if (result.data.gameMode == "ARAM") {
+                } else if (data.gameMode == "ARAM") {
                   data.gameMode = "칼바람 나락";
-                } else if (result.data.gameMode == "URF") {
+                } else if (data.gameMode == "URF") {
                   data.gameMode = "우르프";
-                } else if (result.data.gameMode == "SIEGE") {
+                } else if (data.gameMode == "SIEGE") {
                   data.gameMode = "돌격 넥서스";
-                } else if (result.data.gameMode == "ONEFORALL") {
+                } else if (data.gameMode == "ONEFORALL") {
                   data.gameMode = "단일 챔피언";
-                } else if (result.data.gameMode == "ULTBOOK") {
+                } else if (data.gameMode == "ULTBOOK") {
                   data.gameMode = "궁극기 모드";
                 }
 
-                if (result.data.gameType == "MATCHED_GAME") {
-                  if (result.data.queueId == 420) {
+                if (data.gameType == "MATCHED_GAME") {
+                  if (data.queueId == 420) {
                     data.gameType = "솔로 랭크";
-                  } else if (result.data.queueId == 430) {
+                  } else if (data.queueId == 430) {
                     data.gameType = "일반 게임";
-                  } else if (result.data.queueId == 450) {
+                  } else if (data.queueId == 450) {
                     data.gameType = "칼바람 나락";
-                  } else if (result.data.queueId == 1400) {
+                  } else if (data.queueId == 1400) {
                     data.gameType = "궁극기 모드";
                   } else {
                     data.gameType = "자유 랭크";
                   }
-                } else if (result.data.gameType == "CUSTOM_GAME") {
+                } else if (data.gameType == "CUSTOM_GAME") {
                   data.gameType = "사용자 설정 게임";
                 }
+                // console.log(data);
 
                 array3 = array3.concat(data);
               })
               .finally(() => {
                 if (array1.length === index + 1) {
                   console.log("loading...", `${index + 1}/${array1.length}`);
-                  console.log("finished");
-                  // console.log(array3);
+                  // console.log("finished");
 
                   array3.map((item, index) => {
-                    const length1 = item.participantIdentities.length;
+                    const length1 = item.participants.length;
                     let dataList = [];
 
                     for (let i = 0; i < length1; i++) {
-                      const championIdValue = item.participants[i].championId;
+                      // const championIdValue = item.participants[i].championId;
 
-                      // let champData;
-                      // console.log(championIdValue);
                       let data = {
-                        summonerName:
-                          item.participantIdentities[i].player.summonerName,
-                        summonerId:
-                          item.participantIdentities[i].player.summonerId,
-                        championId: championIdValue,
-                        kills: item.participants[i].stats.kills,
-                        deaths: item.participants[i].stats.deaths,
-                        assists: item.participants[i].stats.assists,
+                        summonerName: item.participants[i].summonerName,
+                        summonerId: item.participants[i].summonerId,
+                        championId: item.participants[i].championId,
+                        kills: item.participants[i].kills,
+                        deaths: item.participants[i].deaths,
+                        assists: item.participants[i].assists,
                         gameCreation: item.gameCreation,
                         gameDuration: item.gameDuration,
                         gameMode: item.gameMode,
                         gameType: item.gameType,
                         queueId: item.queueId,
-                        win: item.participants[i].stats.win ? "WIN" : "LOSE",
+                        win: item.participants[i].win ? "WIN" : "LOSE",
                         tier: {
                           flex: {
                             tier: "",
@@ -441,26 +455,6 @@ app.post("/usertotal", async (req, res) => {
                           },
                         },
                       };
-                      // data.championId = getChampInfo(data, championIdValue);
-
-                      // console.log("정제된 데이터", data);
-                      // data.championId = getChampInfo(data, championIdValue);
-
-                      // eslint-disable-next-line no-loop-func
-                      // getChampionName().then((res) => {
-                      //   const championList = res.data.data;
-                      //   const convertToObjectChampionList =
-                      //     Object.entries(championList);
-                      //   // const champ = "";
-
-                      //   convertToObjectChampionList.map((item, index) => {
-                      //     if (item[1].key == championIdValue) {
-                      //       // console.log(item[1].name);
-                      //       // console.log(item[1].image.full);
-                      //     }
-                      //   });
-                      // });
-                      // console.log(champData);
 
                       dataList = dataList.concat(data);
                       // console.log("return이후 콘솔");
@@ -474,29 +468,7 @@ app.post("/usertotal", async (req, res) => {
                       }
                     }
                   });
-                  // console.log(resultArray[0].dataList[0]);
-                  // return res.json(
-                  // resultArray.map((gameCount, index) => {
-                  //   // console.log(gameCount.dataList);
-                  //   // let champId = gameCount.dataList.champId;
-                  //   // console.log(gameCount.dataList);
-                  //   gameCount.dataList.map((user, index) => {
-                  //     let champId = user.championId;
-                  //     console.log(user.championId);
-                  //     user.championId = getChampInfo(champId);
-                  //   });
-                  //   // return (gameCount.dataList.championId =
-                  //   //   getChampInfo(champId));
-                  // });
-
-                  // console.log(resultArray[0].dataList[0].championId);
-
-                  // resultArray[0].dataList[0].championId.then((res) =>
-                  //   console.log(res)
-                  // );
-
-                  // );
-
+                  // console.log(resultArray);
                   return res.json(resultArray);
                 }
                 console.log("loading...", `${index + 1}/${array1.length}`);
@@ -514,6 +486,7 @@ app.post("/usertotal", async (req, res) => {
       console.log("전적이 없네요?");
     });
 
+  console.log("보낼 데이터", data);
   // return res.json(data);
 });
 // 챔피언 이름 가져오기(작업 완료 설정 대기중)

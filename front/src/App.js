@@ -217,12 +217,13 @@ function App() {
   // get user total data
   const onTotalData = (userData) => {
     const data = userData;
+    // console.log("받은 데이터", data);
 
     setTotalLoding(true);
 
     const resultData = getUserTotalData(data)
       .then((result) => {
-        console.log(result);
+        console.log("결과", result);
         const matches = result.data;
 
         setTotalData1(matches);
@@ -402,6 +403,7 @@ function App() {
 
     searchUser(trimmedUserName).then((getUserData) => {
       const data = getUserData;
+      // console.log("넘어온 데이터 ->", data);
 
       if (testAlign) {
         onTotalData(data);
