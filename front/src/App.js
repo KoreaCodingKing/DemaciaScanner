@@ -159,6 +159,7 @@ function App() {
       name: addUser.name || addUser.summonerName,
       id: addUser.id || addUser.summonerId,
       accountId: addUser.accountId,
+      puuid: addUser.puuid,
       tier: addUser.tier,
       revisionDate: addUser.revisionDate,
       profileIconId: addUser.profileIconId,
@@ -217,7 +218,7 @@ function App() {
   // get user total data
   const onTotalData = (userData) => {
     const data = userData;
-    // console.log("받은 데이터", data);
+    console.log("받은 데이터", data);
 
     setTotalLoding(true);
 
@@ -403,7 +404,7 @@ function App() {
 
     searchUser(trimmedUserName).then((getUserData) => {
       const data = getUserData;
-      // console.log("넘어온 데이터 ->", data);
+      console.log("넘어온 데이터 ->", data);
 
       if (testAlign) {
         onTotalData(data);

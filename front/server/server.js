@@ -468,7 +468,7 @@ app.post("/usertotal", async (req, res) => {
                       }
                     }
                   });
-                  // console.log(resultArray);
+                  // console.log("보낼 데이터", resultArray);
                   return res.json(resultArray);
                 }
                 console.log("loading...", `${index + 1}/${array1.length}`);
@@ -486,8 +486,7 @@ app.post("/usertotal", async (req, res) => {
       console.log("전적이 없네요?");
     });
 
-  console.log("보낼 데이터", data);
-  // return res.json(data);
+  // console.log("보낼 데이터", data);
 });
 // 챔피언 이름 가져오기(작업 완료 설정 대기중)
 app.post("/champion", async (req, res) => {

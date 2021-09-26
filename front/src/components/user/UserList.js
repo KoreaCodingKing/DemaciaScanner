@@ -102,6 +102,7 @@ function User({ user }) {
   // console.log("찾은 유저의 데이터->", user);
 
   const test = (user) => {
+    console.log("test 전적확인하기 버튼 ->", user);
     onTotalData(user).then((res) => {
       // setTotalData(res);
       // setView(true);
