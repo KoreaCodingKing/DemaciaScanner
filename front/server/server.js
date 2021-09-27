@@ -430,14 +430,33 @@ app.post("/usertotal", async (req, res) => {
 
                     for (let i = 0; i < length1; i++) {
                       // const championIdValue = item.participants[i].championId;
+                      /*
+                        챔피언 이름 : championName,
+                        챔피언 아이디 : championId, 
+                        챔피언 랩 : champLevel,
+                        픽 포지션 : individualPosition,
+                        랭크 상태(솔로, 듀오, 다인큐) : "role"
+                       */
 
                       let data = {
                         summonerName: item.participants[i].summonerName,
                         summonerId: item.participants[i].summonerId,
                         championId: item.participants[i].championId,
+                        championName: item.participants[i].championName,
+                        position: item.participants[i].individualPosition,
+                        role: item.participants[i].role,
                         kills: item.participants[i].kills,
                         deaths: item.participants[i].deaths,
                         assists: item.participants[i].assists,
+                        item0: item.participants[i].item0,
+                        item1: item.participants[i].item1,
+                        item2: item.participants[i].item2,
+                        item3: item.participants[i].item3,
+                        item4: item.participants[i].item4,
+                        item5: item.participants[i].item5,
+                        item6: item.participants[i].item6,
+                        summoner1Id: item.participants[i].summoner1Id,
+                        summoner2Id: item.participants[i].summoner2Id,
                         gameCreation: item.gameCreation,
                         gameDuration: item.gameDuration,
                         gameMode: item.gameMode,
@@ -455,6 +474,58 @@ app.post("/usertotal", async (req, res) => {
                           },
                         },
                       };
+
+                      if (data.summoner1Id == "21") {
+                        data.summoner1Id = "SummonerBarrier";
+                      } else if (data.summoner1Id == "1") {
+                        data.summoner1Id = "SummonerBoost";
+                      } else if (data.summoner1Id == "14") {
+                        data.summoner1Id = "SummonerDot";
+                      } else if (data.summoner1Id == "3") {
+                        data.summoner1Id = "SummonerExhaust";
+                      } else if (data.summoner1Id == "4") {
+                        data.summoner1Id = "SummonerFlash";
+                      } else if (data.summoner1Id == "6") {
+                        data.summoner1Id = "SummonerHaste";
+                      } else if (data.summoner1Id == "7") {
+                        data.summoner1Id = "SummonerHeal";
+                      } else if (data.summoner1Id == "13") {
+                        data.summoner1Id = "SummonerMana";
+                      } else if (data.summoner1Id == "30") {
+                        data.summoner1Id = "SummonerPoroRecall";
+                      } else if (data.summoner1Id == "31") {
+                        data.summoner1Id = "SummonerPoroThrow";
+                      } else if (data.summoner1Id == "11") {
+                        data.summoner1Id = "SummonerSmite";
+                      } else if (data.summoner1Id == "12") {
+                        data.summoner1Id = "SummonerTeleport";
+                      }
+
+                      if (data.summoner2Id == "21") {
+                        data.summoner2Id = "SummonerBarrier";
+                      } else if (data.summoner2Id == "1") {
+                        data.summoner2Id = "SummonerBoost";
+                      } else if (data.summoner2Id == "14") {
+                        data.summoner2Id = "SummonerDot";
+                      } else if (data.summoner2Id == "3") {
+                        data.summoner2Id = "SummonerExhaust";
+                      } else if (data.summoner2Id == "4") {
+                        data.summoner2Id = "SummonerFlash";
+                      } else if (data.summoner2Id == "6") {
+                        data.summoner2Id = "SummonerHaste";
+                      } else if (data.summoner2Id == "7") {
+                        data.summoner2Id = "SummonerHeal";
+                      } else if (data.summoner2Id == "13") {
+                        data.summoner2Id = "SummonerMana";
+                      } else if (data.summoner2Id == "30") {
+                        data.summoner2Id = "SummonerPoroRecall";
+                      } else if (data.summoner2Id == "31") {
+                        data.summoner2Id = "SummonerPoroThrow";
+                      } else if (data.summoner2Id == "11") {
+                        data.summoner2Id = "SummonerSmite";
+                      } else if (data.summoner2Id == "12") {
+                        data.summoner2Id = "SummonerTeleport";
+                      }
 
                       dataList = dataList.concat(data);
                       // console.log("return이후 콘솔");

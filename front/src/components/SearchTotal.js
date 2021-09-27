@@ -43,6 +43,7 @@ function UserTotalView({ userTotal, championName, championValue }) {
           beforeTime = Math.floor(chai / (1000 * 60 * 60 * 24 * 30)) + " 달전";
 
         const test2 = new Date(user.gameCreation) - new Date();
+        const itemLength = 6;
 
         result.push(
           <li
@@ -50,10 +51,77 @@ function UserTotalView({ userTotal, championName, championValue }) {
             key={`${index1}${index2}`}
           >
             {index1} - {user.summonerName} - {user.kills} / {user.deaths} /{" "}
-            {user.assists} - {user.win}
-            {/* {user.gameMode !== "소환사의 협곡"
-              ? user.gameMode
-              : `${user.gameMode} - ${user.gameType}`} */}
+            {user.assists} - {user.win} / 포지션 : {user.position}
+            <img
+              width="50px"
+              src={`http://ddragon.leagueoflegends.com/cdn/11.19.1/img/champion/${user.championName}.png`}
+              alt="champion img"
+            />
+            <p>
+              <img
+                width="50px"
+                src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner1Id}.png`}
+                alt="champion img"
+              />
+            </p>
+            <p>
+              <img
+                width="50px"
+                src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner2Id}.png`}
+                alt="champion img"
+              />
+            </p>
+            <ul style={{ display: "flex" }}>
+              <p>
+                <img
+                  width="50px"
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item0}.png`}
+                  alt="champion img"
+                />
+              </p>
+              <p>
+                <img
+                  width="50px"
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item1}.png`}
+                  alt="champion img"
+                />
+              </p>
+              <p>
+                <img
+                  width="50px"
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item2}.png`}
+                  alt="champion img"
+                />
+              </p>
+              <p>
+                <img
+                  width="50px"
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item3}.png`}
+                  alt="champion img"
+                />
+              </p>
+              <p>
+                <img
+                  width="50px"
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item4}.png`}
+                  alt="champion img"
+                />
+              </p>
+              <p>
+                <img
+                  width="50px"
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item5}.png`}
+                  alt="champion img"
+                />
+              </p>
+              <p>
+                <img
+                  width="50px"
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item6}.png`}
+                  alt="champion img"
+                />
+              </p>
+            </ul>
           </li>
         );
 

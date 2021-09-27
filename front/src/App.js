@@ -224,7 +224,7 @@ function App() {
 
     const resultData = getUserTotalData(data)
       .then((result) => {
-        console.log("결과", result);
+        console.log("결과", result.data);
         const matches = result.data;
 
         setTotalData1(matches);
