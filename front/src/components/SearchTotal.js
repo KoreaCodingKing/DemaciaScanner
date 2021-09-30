@@ -160,7 +160,11 @@ function UserTotalView({ userTotal, championName, championValue }) {
     return gameNumber;
   };
 
-  return <div className={``}>{rendering(userTotal)}</div>;
+  return (
+    <div style={{ overflowY: "auto", height: "1000px" }} className={``}>
+      <div style={{}}>{rendering(userTotal)}</div>
+    </div>
+  );
 }
 
 const UserDetail = ({ userInfo, addUserList }) => {
@@ -199,7 +203,6 @@ const SearchTotal = () => {
   const { totalData1, userInfo, addUserList } = useContext(UserListContext);
   return (
     <div className="info__wrap" style={{ padding: "10px" }}>
-      <h1>유저 전적 페이지입니다.</h1>
       <UserDetail userInfo={userInfo} addUserList={addUserList} />
       <UserTotalView userTotal={totalData1} />
     </div>

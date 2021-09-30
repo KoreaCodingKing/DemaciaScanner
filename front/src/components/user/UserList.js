@@ -115,23 +115,23 @@ function User({ user }) {
       <div className="user__title">
         <div className="thumb">
           <img
-            style={{ width: "50px", height: "50px", borderRadius: "25px" }}
+            style={{ width: "40px", height: "40px", borderRadius: "25px" }}
             src={`http://ddragon.leagueoflegends.com/cdn/11.16.1/img/profileicon/${user.profileIconId}.png`}
           />
         </div>
         <div className="info">
-          <p>이름 : {user.name}</p>
-          <p>
-            자유 랭크 :{" "}
+          <span className="info__id">{user.name}</span>
+          {/* <span className="info_tier info_tier--free">
             {user.tier.flex.tier !== "" ? user.tier.flex.tier : "없음"}-{" "}
             {user.tier.flex.rank !== "" ? user.tier.flex.rank : "없음"}
-          </p>
-          <p>
-            솔로랭크 :{" "}
-            {user.tier.solo.tier !== "" ? user.tier.solo.tier : "없음"} - :{" "}
-            {user.tier.solo.rank !== "" ? user.tier.solo.rank : "없음"}
-          </p>
+          </span> */}
+          <span className="info_tier info_tier--solo">
+            {user.tier.solo.tier !== ""
+              ? `${user.tier.solo.tier} - ${user.tier.solo.rank}`
+              : "없음"}
+          </span>
         </div>
+        <div className="memo">메모메모메모메모메모메모메모메모</div>
         <div className="func">
           <button
             onClick={() => {
@@ -149,7 +149,7 @@ function User({ user }) {
               test(user);
             }}
           >
-            전적 확인하기
+            전적
           </button>
           {/* {totalLoading ? "loading..." : " "} */}
         </div>
@@ -175,10 +175,21 @@ function UserList({ users }) {
 
   return (
     <div className="user__list_view">
-      <h1>트롤 리스트 - {users.length}명</h1>
-      {users.map((user, index) => (
-        <User user={user} key={index} />
-      ))}
+      {/* <h1>트롤 리스트 - {users.length}명</h1> */}
+      <div className="user__list_wrap">
+        <ul className="user__list_view__label">
+          <li className="list_view__label__title id">아이디</li>
+          <li className="list_view__label__title tier">티어</li>
+          <li className="list_view__label__title memo">메모</li>
+          <li className="list_view__label__title remove">제거</li>
+          <li className="list_view__label__title search">검색</li>
+        </ul>
+        <div className="scroll_wrap">
+          {users.map((user, index) => (
+            <User user={user} key={index} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

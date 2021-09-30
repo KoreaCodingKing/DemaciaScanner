@@ -60,7 +60,15 @@ body {
 
 .contents__wrap {
   width: 100%;
+  padding: 10px;
   & + & {
     width: 100%;
   }
+}
+
+.contents__wrap:nth-child(1) {
+  background: #9e9e9e;
+}
+.contents__wrap.total_view {
+  background: #e5e5e5;
 }

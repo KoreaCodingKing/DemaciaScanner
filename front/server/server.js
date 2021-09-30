@@ -495,6 +495,8 @@ app.post("/usertotal", async (req, res) => {
                         data.summoner1Id = "SummonerPoroRecall";
                       } else if (data.summoner1Id == "31") {
                         data.summoner1Id = "SummonerPoroThrow";
+                      } else if (data.summoner1Id == "32") {
+                        data.summoner1Id = "SummonerSnowball";
                       } else if (data.summoner1Id == "11") {
                         data.summoner1Id = "SummonerSmite";
                       } else if (data.summoner1Id == "12") {
@@ -521,6 +523,8 @@ app.post("/usertotal", async (req, res) => {
                         data.summoner2Id = "SummonerPoroRecall";
                       } else if (data.summoner2Id == "31") {
                         data.summoner2Id = "SummonerPoroThrow";
+                      } else if (data.summoner2Id == "32") {
+                        data.summoner1Id = "SummonerSnowball";
                       } else if (data.summoner2Id == "11") {
                         data.summoner2Id = "SummonerSmite";
                       } else if (data.summoner2Id == "12") {
@@ -592,8 +596,7 @@ app.post("/champion", async (req, res) => {
 
   getChampName(id);
 });
-getChampionName();
-console.log(getChampionName());
+// getChampionName();
 app.listen(port, () => {
   console.log(`express is running on ${port}`);
 });

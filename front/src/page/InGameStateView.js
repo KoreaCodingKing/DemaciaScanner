@@ -9,12 +9,30 @@ const InGameStateView = (props) => {
   let { scanning, userList, totalData1 } = useContext(UserListContext);
 
   const users = props.state;
-  // console.log(userList);
+  // console.log("유저 리스트 데이터", users);
+
+  const [doing, setDoing] = useState("");
+  let count = 0;
+  const qqq = users.map((user, index) => {
+    if (user.state) {
+      count += 1;
+    }
+    return count;
+  });
+  // console.log(qqq[1]);
 
   return (
     <>
-      <div className="header">
-        <h1>InGameStateView</h1>
+      <div className="ingame_view__header">
+        <div className="ingame_view__wrap">
+          <div className="ingame_view__list_info">
+            <span>리스트 총 갯수 - {userList.length}/20 </span>
+            <span>
+              게임중 {qqq[1]}/{userList.length}
+            </span>
+          </div>
+          <div className="ingame_view__list_info view_state view_state--card"></div>
+        </div>
         {scanning ? <Scanning /> : <span></span>}
       </div>
 

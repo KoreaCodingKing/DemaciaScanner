@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "../assets/scss/ingamestate.scss";
 
 function TimeView({ gameTime, gameLength }) {
@@ -71,23 +72,73 @@ function TimeView({ gameTime, gameLength }) {
 function User({ user, state, runningTime, numb, revisionData }) {
   const [show, setShow] = useState(false);
   const [gameStart, setGameStart] = useState(false);
+  const [champName, setChampId] = useState();
 
   const gameLength = user.gameLength;
 
-  console.log(revisionData);
+  // console.log("유저 데이터", user);
+  const myName = user.name;
+
+  if (!user.state) {
+    // return false; //하면 게임중이지 않은 리스트가 사라짐 (사용할 수 있을듯)
+  } else {
+    user.participants.map((item, index) => {
+      if (item.summonerName == myName) {
+        // console.log(
+        //   "맞음, summonerName = ",
+        //   item.summonerName,
+        //   item.championId
+        // );
+
+        const data = axios
+          .get(
+            "http://ddragon.leagueoflegends.com/cdn/11.19.1/data/en_US/champion.json"
+          )
+          .then((res) => {
+            const championList = res.data.data;
+            const convertToObjectChampionList = Object.entries(championList);
+
+            convertToObjectChampionList.map((item2, index) => {
+              if (item2[1].key == item.championId) {
+                console.log(item2[1].name);
+                setChampId(item2[1].name.replace(/\s/gi, ""));
+              }
+            });
+          });
+      } else {
+        console.log("다름, summonerName", item.summonerName);
+      }
+    });
+  }
 
   return (
-    <div className="user_block" style={{ animationDelay: `0.${numb}s` }}>
-      <span className="user_block__name">({user.name})</span> -
-      <span className={`state ${state ? "state--true" : "state--false"}`}>
-        {state
-          ? `게임중 - ${
-              user.gameMode !== "소환사의 협곡"
-                ? user.gameMode
-                : `${user.gameMode} - ${user.gameType}`
-            }`
-          : `대기중 - 몇분전 체크 해야함`}
-      </span>
+    <div className="user_block card" style={{ animationDelay: `0.${numb}s` }}>
+      <div className="user_block__img">
+        {champName ? (
+          // Kai'Sa -> 처럼 특수 부호가 들어간게 있는듯 하다.
+          <img
+            src={`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champName}_0.jpg`}
+            alt={champName}
+          />
+        ) : (
+          ""
+        )}
+      </div>
+      <div className="user_block__info">
+        <span className="user_block__name">
+          ({user.name} {champName ? `/ ${champName}` : ""} )
+        </span>
+        <span className={`state ${state ? "state--true" : "state--false"}`}>
+          {state
+            ? `게임중 - ${
+                user.gameMode !== "소환사의 협곡"
+                  ? user.gameMode
+                  : `${user.gameMode} - ${user.gameType}`
+              }`
+            : `대기중 - 몇분전 체크 해야함`}
+        </span>
+      </div>
+
       {gameLength != 0 && state ? (
         <TimeView gameTime={runningTime} gameLength={gameLength} />
       ) : (
@@ -110,7 +161,7 @@ function UserListInGame({ users, userList }) {
   const numb = users.length;
 
   return (
-    <div>
+    <div className="ingame_view__content ingame_view__content--card">
       {users.map((user, index) => (
         <User
           user={user}
