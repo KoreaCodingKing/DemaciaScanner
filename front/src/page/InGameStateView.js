@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import UserListInGame from "../components/UserListInGame";
 import "../assets/scss/ingamestate.scss";
 import Loading from "../components/Loading";
@@ -11,15 +11,25 @@ const InGameStateView = (props) => {
   const users = props.state;
   // console.log("유저 리스트 데이터", users);
 
+  // useEffect(() => {
+  //   return () => {
+  //     qqq = "";
+  //   };
+  // }, []);
+
   const [doing, setDoing] = useState("");
   let count = 0;
-  const qqq = users.map((user, index) => {
+
+  users.map((user, index) => {
     if (user.state) {
       count += 1;
     }
-    return count;
+    console.log(`index-> ${index} / users.length-> ${users.length - 1} `);
+    if (index == users.length + 1) {
+      return count;
+    }
   });
-  // console.log(qqq[1]);
+  console.log(count);
 
   return (
     <>
@@ -28,7 +38,7 @@ const InGameStateView = (props) => {
           <div className="ingame_view__list_info">
             <span>리스트 총 갯수 - {userList.length}/20 </span>
             <span>
-              게임중 {qqq[1]}/{userList.length}
+              게임중 {count}/{userList.length}
             </span>
           </div>
           <div className="ingame_view__list_info view_state view_state--card"></div>

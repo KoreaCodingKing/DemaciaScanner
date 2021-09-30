@@ -66,15 +66,31 @@
   animation-timing-function: linear;
   animation-fill-mode: forwards;
 
-  &:hover {
-    background-color: #ccc;
+  // &:hover {
+  //   background-color: #ccc;
+  // }
+
+  &.state_false {
+    opacity: 0.4;
+    transition: 0.6 linear;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      opacity: 0.7;
+    }
   }
 }
 
 .user_block.card {
   overflow: hidden;
   width: 32%;
-  height: 30%;
+  height: 20%;
   border-radius: 10px;
 }
 
@@ -102,13 +118,40 @@
   }
 }
 
+// 게임 진행중일때 시각 노출
+.state_true .user_block__symbol {
+  margin-left: 10px;
+  display: inline-block;
+  padding: 4px 0px;
+  width: 50px;
+  text-align: center;
+  background: rgba(038, 138, 238, 0.7);
+
+  .user_block__game-type {
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+.state_true .user_block__state {
+  padding: 3px 0;
+  font-size: 12px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.user_block__symbol--txt {
+  font-size: 12px;
+  color: #fff;
+}
+
 @keyframes test {
   0% {
     opacity: 0;
-    padding-left: 4%;
+    // padding-left: 4%;
   }
   30% {
-    padding-left: 2%;
+    // padding-left: 2%;
   }
   100% {
     opacity: 1;

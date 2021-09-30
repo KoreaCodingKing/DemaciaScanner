@@ -252,15 +252,15 @@ app.post("/userstatus", async (req, res) => {
 
               if (res.data.gameType == "MATCHED_GAME") {
                 if (res.data.gameQueueConfigId == 420) {
-                  data.gameType = "솔로 랭크";
+                  data.gameType = "솔랭";
                 } else if (res.data.gameQueueConfigId == 430) {
-                  data.gameType = "일반 게임";
+                  data.gameType = "일반";
                 } else if (res.data.gameQueueConfigId == 450) {
-                  data.gameType = "칼바람 나락";
+                  data.gameType = "칼바람";
                 } else if (res.data.gameQueueConfigId == 1400) {
                   data.gameType = "궁극기 모드";
                 } else {
-                  data.gameType = "자유 랭크";
+                  data.gameType = "자랭";
                 }
               } else if (res.data.gameType == "CUSTOM_GAME") {
                 data.gameType = "사용자 설정 게임";
@@ -402,15 +402,15 @@ app.post("/usertotal", async (req, res) => {
 
                 if (data.gameType == "MATCHED_GAME") {
                   if (data.queueId == 420) {
-                    data.gameType = "솔로 랭크";
+                    data.gameType = "솔랭";
                   } else if (data.queueId == 430) {
-                    data.gameType = "일반 게임";
+                    data.gameType = "일반";
                   } else if (data.queueId == 450) {
-                    data.gameType = "칼바람 나락";
+                    data.gameType = "칼바람";
                   } else if (data.queueId == 1400) {
                     data.gameType = "궁극기 모드";
                   } else {
-                    data.gameType = "자유 랭크";
+                    data.gameType = "자랭";
                   }
                 } else if (data.gameType == "CUSTOM_GAME") {
                   data.gameType = "사용자 설정 게임";

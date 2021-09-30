@@ -62,17 +62,18 @@ function TimeView({ gameTime, gameLength }) {
   }, []);
 
   return (
-    <>
-      - {dateTime.minutes < 10 ? "0" + dateTime.minutes : dateTime.minutes} :
+    <span className="user_block__symbol--txt">
+      {dateTime.minutes < 10 ? "0" + dateTime.minutes : dateTime.minutes} :
       {dateTime.seconds < 10 ? "0" + dateTime.seconds : dateTime.seconds}
-    </>
+    </span>
   );
 }
 
 function User({ user, state, runningTime, numb, revisionData }) {
   const [show, setShow] = useState(false);
   const [gameStart, setGameStart] = useState(false);
-  const [champName, setChampId] = useState();
+  const [champInfoId, setChampInfoId] = useState();
+  const [champInfoName, setChampInfoName] = useState();
 
   const gameLength = user.gameLength;
 
@@ -84,15 +85,9 @@ function User({ user, state, runningTime, numb, revisionData }) {
   } else {
     user.participants.map((item, index) => {
       if (item.summonerName == myName) {
-        // console.log(
-        //   "맞음, summonerName = ",
-        //   item.summonerName,
-        //   item.championId
-        // );
-
         const data = axios
           .get(
-            "http://ddragon.leagueoflegends.com/cdn/11.19.1/data/en_US/champion.json"
+            "http://ddragon.leagueoflegends.com/cdn/11.19.1/data/ko_KR/champion.json"
           )
           .then((res) => {
             const championList = res.data.data;
@@ -100,25 +95,28 @@ function User({ user, state, runningTime, numb, revisionData }) {
 
             convertToObjectChampionList.map((item2, index) => {
               if (item2[1].key == item.championId) {
-                console.log(item2[1].name);
-                setChampId(item2[1].name.replace(/\s/gi, ""));
+                setChampInfoId(item2[1].id.replace(/\s/gi, ""));
+                setChampInfoName(item2[1].name.replace(/\s/gi, ""));
               }
             });
           });
       } else {
-        console.log("다름, summonerName", item.summonerName);
+        // console.log("다름, summonerName", item.summonerName);
       }
     });
   }
 
   return (
-    <div className="user_block card" style={{ animationDelay: `0.${numb}s` }}>
+    <div
+      className={`user_block card state_${user.state}`}
+      style={{ animationDelay: `0.${numb}s` }}
+    >
       <div className="user_block__img">
-        {champName ? (
+        {champInfoId ? (
           // Kai'Sa -> 처럼 특수 부호가 들어간게 있는듯 하다.
           <img
-            src={`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champName}_0.jpg`}
-            alt={champName}
+            src={`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champInfoId}_0.jpg`}
+            alt={champInfoId}
           />
         ) : (
           ""
@@ -126,24 +124,35 @@ function User({ user, state, runningTime, numb, revisionData }) {
       </div>
       <div className="user_block__info">
         <span className="user_block__name">
-          ({user.name} {champName ? `/ ${champName}` : ""} )
+          ({user.name} {champInfoName ? `/ ${champInfoName}` : ""} )
         </span>
         <span className={`state ${state ? "state--true" : "state--false"}`}>
-          {state
+          {/* {state
             ? `게임중 - ${
                 user.gameMode !== "소환사의 협곡"
                   ? user.gameMode
                   : `${user.gameMode} - ${user.gameType}`
               }`
-            : `대기중 - 몇분전 체크 해야함`}
+            : `대기중 - 몇분전 체크 해야함`} */}
         </span>
       </div>
 
-      {gameLength != 0 && state ? (
-        <TimeView gameTime={runningTime} gameLength={gameLength} />
-      ) : (
-        <span></span>
-      )}
+      <div className="user_block__symbol">
+        <div>
+          {gameLength != 0 && state ? (
+            <TimeView gameTime={runningTime} gameLength={gameLength} />
+          ) : (
+            <span></span>
+          )}
+        </div>
+        <div className="user_block__game-type">
+          <span>{state ? `${user.gameType}` : `대기중`}</span>
+        </div>
+      </div>
+      {/* <div className="user_block__symbol user_block__state">
+        
+      </div> */}
+
       {/* {state ? <TimeView gameTime={runningTime} /> : <span></span>} */}
     </div>
   );

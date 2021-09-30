@@ -70,7 +70,7 @@ function ApiTest(props) {
   };
 
   return (
-    <div className="contents" style={{ height: "1000px", overflow: "hidden" }}>
+    <div className="contents" style={{ overflow: "hidden" }}>
       <div className="contents__wrap">
         <UserList users={userList} />
         <InGameStateView state={userState} loading={loading} />
