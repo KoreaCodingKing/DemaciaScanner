@@ -54,7 +54,7 @@ app.post('/signup', (req: any, res: any, next: any) => {
         })
         .catch((err: any) => {
             console.log('err', err);
-            res.status(404).json({ success: true, error: err });
+            res.status(404).json({ success: false, error: err });
         })
 });
 
