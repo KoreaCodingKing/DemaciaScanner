@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "../assets/scss/ingamestate.scss";
 
 function TimeView({ gameTime, gameLength }) {
@@ -11,7 +12,7 @@ function TimeView({ gameTime, gameLength }) {
     if (!gameTime) {
       return;
     }
-    setDateTime({minutes : "", seconds : ""});
+    setDateTime({ minutes: "", seconds: "" });
     const asd = setInterval(() => {
       // 현재 시간
       const currentDate = new Date();
@@ -33,12 +34,11 @@ function TimeView({ gameTime, gameLength }) {
         const targetS = parmDate.getSeconds();
 
         return targetM + targetS;
-      }
+      };
 
       if (convertDateCurrent() < convertDate(date)) {
-        const calcResult =
-          3600 - (convertDate(date) - convertDateCurrent());
-          // 3600은 60초에 1분, 6분에 360초, 60분에 3600초
+        const calcResult = 3600 - (convertDate(date) - convertDateCurrent());
+        // 3600은 60초에 1분, 6분에 360초, 60분에 3600초
 
         setDateTime({
           minutes: parseInt(calcResult / 60),
@@ -55,56 +55,129 @@ function TimeView({ gameTime, gameLength }) {
 
       // 시간 state 갱신
     }, 1000);
-    return () => clearInterval(asd); setDateTime({minutes : "", seconds : ""});
+    return () => {
+      clearInterval(asd);
+      setDateTime({ minutes: "", seconds: "" });
+    };
   }, []);
 
   return (
-    <>
-      - {dateTime.minutes < 10 ? "0" + dateTime.minutes : dateTime.minutes} :
+    <span className="user_block__symbol--txt">
+      {dateTime.minutes < 10 ? "0" + dateTime.minutes : dateTime.minutes} :
       {dateTime.seconds < 10 ? "0" + dateTime.seconds : dateTime.seconds}
-    </>
+    </span>
   );
 }
 
-function User({ user, state, runningTime, numb}) {
+function User({ user, state, runningTime, numb, revisionData }) {
   const [show, setShow] = useState(false);
   const [gameStart, setGameStart] = useState(false);
+  const [champInfoId, setChampInfoId] = useState();
+  const [champInfoName, setChampInfoName] = useState();
 
   const gameLength = user.gameLength;
 
-  console.log(user)
+  // console.log("유저 데이터", user);
+  const myName = user.name;
+
+  if (!user.state) {
+    // return false; //하면 게임중이지 않은 리스트가 사라짐 (사용할 수 있을듯)
+  } else {
+    user.participants.map((item, index) => {
+      if (item.summonerName == myName) {
+        const data = axios
+          .get(
+            "http://ddragon.leagueoflegends.com/cdn/11.19.1/data/ko_KR/champion.json"
+          )
+          .then((res) => {
+            const championList = res.data.data;
+            const convertToObjectChampionList = Object.entries(championList);
+
+            convertToObjectChampionList.map((item2, index) => {
+              if (item2[1].key == item.championId) {
+                setChampInfoId(item2[1].id.replace(/\s/gi, ""));
+                setChampInfoName(item2[1].name.replace(/\s/gi, ""));
+              }
+            });
+          });
+      } else {
+        // console.log("다름, summonerName", item.summonerName);
+      }
+    });
+  }
 
   return (
-    <div className="user_block" style={{animationDelay :  `0.${numb}s`}} >
-      <span className="user_block__name">({user.name})</span> -
-      <span className={`state ${state ? "state--true" : "state--false"}`}>
-        {state ? `게임중 - ${user.gameMode !== '소환사의 협곡' ? user.gameMode : `${user.gameMode} - ${user.gameType}` }` : "대기중 - 몇분전 체크 해야함"}
-      </span>
-      {gameLength != 0 && state ? <TimeView gameTime={runningTime} gameLength={gameLength} /> : <span></span>}
+    <div
+      className={`user_block card state_${user.state}`}
+      style={{ animationDelay: `0.${numb}s` }}
+    >
+      <div className="user_block__img">
+        {champInfoId ? (
+          // Kai'Sa -> 처럼 특수 부호가 들어간게 있는듯 하다.
+          <img
+            src={`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champInfoId}_0.jpg`}
+            alt={champInfoId}
+          />
+        ) : (
+          ""
+        )}
+      </div>
+      <div className="user_block__info">
+        <span className="user_block__name">
+          ({user.name} {champInfoName ? `/ ${champInfoName}` : ""} )
+        </span>
+        <span className={`state ${state ? "state--true" : "state--false"}`}>
+          {/* {state
+            ? `게임중 - ${
+                user.gameMode !== "소환사의 협곡"
+                  ? user.gameMode
+                  : `${user.gameMode} - ${user.gameType}`
+              }`
+            : `대기중 - 몇분전 체크 해야함`} */}
+        </span>
+      </div>
+
+      <div className="user_block__symbol">
+        <div>
+          {gameLength != 0 && state ? (
+            <TimeView gameTime={runningTime} gameLength={gameLength} />
+          ) : (
+            <span></span>
+          )}
+        </div>
+        <div className="user_block__game-type">
+          <span>{state ? `${user.gameType}` : `대기중`}</span>
+        </div>
+      </div>
+      {/* <div className="user_block__symbol user_block__state">
+        
+      </div> */}
+
       {/* {state ? <TimeView gameTime={runningTime} /> : <span></span>} */}
     </div>
   );
 }
 
-function UserListInGame({ users }) {
-useEffect(()=> {
-  users.map(user => {
-    console.log(`${user.name} - ${user.currentTimeStamp}`)
-  })
+function UserListInGame({ users, userList }) {
+  // console.log(userList);
+  useEffect(() => {
+    // users.map((user) => {
+    //   console.log(`${user.name} - ${user.currentTimeStamp}`);
+    // });
 
-  return ()=> console.log("없어짐")
-},[])
-const numb = users.length;
-  
+    return () => console.log("없어짐");
+  }, []);
+  const numb = users.length;
 
   return (
-    <div>
+    <div className="ingame_view__content ingame_view__content--card">
       {users.map((user, index) => (
         <User
           user={user}
           key={index}
           numb={index}
           state={user.state}
+          revisionData={userList[index]}
           runningTime={user.currentTimeStamp}
         />
       ))}

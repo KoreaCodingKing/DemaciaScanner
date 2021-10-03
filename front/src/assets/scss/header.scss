@@ -1,0 +1,42 @@
+.header__search {
+  padding: 10px;
+}
+.header__control {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.header__control button {
+  padding: 10px;
+}
+
+.header__item.auth_box {
+  flex: 0.8;
+  align-self: flex-end;
+}
+
+// login 영역
+.header_item__auth_info {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.auth_info__thumb {
+  width: 30px;
+  height: 30px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.auth_info__name {
+  align-self: center;
+  padding: 0 10px;
+  font-size: 1.25rem;
+}
+
+.auth_info__login_state {
+  align-self: center;
+}

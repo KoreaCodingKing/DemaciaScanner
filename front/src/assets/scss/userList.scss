@@ -1,0 +1,109 @@
+.user__title {
+  display: flex;
+}
+
+.scroll_wrap {
+  overflow-y: auto;
+  height: 370px;
+}
+
+// 트롤 리스트 라벨 타이틀 스타일
+.user__list_view__label {
+  margin: 5px 0;
+  display: flex;
+  justify-content: flex-end;
+  -webkit-box-shadow: 0px 12px 19px -11px rgba(0, 0, 0, 0.8);
+  box-shadow: 0px 12px 19px -11px rgba(0, 0, 0, 0.8);
+}
+
+.list_view__label__title {
+  text-align: center;
+  font-weight: 600;
+
+  &.id {
+    flex: 0.24;
+  }
+  &.tier {
+    flex: 0.1;
+  }
+  &.memo {
+    flex: 0.4;
+  }
+  &.remove {
+    flex: 0.1;
+  }
+  &.search {
+    flex: 0.1;
+  }
+}
+
+.user__list_view {
+}
+
+.user__list_wrap {
+  padding: 12px 10px;
+  background: #e5e5e5;
+  border-radius: 10px;
+}
+
+.user__list--item {
+  padding: 10px 15px;
+  background: #fff;
+  border-radius: 10px;
+
+  & + & {
+    margin-top: 1.5%;
+  }
+}
+
+.user__title .thumb {
+  flex: 0.05;
+}
+
+.user__title .info {
+  display: flex;
+  flex: 0.4;
+  align-self: center;
+}
+
+.user__title .info span {
+  flex: 0.5;
+  text-align: center;
+  font-weight: 600;
+}
+
+.user__title .memo {
+  flex: 0.4;
+  align-self: center;
+}
+
+.user__title .func {
+  flex: 0.19;
+  display: flex;
+  justify-content: space-evenly;
+}
+.func button {
+  width: 40px;
+  height: 40px;
+}
+
+.user_state__block {
+  width: 550px;
+  background: rgb(255, 179, 0);
+  outline: 1px solid #222;
+  box-sizing: border-box;
+}
+
+.user_state__item {
+  padding: 5px 0 5px 10px;
+  outline: 1px solid #222;
+  box-sizing: border-box;
+  font-weight: 600;
+
+  &--WIN {
+    background: rgb(17, 154, 31);
+  }
+  &--LOSE {
+    background: rgb(221, 5, 5);
+  }
+}

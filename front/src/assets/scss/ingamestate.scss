@@ -1,4 +1,20 @@
+// ingame Header
+.ingame_view__header {
+  position: relative;
+  margin-top: 5px;
+  padding: 15px 10px;
+  background: #4d4d4d;
+  border-radius: 10px;
+}
 
+.view__container {
+  height: 100%;
+}
+
+.ingame_view__list_info span {
+  font-weight: 600;
+  color: #fff;
+}
 
 .state {
   font-size: 16px;
@@ -12,34 +28,133 @@
   color: green;
 }
 
+.ingame_view__content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+// 카드 버전 경우
+.ingame_view__content.ingame_view__content--card {
+  flex-direction: inherit;
+  flex-wrap: wrap;
+  align-content: flex-start;
+
+  .user_block + .user_block {
+    margin-left: 2%;
+  }
+
+  .user_block {
+    width: 32%;
+
+    &:nth-child(3n + 1) {
+      margin-left: 0;
+    }
+  }
+}
 
 .user_block {
   position: relative;
-  opacity : 0;
-  width : 100%;
-  padding : 2% 0 2% 2%;
-  margin : 1% 0;
-  background-color : #e0e0e0;
-  animation-name : test;
-  animation-duration : 0.4s;
-  animation-timing-function : linear;
+  opacity: 0;
+  width: 100%;
+  height: 30%;
+  padding: 2% 0;
+  margin: 1% 0;
+  background-color: #e0e0e0;
+  animation-name: test;
+  animation-duration: 0.4s;
+  animation-timing-function: linear;
   animation-fill-mode: forwards;
 
-  &:hover {
-    background-color :#ccc;
+  // &:hover {
+  //   background-color: #ccc;
+  // }
+
+  &.state_false {
+    opacity: 0.4;
+    transition: 0.6 linear;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      opacity: 0.7;
+    }
   }
+}
+
+.user_block.card {
+  overflow: hidden;
+  width: 32%;
+  height: 20%;
+  border-radius: 10px;
+}
+
+.user_block__info {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40%;
+  background: #fff;
+}
+
+.user_block__name {
+  margin-left: 2%;
+}
+
+.user_block__img {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  img {
+    width: 100%;
+  }
+}
+
+// 게임 진행중일때 시각 노출
+.state_true .user_block__symbol {
+  margin-left: 10px;
+  display: inline-block;
+  padding: 4px 0px;
+  width: 50px;
+  text-align: center;
+  background: rgba(038, 138, 238, 0.7);
+
+  .user_block__game-type {
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+.state_true .user_block__state {
+  padding: 3px 0;
+  font-size: 12px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.user_block__symbol--txt {
+  font-size: 12px;
+  color: #fff;
 }
 
 @keyframes test {
   0% {
-      opacity : 0;
-      padding-left : 4%;
+    opacity: 0;
+    // padding-left: 4%;
   }
   30% {
-      padding-left : 2%;
+    // padding-left: 2%;
   }
   100% {
-      opacity : 1
+    opacity: 1;
   }
 }
 
@@ -55,18 +170,18 @@
 }
 
 .skeleton-item {
-  position : absolute;
-  top : 50%;
-  left : 2%;
-  transform : translateY(-50%);
-  width : 250px;
+  position: absolute;
+  top: 50%;
+  left: 2%;
+  transform: translateY(-50%);
+  width: 250px;
   padding: 1% 0;
-  background-color : #bbb;
+  background-color: #bbb;
 }
 
 .skeleton-item::before {
-  z-index :10;
-  content: '';
+  z-index: 10;
+  content: "";
   position: absolute;
   top: 0;
   left: 0;

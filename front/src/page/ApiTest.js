@@ -11,6 +11,8 @@ import CurrentMyState from "./CurrentMyState";
 import { UserListContext } from "../App";
 import UserTotal from "../components/UserTotal";
 import * as RealmWeb from "realm-web";
+import "../assets/scss/common.scss";
+import SearchTotal from "../components/SearchTotal";
 
 let tempList = [];
 
@@ -19,7 +21,7 @@ const appRealm = new RealmWeb.App({ id: "demaciascanner-0-nylor" });
 function ApiTest(props) {
   // 상위 context에서function 가져오기
   const currentURI = decodeURI(window.location.href);
-  
+
   let {
     userList,
     userName,
@@ -39,6 +41,10 @@ function ApiTest(props) {
     scanning,
     modalView,
     modal,
+    onTotalData,
+    totalData,
+    userInfo,
+    addUserList,
   } = useContext(UserListContext);
 
   useState(() => {
@@ -49,7 +55,7 @@ function ApiTest(props) {
     }
     const token = aa.split('token=')
     const tokenValue = token[1].split("&");
-    
+
     const tokenId = tokenValue[1].split("tokenId=")
     console.log(`token=${tokenValue[0]}-------------/ tokenId=${tokenId[1]}` )
 
@@ -88,26 +94,25 @@ function ApiTest(props) {
   };
 
   return (
-    <>
-      <hr />
-      <button onClick={getTestList}>테스트 리스트 갱신</button>
-      <button onClick={sessionStorageInit}>로컬스토리지 초기화</button>
-      {/* <button onClick={searchInGameState}>인게임 상태</button> */}
-      <button onClick={startScanner}>인게임 스케너</button>
-      <button onClick={stopScanner}>인게임 스캐너 중지</button>
-      <button onClick={modalView}>모달 버튼</button>
-
-      <br />
-      {modal ? <UserTotal /> : <span></span>}
-      <form className="insert_form" onSubmit={insertUser}>
-        <UserInsertForm inputValue={userName} onChangeEvent={onChangeHandle} />
-      </form>
-      <br />
-      <UserList users={userList} />
-      <br />
-      <div className="id-list"></div>
-      <InGameStateView state={userState} loading={loading} />
-    </>
+    <div className="contents" style={{ overflow: "hidden" }}>
+      <div className="contents__wrap">
+        <UserList users={userList} />
+        <InGameStateView state={userState} loading={loading} />
+      </div>
+      {userInfo ? (
+        <div className="contents__wrap total_view">
+          <div>
+            <SearchTotal
+              users={userList}
+              onTotalData={onTotalData}
+              totalData={totalData}
+            />
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+    </div>
   );
 }
 
