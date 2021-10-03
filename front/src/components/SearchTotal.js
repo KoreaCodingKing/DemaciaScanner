@@ -168,16 +168,19 @@ function UserTotalView({ userTotal, championName, championValue }) {
   );
 }
 
-const UserDetail = ({ userInfo, addUserList }) => {
-  // console.log("유저 정보", userInfo);
+const UserDetail = ({ userInfo, addUserList, myTotalDataSolo, myTotalDataFlex, myTotalDataAll }) => {
+  console.log('받은 자랭 정보 =>',myTotalDataAll)
+
+  // 승률
   const winningPercentage = Math.floor(userInfo.tier.solo.wins / (userInfo.tier.solo.wins + userInfo.tier.solo.losses) * 100);
+  
   return (
     <div className="search_total__wrap">
       <div className="search_total__header">
         <div className="search_total__content user_infomation">
           <div className="info_thumb">
             <img
-              src={`http://ddragon.leagueoflegends.com/cdn/11.16.1/img/profileicon/${userInfo.profileIconId}.png`}
+              src={`http://ddragon.leagueoflegends.com/cdn/11.19.1/img/profileicon/${userInfo.profileIconId}.png`}
               alt=""
             />
           </div>
@@ -329,10 +332,10 @@ const UserDetail = ({ userInfo, addUserList }) => {
 };
 
 const SearchTotal = () => {
-  const { totalData1, userInfo, addUserList } = useContext(UserListContext);
+  const { totalData1, userInfo, addUserList, myTotalDataSolo, myTotalDataFlex, myTotalDataAll } = useContext(UserListContext);
   return (
     <div className="info__wrap">
-      <UserDetail userInfo={userInfo} addUserList={addUserList} />
+      <UserDetail userInfo={userInfo} addUserList={addUserList} myTotalDataSolo={myTotalDataSolo} myTotalDataFlex={myTotalDataFlex} myTotalDataAll={myTotalDataAll} />
       <UserTotalView userTotal={totalData1} />
     </div>
   );

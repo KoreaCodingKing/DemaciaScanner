@@ -65,7 +65,7 @@ async function getUserTotalGameData(user) {
   //   `https://kr.api.riotgames.com/lol/match/v4/matches/${gameId}?api_key=${riotApiKey}`
   // );
 
-  console.log("받은 게임 아이디 값->", gameId);
+  // console.log("받은 게임 아이디 값->", gameId);
   // match v5 변경코드
   return await axios.get(
     `https://asia.api.riotgames.com/lol/match/v5/matches/${gameId}?api_key=${riotApiKey}`
@@ -166,7 +166,7 @@ app.post("/searchuser", async (req, res) => {
     resolve(getUserData(encodeURI(userName)));
   })
     .then((result) => {
-      console.log("검색 유저의 정보", result.data);
+      // console.log("검색 유저의 정보", result.data);
       let data = {
         id: result.data.id,
         name: result.data.name,
@@ -200,7 +200,7 @@ app.post("/searchuser", async (req, res) => {
       return getUserRankTier(resData);
     })
     .catch((err) => {
-      console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
+      // console.log(`없는 아이디입니다.-${userName}-${err.response.status}`);
       if (err.response.status === 404) {
         return null;
       }
@@ -292,7 +292,7 @@ app.post("/userstatus", async (req, res) => {
               // );
             })
             .catch((err) => {
-              console.log(`${user.name}은(는) 게임 중이지 않습니다.`);
+              // console.log(`${user.name}은(는) 게임 중이지 않습니다.`);
               // accountId를 앚아서 match v4를 사용해 최근 게임의 끝난 시간을 도출해야함
               asdList = asdList.concat({
                 name: user.name,
@@ -338,7 +338,7 @@ app.post("/userstatus", async (req, res) => {
   */
 app.post("/usertotal", async (req, res) => {
   const userData = req.body.user;
-  console.log("타겟 유저", userData);
+  // console.log("타겟 유저", userData);
 
   let array1 = [];
   let array3 = [];
@@ -358,7 +358,7 @@ app.post("/usertotal", async (req, res) => {
     })
     .then((matches) => {
       // console.log(matches);
-      const list = matches.slice(0, 2 || matches.length);
+      const list = matches.slice(0, 20 || matches.length);
       list.map((matchesGameId) => {
         const gameId = matchesGameId;
 
@@ -548,7 +548,7 @@ app.post("/usertotal", async (req, res) => {
                 }
                 console.log("loading...", `${index + 1}/${array1.length}`);
               });
-          }, 250 * x);
+          }, 200 * x);
         })(index);
       }); // map end
       // array1.splice(0, array1.length);

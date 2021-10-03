@@ -61,6 +61,10 @@ function App() {
   const [userInfo, setUserInfo] = useState();
   const [headerState, setHeaderState] = useState(false);
 
+  const [myTotalDataSolo, setMyTotalDataSolo] = useState('');
+  const [myTotalDataFlex, setMyTotalDataFlex] = useState('');
+  const [myTotalDataAll, setMyTotalDataAll] = useState('');
+
   useEffect(() => {
     const sessionStorageValue = sessionStorage.userList || null;
 
@@ -138,7 +142,7 @@ function App() {
 
   // 리스트 추가 함수
   const addUserList = (addUser, saveValue, storageValue) => {
-    console.log("revisionData", addUser);
+    // console.log("revisionData", addUser);
     if (addUser == null) {
       return false;
     }
@@ -223,14 +227,82 @@ function App() {
   // get user total data
   const onTotalData = (userData) => {
     const data = userData;
-    console.log("받은 데이터", data);
+    // 유저 이름
+    const targetUserName = data.name;
+    // console.log("받은 데이터", data);
 
     setTotalLoding(true);
 
     const resultData = getUserTotalData(data)
       .then((result) => {
-        console.log("결과", result.data);
+        // console.log("결과", result.data);
         const matches = result.data;
+        let targetDataResultRankSolo = [];
+        let targetDataResultRankFlex = [];
+        let targetDataResultRankAll = [];
+
+        matches.map((item, index)=> {
+          const data = Object.entries(item);
+
+          data[0][1].map((user, index2) => {
+
+            if(user.summonerName == targetUserName) {
+              const targetData = [
+                index = {
+                  championName : user.championName,
+                  championId: user.championId,
+                  position : user.position,
+                  win : user.win,
+                  queueId : user.queueId,
+                  kills : user.kills,
+                  deaths : user.deaths,
+                  assists : user.assists
+                }
+              ]
+              targetDataResultRankAll.push(index)
+            }else if(user.summonerName == targetUserName && user.queueId == '420') {
+              // 솔랭
+              const targetData = [
+                index = {
+                  championName : user.championName,
+                  championId: user.championId,
+                  position : user.position,
+                  win : user.win,
+                  queueId : user.queueId,
+                  kills : user.kills,
+                  deaths : user.deaths,
+                  assists : user.assists
+                  
+                }
+              ]
+              targetDataResultRankSolo.push(index)
+            }else if(user.summonerName == targetUserName && user.queueId == '440') {
+              // 자랭
+              const targetData = [
+                index = {
+                  championName : user.championName,
+                  championId: user.championId,
+                  position : user.position,
+                  win : user.win,
+                  queueId : user.queueId,
+                  kills : user.kills,
+                  deaths : user.deaths,
+                  assists : user.assists
+                }
+              ]
+              targetDataResultRankFlex.push(index)
+            } 
+
+            
+          
+
+          })
+
+        })
+        setMyTotalDataAll(targetDataResultRankAll);
+        setMyTotalDataSolo(targetDataResultRankAll);
+        setMyTotalDataFlex(targetDataResultRankFlex)
+        // console.log('모든 최근 전적 -',targetDataResultRankAll, );
 
         setTotalData1(matches);
         setUserInfo(data);
@@ -533,6 +605,9 @@ function App() {
             totalData1,
             totalLoading,
             userInfo,
+            myTotalDataSolo,
+            myTotalDataFlex,
+            myTotalDataAll
           }}
         >
           <ApiTest />
