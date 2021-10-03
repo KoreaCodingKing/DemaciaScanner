@@ -1,11 +1,13 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from 'axios';
 import { UserListContext } from "../App";
 
 import "../assets/scss/signup.scss";
 
 const Signup = ({ props, history }) => {
   let { onChangeHandle, userName } = useContext(UserListContext);
+  const [loading, setLoading] = useState(false);
 
   const goBack = () => {
     history.goBack();
@@ -155,23 +157,40 @@ const Signup = ({ props, history }) => {
                 >
                   취소
                 </button>
-                 <Link to={`/confirmed_email/${userName.user_email}`}>
-                <button
-                  type="submit"
-                  className="signup__button signup__button--point"
-                  disabled={
-                    !emailRuleTest(userName.user_email)
-                    // !emailRuleTest(userName.user_email) &&
-                    // !passwordRuleTest(userName.user_password) &&
-                    // !nicknameRuleTest(userName.user_nickname)
-                      ? false
-                      : true
-                  }
-                >
-                 
-                    이메일 인증
-                </button>
-                  </Link>
+                 {/* <Link to={`/confirmed_email/${userName.user_email}`}> */}
+                    <button
+                      type="submit"
+                      className="signup__button signup__button--point"
+                      onClick={(e)=> {
+                        e.preventDefault();
+                        setLoading(true);
+                        axios.post('http://localhost:8080/signup', {
+                          email : userName.user_email
+                        }).then(res=> {
+                          setLoading(false);
+                          if(!res.data.success) {
+                            return alert("오류")
+                          }
+                            
+
+                        })
+                        .catch(e=> {
+                          console.log(e)
+                        })
+                      }}
+                      disabled={
+                        !emailRuleTest(userName.user_email)
+                          ? false
+                          : true
+                      }
+                    >
+                    
+                        이메일 인증
+                        {
+                          loading ? "대기중이빈다." : ""
+                        }
+                    </button>
+                  {/* </Link> */}
               </div>
               <div className="signup__link">
                 이미 회원 이신가요?{" "}
