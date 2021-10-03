@@ -10,6 +10,7 @@ require("dotenv").config();
 const mongoose = require('mongoose');
 const app = express();
 const realmApp = new Realm.App({ id: process.env.REALM_ID });
+const nodemailer = require('nodemailer');
 const port = 8080;
 
 const bcrypt = require('bcrypt');
@@ -45,17 +46,31 @@ app.get('/login', async (req: any, res: any, next: any) => {
     }
 });
 
-app.post('/signup', (req: any, res: any, next: any) => {
-    const saltRounds = 10;
-    realmApp.emailPasswordAuth
-        .registerUser(req.body.email, bcrypt.hashSync(req.body.pw, saltRounds))
-        .then((result: any) => {
-            res.status(200).json({ success: true, email: req.body.email});
-        })
-        .catch((err: any) => {
-            console.log('err', err);
-            res.status(404).json({ success: false, error: err });
-        })
+app.post('/signup', async(req: any, res: any, next: any) => {
+    const digits = 6;
+    const random = Math.floor((Math.random() * Math.pow(10, digits)));
+    const randomNumber = ('0'.repeat(digits) + random).slice(-digits);
+    console.log(randomNumber);
+
+    const transporter = await nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+            user: "rokydae@gmail.com",
+            pass: `${process.env.MAILPASS}`
+        }
+    });
+
+    transporter.sendMail({
+        from: 'rokydae@gmail.com',
+        to: req.body.email,
+        subject: '[데마시아스캐너] 인증 번호입니다.',
+        html: `<div>${randomNumber}</div>`
+    }).then(() => {
+        res.status(200).send({ success: true });
+    }).catch((err: any) => {
+        console.log('err', err);
+        res.status(400).send({ success: false });
+    })
 });
 
 app.post('/signup/confirmed', (req: any, res: any, next: any) => {
