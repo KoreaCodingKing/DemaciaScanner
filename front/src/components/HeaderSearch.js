@@ -61,7 +61,6 @@ const HeaderSearch = (props) => {
 
   return (
     <div className="header__search">
-      <hr />
       <div className="header__control">
         {/* <button onClick={getTestList}>테스트 리스트 갱신</button> */}
         {/* <button onClick={searchInGameState}>인게임 상태</button> */}

@@ -19,6 +19,8 @@ import dotenv from "dotenv";
 import "./assets/scss/common.scss";
 import SearchTotal from "./components/SearchTotal";
 import Signup from "./page/Signup";
+import SignupConfirmed from "./page/SignupConfirmed";
+import SignupConfirmedEmail from "./page/SignupConfirmedEmail";
 import Login from "./page/Login";
 
 export const UserListContext = createContext();
@@ -35,6 +37,7 @@ function App() {
     current_game_name: "",
     search_name: "",
     user_email: "",
+    user_id: "",
     user_password: "",
     user_nickname: "",
   });
@@ -42,6 +45,7 @@ function App() {
     current_game_name,
     search_name,
     user_email,
+    user_id,
     user_password,
     user_nickname,
   } = userName;
@@ -68,7 +72,8 @@ function App() {
     // header 노출 여부
     if (
       window.location.pathname !== "/signup" &&
-      window.location.pathname !== "/login"
+      window.location.pathname !== "/login" &&
+      window.location.pathname !== "/confirmed_email/:email"
     ) {
       setHeaderState(true);
     }
@@ -574,30 +579,31 @@ function App() {
       >
         <Route path="/signup" component={Signup} />
       </UserListContext.Provider>
-      {/* <Route path="/signup">
-        <UserListContext.Provider
-          value={{
-            userList,
-            searchUser,
-            addUserList,
-            onRemove,
-            onReset,
-            sessionStorageInit,
-            onChangeHandle,
-            insertUser,
-            getUserDataInGame,
-            updateInGame,
-            getUserData,
-            userName,
-            searchLoading,
-          }}
-        >
-          <Signup />
-        </UserListContext.Provider>
-      </Route> */}
-      {/* <Route path="/login">
-        <Login />
-      </Route> */}
+
+      
+
+      <UserListContext.Provider
+        value={{
+          userList,
+          searchUser,
+          addUserList,
+          onRemove,
+          onReset,
+          sessionStorageInit,
+          onChangeHandle,
+          insertUser,
+          getUserDataInGame,
+          updateInGame,
+          getUserData,
+          userName,
+          searchLoading,
+        }}
+      >
+        <Route path="/signup/confirmed" component={SignupConfirmed} />
+      </UserListContext.Provider>
+
+      <Route path="/confirmed_email/:email" component={SignupConfirmedEmail} />
+
       <UserListContext.Provider
         value={{
           userList,
@@ -617,42 +623,6 @@ function App() {
       >
         <Route path="/login" component={Login} />
       </UserListContext.Provider>
-      {/* <Route path="/searchtotal">
-        <UserListContext.Provider
-          value={{
-            userList,
-            addUserList,
-            onRemove,
-            sessionStorageInit,
-            onChangeHandle,
-            insertUser,
-            getUserDataInGame,
-            userName,
-            isPause,
-            timer,
-            loading,
-            userState,
-            startScanner,
-            stopScanner,
-            scanning,
-            // modalView,
-            // modal,
-            onTotalData,
-            userTotal,
-            championName,
-            championValue,
-          }}
-        >
-          <SearchTotal />
-        </UserListContext.Provider>
-      </Route> */}
-
-      {/* <UserListContext.Provider value={{ userList}}>
-        <Route path="/" exact component={Home} />
-        <Route path="/about" component={About} />
-        <Route path="/apiTest" component={ApiTest}  />
-        <Route path="/currentMyState" component={CurrentMyState} />
-      </UserListContext.Provider> */}
     </div>
   );
 }

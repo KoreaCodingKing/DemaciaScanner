@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { UserListContext } from "../App";
+import "../assets/scss/searchtotal.scss";
 
 function UserTotalView({ userTotal, championName, championValue }) {
   const rendering = (user) => {
@@ -168,28 +169,87 @@ function UserTotalView({ userTotal, championName, championValue }) {
 }
 
 const UserDetail = ({ userInfo, addUserList }) => {
-  //   console.log(addUserList);
+  console.log("유저 정보", userInfo);
   return (
-    <div style={{ borderRadius: "25px", padding: "10px", background: "#ccc" }}>
-      <h2>유저 {userInfo ? userInfo.name : ""}의 정보</h2>
-      <br />
-      {/* <h4>{userInfo ? userInfo.name : " "}</h4> */}
-      <p>
-        티어 :{" "}
-        {userInfo ? (
-          <img
-            style={{ width: "100px", height: "100px" }}
-            src={`/images/ranked-emblems/Emblem_${userInfo.tier.solo.tier}.png`}
-          />
-        ) : (
-          ""
-        )}{" "}
-        - {userInfo ? userInfo.tier.solo.rank : ""}
-        <br />
-        {userInfo ? userInfo.tier.solo.leaguePoints : ""}포인트
-      </p>
-      <p>승리 : {userInfo ? userInfo.tier.solo.wins : ""}</p>
-      <p>패배 : {userInfo ? userInfo.tier.solo.losses : ""}</p>
+    <div className="search_total__wrap">
+      <div className="search_total__header">
+        <div className="search_total__content user_infomation">
+          <div className="info_thumb">
+            <img
+              src={`http://ddragon.leagueoflegends.com/cdn/11.16.1/img/profileicon/${userInfo.profileIconId}.png`}
+              alt=""
+            />
+          </div>
+          <div className="info_name">
+            <p>{userInfo ? userInfo.name : ""}</p>
+          </div>
+        </div>
+        <div className="search_total__content content__info">
+          <div className="content__rank">
+            <div className="content__rank content__rank--solo">
+              {userInfo.tier.solo.tier ? (
+                <div>
+                  <p className="title">솔로랭크</p>
+                  <p className="thumb">
+                    <img
+                      // style={{ width: "100px", height: "100px" }}
+                      src={`/images/ranked-emblems/Emblem_${userInfo.tier.solo.tier}.png`}
+                    />
+                  </p>
+                  <p className="rank_info">
+                    <em className="point_color">
+                      {userInfo.tier.solo.tier} {userInfo.tier.solo.rank}
+                    </em>{" "}
+                    / <span>{userInfo.tier.solo.leaguePoints}LP</span>
+                  </p>
+                  <p className="result_info">
+                    <em className="point_color">{userInfo.tier.solo.wins}승</em>{" "}
+                    <span>{userInfo.tier.solo.losses}패</span>
+                  </p>
+                  <div>승패 차트</div>
+                </div>
+              ) : (
+                <span className="none_data">없음</span>
+              )}
+            </div>
+            <div className="content__rank content__rank--flex">
+              {userInfo.tier.flex.tier ? (
+                <div>
+                  <p className="title">자유랭크</p>
+                  <p className="thumb">
+                    <img
+                      // style={{ width: "100px", height: "100px" }}
+                      src={`/images/ranked-emblems/Emblem_${userInfo.tier.flex.tier}.png`}
+                    />
+                  </p>
+                  <p className="rank_info">
+                    <em className="point_color">
+                      {userInfo.tier.flex.tier} {userInfo.tier.flex.rank}
+                    </em>{" "}
+                    / <span>{userInfo.tier.flex.leaguePoints}LP</span>
+                  </p>
+                  <p className="result_info">
+                    <em className="point_color">{userInfo.tier.flex.wins}승</em>{" "}
+                    <span>{userInfo.tier.flex.losses}패</span>
+                  </p>
+                  <div>승패 차트</div>
+                </div>
+              ) : (
+                <span className="none_data">없음</span>
+              )}
+            </div>
+          </div>
+          <div className="content__current_total">최근 전적</div>
+          <div className="content__current_total content__current_champion">
+            <ul className="list">
+              <li className="list_item">champ1</li>
+              <li className="list_item">champ2</li>
+              <li className="list_item">champ3</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <button onClick={() => addUserList(userInfo, true, "userList")}>
         리스트 추가하기
       </button>
@@ -202,7 +262,7 @@ const UserDetail = ({ userInfo, addUserList }) => {
 const SearchTotal = () => {
   const { totalData1, userInfo, addUserList } = useContext(UserListContext);
   return (
-    <div className="info__wrap" style={{ padding: "10px" }}>
+    <div className="info__wrap">
       <UserDetail userInfo={userInfo} addUserList={addUserList} />
       <UserTotalView userTotal={totalData1} />
     </div>

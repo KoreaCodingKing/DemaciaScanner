@@ -4,7 +4,7 @@ import { UserListContext } from "../App";
 
 import "../assets/scss/signup.scss";
 
-const Signup = ({ props, history }) => {
+const SignupConfirmed = ({ props, history }) => {
   let { onChangeHandle, userName } = useContext(UserListContext);
 
   const goBack = () => {
@@ -19,10 +19,10 @@ const Signup = ({ props, history }) => {
     // };
   }, [history]);
 
-  function emailRuleTest(target) {
-    const emailRule =
-      /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i;
-    if (!emailRule.test(target)) {
+  function idRuleTest(target) {
+    const idRule =
+       /^([a-zA-Z])[-a-zA-Z0-9_.]{5,11}$/
+    if (!idRule.test(target) || target.includes('admin')) {
       return true;
     } else {
       //   setEmailState(true);
@@ -40,7 +40,7 @@ const Signup = ({ props, history }) => {
   }
 
   function nicknameRuleTest(target) {
-    const nickRule = /^[A-Za-z0-9]{2,20}$/; //숫자와 문자 포함 형태의 6~20자리 이내의 암호 정규식
+    const nickRule = /^[가-힣A-Za-z0-9]{2,6}$/; //숫자와 문자 포함 형태의 6~20자리 이내의 암호 정규식
     if (!nickRule.test(target)) {
       return true;
     } else {
@@ -60,25 +60,25 @@ const Signup = ({ props, history }) => {
             <form>
               <div
                 className={`member_input__box ${
-                  userName.user_email ? "input_value--true" : ""
+                  userName.user_id ? "input_value--true" : ""
                 }`}
               >
                 <input
-                  id="member-input--email"
-                  name="user_email"
+                  id="member-input--id"
+                  name="user_id"
                   autoComplete="off"
                   autoFocus
                   onChange={onChangeHandle}
-                  value={userName.user_email}
+                  value={userName.user_id}
                 />
-                <label htmlFor="member-input--email">이메일 주소</label>
+                <label htmlFor="member-input--id">아이디</label>
 
                 <div className="rule_wrap">
-                  {userName.user_email ? (
+                  {userName.user_id ? (
                     <div>
-                      {emailRuleTest(userName.user_email) ? (
+                      {idRuleTest(userName.user_id) ? (
                         <span>
-                          "유효한 이메일 주소를 입력해 주시기 바랍니다."
+                          "영문 + 숫자 또는 영문만 6~12자를 입력해주세요"
                         </span>
                       ) : (
                         ""
@@ -89,7 +89,7 @@ const Signup = ({ props, history }) => {
                   )}
                 </div>
               </div>
-              {/* <div
+              <div
                 className={`member_input__box ${
                   userName.user_password ? "input_value--true" : ""
                 }`}
@@ -118,8 +118,8 @@ const Signup = ({ props, history }) => {
                     ""
                   )}
                 </div>
-              </div> */}
-              {/* <div
+              </div>
+              <div
                 className={`member_input__box ${
                   userName.user_nickname ? "input_value--true" : ""
                 }`}
@@ -145,7 +145,7 @@ const Signup = ({ props, history }) => {
                     ""
                   )}
                 </div>
-              </div> */}
+              </div>
 
               <div className="signup__button signup__button--group">
                 <button
@@ -155,23 +155,19 @@ const Signup = ({ props, history }) => {
                 >
                   취소
                 </button>
-                 <Link to={`/confirmed_email/${userName.user_email}`}>
                 <button
                   type="submit"
                   className="signup__button signup__button--point"
                   disabled={
-                    !emailRuleTest(userName.user_email)
-                    // !emailRuleTest(userName.user_email) &&
-                    // !passwordRuleTest(userName.user_password) &&
-                    // !nicknameRuleTest(userName.user_nickname)
+                    !idRuleTest(userName.user_id) &&
+                    !passwordRuleTest(userName.user_password) &&
+                    !nicknameRuleTest(userName.user_nickname)
                       ? false
                       : true
                   }
                 >
-                 
-                    이메일 인증
+                  가입하기
                 </button>
-                  </Link>
               </div>
               <div className="signup__link">
                 이미 회원 이신가요?{" "}
@@ -187,4 +183,4 @@ const Signup = ({ props, history }) => {
   );
 };
 
-export default Signup;
+export default SignupConfirmed;

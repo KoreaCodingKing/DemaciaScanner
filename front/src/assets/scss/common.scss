@@ -24,12 +24,12 @@ body {
 }
 
 .header {
-  background: #ddd;
+  background: #4d4d4d;
   display: flex;
   flex-direction: column;
 
   a {
-    color: #000;
+    color: #fff;
   }
 }
 
@@ -39,14 +39,14 @@ body {
 }
 
 .header__item {
-  flex: 0.1;
+  flex: 0.05;
   margin-top: 10px;
   padding: 0.5%;
 }
 
 .header__link {
   padding: 5px;
-  background: coral;
+  // background: #ccc;
   border-radius: 5px;
 }
 

@@ -63,23 +63,10 @@ const Login = ({ props, history }) => {
               </div>
 
               <div className="signup__button">
-                {/* <button
-                  type="button"
-                  className="signup__button signup__button--cancle"
-                  onClick={goBack}
-                >
-                  취소
-                </button> */}
+               
                 <button
                   type="submit"
                   className="signup__button signup__button--full signup__button--point"
-                  // disabled={
-                  //   !emailRuleTest(userName.user_email) &&
-                  //   !passwordRuleTest(userName.user_password) &&
-                  //   !nicknameRuleTest(userName.user_nickname)
-                  //     ? false
-                  //     : true
-                  // }
                 >
                   로그인
                 </button>

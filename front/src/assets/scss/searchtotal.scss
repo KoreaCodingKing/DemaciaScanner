@@ -1,0 +1,92 @@
+$blue: #228be6;
+
+// 우측 소환사 정보
+.search_total__wrap {
+  position: relative;
+  padding: 0 10px;
+}
+
+.search_total__header {
+  position: relative;
+}
+
+.search_total__header {
+  width: 100%;
+}
+
+//header 영역 나누기
+.search_total__content {
+  display: flex;
+}
+
+.point_color {
+  color: $blue;
+}
+
+.search_total__content.user_infomation {
+  flex-direction: column;
+  .info_thumb {
+    flex: 1;
+    overflow: hidden;
+    width: 100px;
+    height: 100px;
+    align-self: center;
+    border-radius: 5px;
+    background: $blue;
+
+    img {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+  .info_name {
+    flex: 1;
+    align-self: center;
+    margin-top: 20px;
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.search_total__content.content__info {
+  display: flex;
+  margin-top: 20px;
+
+  .content__rank {
+    display: flex;
+    flex: 0.6;
+    justify-content: space-evenly;
+  }
+
+  .content__rank .thumb {
+    margin: 10px auto;
+    width: 70px;
+
+    img {
+      width: 100%;
+    }
+  }
+  .none_data {
+    align-self: center;
+  }
+
+  .content__rank .title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  em.point_color {
+    font-size: 16px;
+    font-weight: bold;
+    font-style: inherit;
+  }
+
+  .rank_info,
+  .result_info {
+    text-align: center;
+    font-size: 16px;
+  }
+}
