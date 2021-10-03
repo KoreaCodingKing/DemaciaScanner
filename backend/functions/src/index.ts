@@ -47,7 +47,12 @@ app.get('/login', async (req: any, res: any, next: any) => {
 
 app.post('/signup', (req: any, res: any, next: any) => {
     const saltRounds = 10;
-    realmApp.emailPasswordAuth.registerUser(req.body.email, bcrypt.hashSync(req.body.pw, saltRounds)).catch((err: any) => console.log('err', err))
+    realmApp.emailPasswordAuth
+        .registerUser(req.body.email, bcrypt.hashSync(req.body.pw, saltRounds))
+        .then((result: any) => {
+            console.log(result)
+        })
+        .catch((err: any) => console.log('err', err))
 });
 
 app.post('/signup/confirmed', (req: any, res: any, next: any) => {
