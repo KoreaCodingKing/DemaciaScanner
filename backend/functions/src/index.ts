@@ -50,9 +50,12 @@ app.post('/signup', (req: any, res: any, next: any) => {
     realmApp.emailPasswordAuth
         .registerUser(req.body.email, bcrypt.hashSync(req.body.pw, saltRounds))
         .then((result: any) => {
-            console.log(result)
+            res.status(200).json({ success: true, email: req.body.email});
         })
-        .catch((err: any) => console.log('err', err))
+        .catch((err: any) => {
+            console.log('err', err);
+            res.status(404).json({ success: true, error: err });
+        })
 });
 
 app.post('/signup/confirmed', (req: any, res: any, next: any) => {
