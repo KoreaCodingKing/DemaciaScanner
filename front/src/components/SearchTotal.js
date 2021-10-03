@@ -169,7 +169,8 @@ function UserTotalView({ userTotal, championName, championValue }) {
 }
 
 const UserDetail = ({ userInfo, addUserList }) => {
-  console.log("유저 정보", userInfo);
+  // console.log("유저 정보", userInfo);
+  const winningPercentage = Math.floor(userInfo.tier.solo.wins / (userInfo.tier.solo.wins + userInfo.tier.solo.losses) * 100);
   return (
     <div className="search_total__wrap">
       <div className="search_total__header">
@@ -206,7 +207,17 @@ const UserDetail = ({ userInfo, addUserList }) => {
                     <em className="point_color">{userInfo.tier.solo.wins}승</em>{" "}
                     <span>{userInfo.tier.solo.losses}패</span>
                   </p>
-                  <div>승패 차트</div>
+                  <div className="result_chart">
+                    <div className="chart_bar">
+                      <div className="chart_bar__point" style={{width: `${winningPercentage}%`}}>
+                      </div>
+                    </div>
+                    <div className="chart_value">
+                      <span>
+                        { `${winningPercentage}%` }
+                      </span>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <span className="none_data">없음</span>
@@ -232,7 +243,17 @@ const UserDetail = ({ userInfo, addUserList }) => {
                     <em className="point_color">{userInfo.tier.flex.wins}승</em>{" "}
                     <span>{userInfo.tier.flex.losses}패</span>
                   </p>
-                  <div>승패 차트</div>
+                  <div className="result_chart">
+                    <div className="chart_bar">
+                      <div className="chart_bar__point" style={{width: `${winningPercentage}%`}}>
+                      </div>
+                    </div>
+                    <div className="chart_value">
+                      <span>
+                        { `${winningPercentage}%` }
+                      </span>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <span className="none_data">없음</span>
@@ -242,9 +263,57 @@ const UserDetail = ({ userInfo, addUserList }) => {
           <div className="content__current_total">최근 전적</div>
           <div className="content__current_total content__current_champion">
             <ul className="list">
-              <li className="list_item">champ1</li>
-              <li className="list_item">champ2</li>
-              <li className="list_item">champ3</li>
+              <li className="list_item">
+                <dl>
+                  <div className="list_item__1">
+                    <dt className="thumb">
+                    
+                    </dt>
+                  </div>
+                  <div className="list_item__2">
+                    <dd className="name">
+                      샤코
+                    </dd>
+                    <dd className="info">
+                      50% (10승 10패) 평점 5.0
+                    </dd>
+                  </div>
+                </dl>
+              </li>
+              <li className="list_item">
+                <dl>
+                  <div className="list_item__1">
+                    <dt className="thumb">
+                    
+                    </dt>
+                  </div>
+                  <div className="list_item__2">
+                    <dd className="name">
+                      샤코
+                    </dd>
+                    <dd className="info">
+                      50% (10승 10패) 평점 5.0
+                    </dd>
+                  </div>
+                </dl>
+              </li>
+              <li className="list_item">
+                <dl>
+                  <div className="list_item__1">
+                    <dt className="thumb">
+                    
+                    </dt>
+                  </div>
+                  <div className="list_item__2">
+                    <dd className="name">
+                      샤코
+                    </dd>
+                    <dd className="info">
+                      50% (10승 10패) 평점 5.0
+                    </dd>
+                  </div>
+                </dl>
+              </li>
             </ul>
           </div>
         </div>

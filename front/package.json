@@ -25,8 +25,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "backend": "nodemon ./server/server.js",
-    "dev": "concurrently \"npm run backend\" \"npm run start\"",
+    "api": "nodemon ./apiServer/server.js",
+    "dev": "concurrently \"npm run api\" \"npm run start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

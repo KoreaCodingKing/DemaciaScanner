@@ -12,6 +12,7 @@ $blue: #228be6;
 
 .search_total__header {
   width: 100%;
+  margin-bottom : 5%
 }
 
 //header 영역 나누기
@@ -54,10 +55,37 @@ $blue: #228be6;
   display: flex;
   margin-top: 20px;
 
+  // 차트 스타일
+  .result_chart {
+    width : 100%;
+    height : 13px;
+  }
+
+  .result_chart .chart_bar {
+    margin : 5px 0;
+    width : 100%;
+    height : 13px;
+    background: #4d4d4d;
+  }
+
+  .result_chart .chart_bar__point {
+    width : 50%;
+    height : 100%;
+    background : $blue;
+  }
+
+  .result_chart .chart_value {
+    text-align: center
+  }
+
   .content__rank {
     display: flex;
-    flex: 0.6;
+    flex: 0.5;
     justify-content: space-evenly;
+
+    p + p {
+      margin-top: 10px
+    }
   }
 
   .content__rank .thumb {
@@ -89,4 +117,54 @@ $blue: #228be6;
     text-align: center;
     font-size: 16px;
   }
+
+  .content__current_total {
+    flex : 0.2;
+    text-align: center
+  }
+
+
+  // 최근 20판 챔피언 승률 스타일
+  .content__current_total.content__current_champion {
+    flex: 0.3;
+
+    .list {
+      display : flex;
+      flex-direction: column;
+      justify-content : space-between;
+      height: 100%;
+    }
+
+    .list_item dl {
+      display : flex;
+      justify-content: space-between
+    }
+
+    .list .list_item__1 {
+      align-self : center;
+    }
+
+    .list .thumb {
+      align-self : center;
+      width: 25px;
+      height : 25px;
+      background : $blue;
+    }
+  }
+
+  .content__current_champion .thumb {
+    img {
+      width: 100%;
+    }
+  }
+
+  .content__current_champion .name {
+    font-weight : bold;
+    font-size: 14px;
+  }
+  .content__current_champion .info {
+    font-size: 12px;
+  }
 }
+
+
