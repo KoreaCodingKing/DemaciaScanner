@@ -76,7 +76,7 @@ app.post('/signup', async(req: any, res: any, next: any) => {
                 subject: '[데마시아스캐너] 인증 번호입니다.',
                 html: `<div>${result.pin}</div>`
             }).then(() => {
-                res.status(200).send({ success: true });
+                res.status(200).send({ success: true, pin: result.pin });
             }).catch((err: any) => {
                 console.log('err', err);
                 res.status(400).send({ success: false });
