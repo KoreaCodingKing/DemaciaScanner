@@ -69,13 +69,12 @@ app.post('/signup', async(req: any, res: any, next: any) => {
 
     const registerPin = new Pin(pinData);
     registerPin.save()
-        .then((result) => {
-            console.log('result', result);
+        .then((result: PinNumbers) => {
             transporter.sendMail({
                 from: 'rokydae@gmail.com',
-                to: req.body.email,
+                to: result.email,
                 subject: '[데마시아스캐너] 인증 번호입니다.',
-                html: `<div>${randomNumber}</div>`
+                html: `<div>${result.pin}</div>`
             }).then(() => {
                 res.status(200).send({ success: true });
             }).catch((err: any) => {
