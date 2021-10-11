@@ -3,6 +3,10 @@ import User from './models/userModel';
 import { UserData } from './interface/user';
 import Pin from './models/pinModel';
 import { PinNumbers } from './interface/pinNumbers';
+import * as moment from 'moment';
+import 'moment/locale/ko';
+
+
 
 const express = require("express");
 const cors = require("cors");
@@ -64,7 +68,8 @@ app.post('/signup', async(req: any, res: any, next: any) => {
 
     const pinData = {
         pin: randomNumber,
-        email: req.body.email
+        email: req.body.email,
+        createdAt: moment().format("YYYY MM DD hh:mm:ss")
     } as PinNumbers;
 
     const registerPin = new Pin(pinData);
@@ -96,7 +101,7 @@ app.post('/signup/confirmed', (req: any, res: any, next: any) => {
         pw: bcrypt.hashSync(req.body.pw, saltRounds),
         lol_id: req.body.lolId,
         // todo: momentjs로 현재시간 할당
-        created: req.body.created
+        created: moment().format("YYYY MM DD hh:mm:ss")
     } as UserData;
 
     const newUser = new User(signUpData);
