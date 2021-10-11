@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { UserListContext } from "../App";
 
@@ -20,9 +20,8 @@ const SignupConfirmed = ({ props, history }) => {
   }, [history]);
 
   function idRuleTest(target) {
-    const idRule =
-       /^([a-zA-Z])[-a-zA-Z0-9_.]{5,11}$/
-    if (!idRule.test(target) || target.includes('admin')) {
+    const idRule = /^([a-zA-Z])[-a-zA-Z0-9_.]{5,11}$/;
+    if (!idRule.test(target) || target.includes("admin")) {
       return true;
     } else {
       //   setEmailState(true);

@@ -165,14 +165,6 @@ function User({ user }) {
 }
 
 function UserList({ users }) {
-  // users 데이터 정보
-  // [0 : {accountId, id, name}, 1: {...}, 2: {...}]
-  // console.log("유저 정보",users)
-
-  // useEffect(() => {
-  //   console.log("랜더");
-  // });
-
   return (
     <div className="user__list_view">
       {/* <h1>트롤 리스트 - {users.length}명</h1> */}

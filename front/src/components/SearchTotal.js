@@ -2,25 +2,36 @@ import React, { useEffect, useState, useContext } from "react";
 import { UserListContext } from "../App";
 import "../assets/scss/searchtotal.scss";
 
-function UserTotalView({ userTotal, championName, championValue }) {
+function UserTotalView({
+  userTotal,
+  gameIndex,
+  sortState,
+  championName,
+  championValue,
+}) {
+  // console.log(gameIndex);
   const rendering = (user) => {
     const result3 = [];
-    // console.log(user);
 
     // let statsValue = "";
+    // console.log(user);
 
     const gameNumber = user.map((item, index1) => {
       const result2 = [];
       const result = [];
       const gameUsers = Object.entries(item);
+      // console.log(gameUsers);
       let beforeTime = "";
 
       let gameInfoMode = "";
       let gameInfoType = "";
 
-      const users = gameUsers[0][1].map((user, index2) => {
-        // console.log(index1, index2);
+      // queueId로 솔트 값 구해서 ul에 id 넣는다
+      const gameQueueId = gameUsers[1][1];
+      const gameCreation = gameUsers[0][1];
+      // console.log("게임 index 값->", gameIndex);
 
+      const users = gameUsers[12][1].map((user, index2) => {
         gameInfoMode = user.gameMode;
         gameInfoType = user.gameType;
 
@@ -54,107 +65,97 @@ function UserTotalView({ userTotal, championName, championValue }) {
             {index1} - {user.summonerName} - {user.kills} / {user.deaths} /{" "}
             {user.assists} - {user.win} / 포지션 : {user.position}
             <img
-              width="50px"
+              width="25px"
               src={`http://ddragon.leagueoflegends.com/cdn/11.19.1/img/champion/${user.championName}.png`}
               alt="champion img"
             />
-            <p>
+            {/* <p>
               <img
-                width="50px"
+                width="25px"
                 src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner1Id}.png`}
                 alt="champion img"
               />
             </p>
             <p>
               <img
-                width="50px"
+                width="25px"
                 src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner2Id}.png`}
                 alt="champion img"
               />
-            </p>
-            <ul style={{ display: "flex" }}>
+            </p> */}
+            {/* <ul style={{ display: "flex" }}>
               <p>
                 <img
-                  width="50px"
+                  width="25px"
                   src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item0}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
-                  width="50px"
+                  width="25px"
                   src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item1}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
-                  width="50px"
+                  width="25px"
                   src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item2}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
-                  width="50px"
+                  width="25px"
                   src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item3}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
-                  width="50px"
+                  width="25px"
                   src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item4}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
-                  width="50px"
+                  width="25px"
                   src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item5}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
-                  width="50px"
+                  width="25px"
                   src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item6}.png`}
                   alt="champion img"
                 />
               </p>
-            </ul>
+            </ul> */}
           </li>
         );
 
         if (index2 == 9) {
           result2.push(result);
-          // console.log(`${result2}`);
         } else {
-          // console.log(result);
         }
       });
 
-      // console.log(result);
-
       return (
         <ul
-          className="user_state__block"
-          style={{ padding: `1%`, marginTop: `2%` }}
+          // sortState = all;
+          id={`queue_id ${gameQueueId}`}
+          className={`user_state__block queue_${sortState}`}
+          style={
+            gameQueueId == sortState || sortState == "all"
+              ? { display: "block" }
+              : { display: "none" }
+          }
         >
-          {gameInfoMode !== "소환사의 협곡"
-            ? gameInfoMode
-            : `${gameInfoMode} - ${gameInfoType}`}
-          - {beforeTime}
+          {gameInfoType}- {beforeTime}
           {result2}
-          {/* <button
-            onClick={() =>
-              alert(
-                "상세 오픈 = 티어, 점수, kda등 자세하게 표기 sessionStorage.totalData에 넣어둠"
-              )
-            }
-          >
-            상세보기
-          </button> */}
         </ul>
       );
     });
@@ -168,12 +169,34 @@ function UserTotalView({ userTotal, championName, championValue }) {
   );
 }
 
-const UserDetail = ({ userInfo, addUserList, myTotalDataSolo, myTotalDataFlex, myTotalDataAll }) => {
-  console.log('받은 자랭 정보 =>',myTotalDataAll)
+const UserDetail = ({
+  userInfo,
+  addUserList,
+  sortResult,
+  myTotalDataSolo,
+  myTotalDataFlex,
+  myTotalDataAll,
+}) => {
+  // console.log("받은 자랭 정보 =>", myTotalDataSolo);
+  // 챔프 승률 표출
+  function champLine(totalData) {
+    const data = totalData;
+
+    data.map((item, index) => {
+      const targetData = item.championName; //챔프 이름 저장.
+    });
+  }
+  champLine(myTotalDataSolo);
 
   // 승률
-  const winningPercentage = Math.floor(userInfo.tier.solo.wins / (userInfo.tier.solo.wins + userInfo.tier.solo.losses) * 100);
-  
+  const winningPercentage = Math.floor(
+    (userInfo.tier.solo.wins /
+      (userInfo.tier.solo.wins + userInfo.tier.solo.losses)) *
+      100
+  );
+
+  // console.log("뇽", myTotalDataAll);
+
   return (
     <div className="search_total__wrap">
       <div className="search_total__header">
@@ -212,13 +235,13 @@ const UserDetail = ({ userInfo, addUserList, myTotalDataSolo, myTotalDataFlex, m
                   </p>
                   <div className="result_chart">
                     <div className="chart_bar">
-                      <div className="chart_bar__point" style={{width: `${winningPercentage}%`}}>
-                      </div>
+                      <div
+                        className="chart_bar__point"
+                        style={{ width: `${winningPercentage}%` }}
+                      ></div>
                     </div>
                     <div className="chart_value">
-                      <span>
-                        { `${winningPercentage}%` }
-                      </span>
+                      <span>{`${winningPercentage}%`}</span>
                     </div>
                   </div>
                 </div>
@@ -248,13 +271,13 @@ const UserDetail = ({ userInfo, addUserList, myTotalDataSolo, myTotalDataFlex, m
                   </p>
                   <div className="result_chart">
                     <div className="chart_bar">
-                      <div className="chart_bar__point" style={{width: `${winningPercentage}%`}}>
-                      </div>
+                      <div
+                        className="chart_bar__point"
+                        style={{ width: `${winningPercentage}%` }}
+                      ></div>
                     </div>
                     <div className="chart_value">
-                      <span>
-                        { `${winningPercentage}%` }
-                      </span>
+                      <span>{`${winningPercentage}%`}</span>
                     </div>
                   </div>
                 </div>
@@ -265,55 +288,74 @@ const UserDetail = ({ userInfo, addUserList, myTotalDataSolo, myTotalDataFlex, m
           </div>
           <div className="content__current_total">최근 전적</div>
           <div className="content__current_total content__current_champion">
+            <div className="content__sort">
+              <ul>
+                <li>
+                  <button
+                    className="sort__button all"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      sortResult("all");
+                    }}
+                  >
+                    전체
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="sort__button solo"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      sortResult("420");
+                    }}
+                  >
+                    솔로랭크
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="sort__button flex"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      sortResult("440");
+                    }}
+                  >
+                    자유랭크
+                  </button>
+                </li>
+              </ul>
+            </div>
             <ul className="list">
               <li className="list_item">
                 <dl>
                   <div className="list_item__1">
-                    <dt className="thumb">
-                    
-                    </dt>
+                    <dt className="thumb"></dt>
                   </div>
                   <div className="list_item__2">
-                    <dd className="name">
-                      샤코
-                    </dd>
-                    <dd className="info">
-                      50% (10승 10패) 평점 5.0
-                    </dd>
+                    <dd className="name">샤코</dd>
+                    <dd className="info">50% (10승 10패) 평점 5.0</dd>
                   </div>
                 </dl>
               </li>
               <li className="list_item">
                 <dl>
                   <div className="list_item__1">
-                    <dt className="thumb">
-                    
-                    </dt>
+                    <dt className="thumb"></dt>
                   </div>
                   <div className="list_item__2">
-                    <dd className="name">
-                      샤코
-                    </dd>
-                    <dd className="info">
-                      50% (10승 10패) 평점 5.0
-                    </dd>
+                    <dd className="name">샤코</dd>
+                    <dd className="info">50% (10승 10패) 평점 5.0</dd>
                   </div>
                 </dl>
               </li>
               <li className="list_item">
                 <dl>
                   <div className="list_item__1">
-                    <dt className="thumb">
-                    
-                    </dt>
+                    <dt className="thumb"></dt>
                   </div>
                   <div className="list_item__2">
-                    <dd className="name">
-                      샤코
-                    </dd>
-                    <dd className="info">
-                      50% (10승 10패) 평점 5.0
-                    </dd>
+                    <dd className="name">샤코</dd>
+                    <dd className="info">50% (10승 10패) 평점 5.0</dd>
                   </div>
                 </dl>
               </li>
@@ -325,18 +367,43 @@ const UserDetail = ({ userInfo, addUserList, myTotalDataSolo, myTotalDataFlex, m
       <button onClick={() => addUserList(userInfo, true, "userList")}>
         리스트 추가하기
       </button>
-      {/* <button onClick={() => console.log(userInfo)}>asd</button> */}
       <br />
     </div>
   );
 };
 
 const SearchTotal = () => {
-  const { totalData1, userInfo, addUserList, myTotalDataSolo, myTotalDataFlex, myTotalDataAll } = useContext(UserListContext);
+  const {
+    totalData1,
+    userInfo,
+    addUserList,
+    myTotalDataSolo,
+    myTotalDataFlex,
+    myTotalDataAll,
+  } = useContext(UserListContext);
+  const [sortState, setSortState] = useState(false);
+
+  function sortResult(target) {
+    const data = target; //queueId_000;
+    setSortState(data);
+    // return (data);
+  }
+
   return (
     <div className="info__wrap">
-      <UserDetail userInfo={userInfo} addUserList={addUserList} myTotalDataSolo={myTotalDataSolo} myTotalDataFlex={myTotalDataFlex} myTotalDataAll={myTotalDataAll} />
-      <UserTotalView userTotal={totalData1} />
+      <UserDetail
+        userInfo={userInfo}
+        addUserList={addUserList}
+        myTotalDataSolo={myTotalDataSolo}
+        myTotalDataFlex={myTotalDataFlex}
+        myTotalDataAll={myTotalDataAll}
+        sortResult={sortResult}
+      />
+      <UserTotalView
+        userTotal={totalData1}
+        sortState={sortState}
+        gameIndex={myTotalDataAll}
+      />
     </div>
   );
 };

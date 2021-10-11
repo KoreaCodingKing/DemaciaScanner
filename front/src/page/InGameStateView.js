@@ -29,7 +29,7 @@ const InGameStateView = (props) => {
       return count;
     }
   });
-  console.log(count);
+  // console.log(count);
 
   return (
     <>

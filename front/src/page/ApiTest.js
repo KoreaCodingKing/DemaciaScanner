@@ -48,23 +48,26 @@ function ApiTest(props) {
   } = useContext(UserListContext);
 
   useState(() => {
-    const aa = new URLSearchParams(currentURI.split('?')[1]).toString();
-    console.log('aa', aa)
+    const aa = new URLSearchParams(currentURI.split("?")[1]).toString();
+    console.log("aa", aa);
     if (!aa || aa.length === 0) {
       return;
     }
-    const token = aa.split('token=')
+    const token = aa.split("token=");
     const tokenValue = token[1].split("&");
 
-    const tokenId = tokenValue[1].split("tokenId=")
-    console.log(`token=${tokenValue[0]}-------------/ tokenId=${tokenId[1]}` )
+    const tokenId = tokenValue[1].split("tokenId=");
+    console.log(`token=${tokenValue[0]}-------------/ tokenId=${tokenId[1]}`);
 
     if (token && tokenId) {
-      appRealm.emailPasswordAuth.confirmUser(tokenValue[0], tokenId[1]).then((result) => {
-        console.log(result)
-      }).catch((err) => console.log('err', err))
+      appRealm.emailPasswordAuth
+        .confirmUser(tokenValue[0], tokenId[1])
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => console.log("err", err));
     }
-  }, [])
+  }, []);
 
   // 게임 종료 후 승패 결과, 게임 시간, 끝나고 난 뒤 시간 체크
   const getUserDataGameResult = async (user) => {};

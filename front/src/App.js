@@ -5,6 +5,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useMemo,
 } from "react";
 import axios from "axios";
 import { Link, Route } from "react-router-dom";
@@ -22,6 +23,7 @@ import Signup from "./page/Signup";
 import SignupConfirmed from "./page/SignupConfirmed";
 import SignupConfirmedEmail from "./page/SignupConfirmedEmail";
 import Login from "./page/Login";
+import { match } from "assert";
 
 export const UserListContext = createContext();
 
@@ -61,9 +63,9 @@ function App() {
   const [userInfo, setUserInfo] = useState();
   const [headerState, setHeaderState] = useState(false);
 
-  const [myTotalDataSolo, setMyTotalDataSolo] = useState('');
-  const [myTotalDataFlex, setMyTotalDataFlex] = useState('');
-  const [myTotalDataAll, setMyTotalDataAll] = useState('');
+  const [myTotalDataSolo, setMyTotalDataSolo] = useState("");
+  const [myTotalDataFlex, setMyTotalDataFlex] = useState("");
+  const [myTotalDataAll, setMyTotalDataAll] = useState("");
 
   useEffect(() => {
     const sessionStorageValue = sessionStorage.userList || null;
@@ -94,15 +96,16 @@ function App() {
     sessionStorage.clear();
   };
 
-  const onChangeHandle = (e) => {
-    const { value, name } = e.target;
-    // setUserName(e.target.value);
-    console.log(value, name);
-    setUserName({
-      ...userName,
-      [name]: value,
-    });
-  };
+  const onChangeHandle = useCallback(
+    (e) => {
+      const { value, name } = e.target;
+      setUserName({
+        ...userName,
+        [name]: value,
+      });
+    },
+    [userName]
+  );
 
   const onReset = () => {
     // setUserName("");
@@ -229,79 +232,169 @@ function App() {
     const data = userData;
     // 유저 이름
     const targetUserName = data.name;
-    // console.log("받은 데이터", data);
+    console.log("받은 데이터", targetUserName);
 
     setTotalLoding(true);
 
     const resultData = getUserTotalData(data)
       .then((result) => {
-        // console.log("결과", result.data);
         const matches = result.data;
+        // console.log("결과", matches[0].dataList[0]);
         let targetDataResultRankSolo = [];
         let targetDataResultRankFlex = [];
         let targetDataResultRankAll = [];
 
-        matches.map((item, index)=> {
-          const data = Object.entries(item);
+        // 정렬
+        matches.sort(function (a, b) {
+          return b.gameCreation - a.gameCreation;
+        });
 
-          data[0][1].map((user, index2) => {
+        // console.log(matches);
+        matches.map((gameNumber, index) => {
+          let count = 0;
 
-            if(user.summonerName == targetUserName) {
-              const targetData = [
-                index = {
-                  championName : user.championName,
-                  championId: user.championId,
-                  position : user.position,
-                  win : user.win,
-                  queueId : user.queueId,
-                  kills : user.kills,
-                  deaths : user.deaths,
-                  assists : user.assists
-                }
-              ]
-              targetDataResultRankAll.push(index)
-            }else if(user.summonerName == targetUserName && user.queueId == '420') {
-              // 솔랭
-              const targetData = [
-                index = {
-                  championName : user.championName,
-                  championId: user.championId,
-                  position : user.position,
-                  win : user.win,
-                  queueId : user.queueId,
-                  kills : user.kills,
-                  deaths : user.deaths,
-                  assists : user.assists
-                  
-                }
-              ]
-              targetDataResultRankSolo.push(index)
-            }else if(user.summonerName == targetUserName && user.queueId == '440') {
-              // 자랭
-              const targetData = [
-                index = {
-                  championName : user.championName,
-                  championId: user.championId,
-                  position : user.position,
-                  win : user.win,
-                  queueId : user.queueId,
-                  kills : user.kills,
-                  deaths : user.deaths,
-                  assists : user.assists
-                }
-              ]
-              targetDataResultRankFlex.push(index)
-            } 
+          Object.entries(gameNumber.participantsList).map((item, index) => {
+            const root = item[1];
+            const myName = root.summonerName;
+            const myPosition = root.position;
+            const myChampName = root.championName;
+            const myChampId = root.championId;
+            const gameResult = root.win;
+            const myDeaths = root.deaths;
+            const mykills = root.kills;
+            const myAssists = root.assists;
 
-            
-          
+            if (myName == targetUserName) {
+              targetDataResultRankAll = targetDataResultRankAll.concat({
+                info: {
+                  champName: myChampName,
+                  champId: myChampId,
+                  position: myPosition,
+                  k: mykills,
+                  d: myDeaths,
+                  a: myAssists,
+                  win: gameResult,
+                },
+              });
 
-          })
+              targetDataResultRankAll.sort(function (a, b) {
+                return b.info.champId - a.info.champId;
+              });
+            }
+          });
+        });
+        // Object.entries(matches).participantsList.map((item, index) => {
+        // console.log("뇽뇽", item.summonerName);
+        // console.log(item.summonerName);
+        // if (item.summonerName == targetUserName) {
+        //   const targetData = [
+        //     (index = {
+        //       championName: item.championName,
+        //       championId: item.championId,
+        //       position: item.position,
+        //       win: item.win,
+        //       queueId: item.queueId,
+        //       kills: item.kills,
+        //       deaths: item.deaths,
+        //       assists: item.assists,
+        //     }),
+        //   ];
+        //   targetDataResultRankAll.push(index);
+        // } else if (item.queueId == "420") {
+        //   const targetData = [
+        //     (index = {
+        //       championName: item.championName,
+        //       championId: item.championId,
+        //       position: item.position,
+        //       win: item.win,
+        //       queueId: item.queueId,
+        //       kills: item.kills,
+        //       deaths: item.deaths,
+        //       assists: item.assists,
+        //     }),
+        //   ];
+        //   targetDataResultRankSolo.push(index);
+        // } else if (item.queueId == "440") {
+        //   const targetData = [
+        //     (index = {
+        //       championName: item.championName,
+        //       championId: item.championId,
+        //       position: item.position,
+        //       win: item.win,
+        //       queueId: item.queueId,
+        //       kills: item.kills,
+        //       deaths: item.deaths,
+        //       assists: item.assists,
+        //     }),
+        //   ];
+        //   targetDataResultRankFlex.push(index);
+        // }
+        //   const data = Object.entries(item);
+        //   // console.log(data);
+        //   data[0][1].map((user, index2) => {
+        //     if (user.summonerName == targetUserName) {
+        //       const gameIndex = user.gameCreation;
+        //       const targetData = [
+        //         (index = {
+        //           gameIndex: gameIndex,
+        //           championName: user.championName,
+        //           championId: user.championId,
+        //           position: user.position,
+        //           win: user.win,
+        //           queueId: user.queueId,
+        //           kills: user.kills,
+        //           deaths: user.deaths,
+        //           assists: user.assists,
+        //         }),
+        //       ];
+        //       targetDataResultRankAll.push(index);
+        //     } else if (
+        //       user.summonerName == targetUserName &&
+        //       user.queueId == "420"
+        //     ) {
+        //       // 솔랭
+        //       const targetData = [
+        //         (index = {
+        //           championName: user.championName,
+        //           championId: user.championId,
+        //           position: user.position,
+        //           win: user.win,
+        //           queueId: user.queueId,
+        //           kills: user.kills,
+        //           deaths: user.deaths,
+        //           assists: user.assists,
+        //         }),
+        //       ];
+        //       targetDataResultRankSolo.push(index);
+        //     } else if (
+        //       user.summonerName == targetUserName &&
+        //       user.queueId == "440"
+        //     ) {
+        //       // 자랭
+        //       const targetData = [
+        //         (index = {
+        //           championName: user.championName,
+        //           championId: user.championId,
+        //           position: user.position,
+        //           win: user.win,
+        //           queueId: user.queueId,
+        //           kills: user.kills,
+        //           deaths: user.deaths,
+        //           assists: user.assists,
+        //         }),
+        //       ];
+        //       targetDataResultRankFlex.push(index);
+        //     }
+        //   });
+        // });
 
-        })
+        console.log("뇽2", targetDataResultRankAll);
+        // const result = targetDataResultRankAll.sort(function(a,b) {
+        //   return a.gameIndex < b.gameIndex ? -1 : 1
+        // })
         setMyTotalDataAll(targetDataResultRankAll);
-        setMyTotalDataSolo(targetDataResultRankAll);
-        setMyTotalDataFlex(targetDataResultRankFlex)
+        setMyTotalDataSolo(targetDataResultRankSolo);
+        setMyTotalDataFlex(targetDataResultRankFlex);
         // console.log('모든 최근 전적 -',targetDataResultRankAll, );
 
         setTotalData1(matches);
@@ -311,36 +404,11 @@ function App() {
 
         return matches;
       })
-      .catch(() => {
-        console.log("데이터를 받지 못했습니다.");
+      .catch((e) => {
+        console.log("데이터를 받지 못했습니다.", e);
       });
     return resultData;
   };
-
-  // // 티어를 알아낼 코드
-  // const onTotalData = (userData) => {
-  //   const data = userData;
-  //   console.log(data);
-
-  //   const resultData = getUserTotalData(data)
-  //     .then((result) => {
-  //       const matches = result.data;
-  //       console.log(matches[0].dataList);
-  // // 한개의 데이터를 사용해서 데이터를 가져옴, map한번더 필요함
-  //       matches[0].dataList.map((item, index) => {
-  //         const asd = searchUser(item.summonerName);
-
-  //       });
-
-  //       // searchUser();
-
-  //       return matches;
-  //     })
-  //     .catch(() => {
-  //       console.log("데이터를 받지 못했습니다.");
-  //     });
-  //   return resultData;
-  // };
 
   // remove User
   const onRemove = (targetId) => {
@@ -454,6 +522,8 @@ function App() {
       //메인 리스트 등록
       e.preventDefault();
       e = userName.search_name;
+      console.log("insertUser userName.search_name값", userName.search_name);
+
       testAlign = true;
     }
 
@@ -481,16 +551,13 @@ function App() {
 
     searchUser(trimmedUserName).then((getUserData) => {
       const data = getUserData;
-      console.log("넘어온 데이터 ->", data);
+      // console.log("넘어온 데이터 ->", data);
 
       if (testAlign) {
         onTotalData(data);
       } else {
         addUserList(data, true, "userList");
       }
-
-      // 리스트 추가
-      // addUserList(data, true, "userList");
     });
 
     onReset();
@@ -512,11 +579,7 @@ function App() {
                 Home
               </Link>
             </li>
-            {/* <li className="header__item">
-          <Link className="header__link" to="/searchtotal">
-            전적검색하기
-          </Link>
-        </li> */}
+
             <li className="header__item">
               <Link className="header__link" to="/apitest">
                 apiTest
@@ -596,8 +659,6 @@ function App() {
             startScanner,
             stopScanner,
             scanning,
-            // modalView,
-            // modal,
             onTotalData,
             userTotal,
             championName,
@@ -607,7 +668,7 @@ function App() {
             userInfo,
             myTotalDataSolo,
             myTotalDataFlex,
-            myTotalDataAll
+            myTotalDataAll,
           }}
         >
           <ApiTest />
@@ -654,8 +715,6 @@ function App() {
       >
         <Route path="/signup" component={Signup} />
       </UserListContext.Provider>
-
-      
 
       <UserListContext.Provider
         value={{
