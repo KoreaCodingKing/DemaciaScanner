@@ -1,4 +1,4 @@
 export interface PinNumbers {
-    pin: number,
+    pin: string,
     email: string
 }
