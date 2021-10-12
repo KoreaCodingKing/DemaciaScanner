@@ -232,172 +232,72 @@ function App() {
     const data = userData;
     // 유저 이름
     const targetUserName = data.name;
-    console.log("받은 데이터", targetUserName);
+    // console.log("받은 데이터", targetUserName);
 
     setTotalLoding(true);
 
     const resultData = getUserTotalData(data)
       .then((result) => {
         const matches = result.data;
-        // console.log("결과", matches[0].dataList[0]);
+        console.log("결과", matches);
         let targetDataResultRankSolo = [];
         let targetDataResultRankFlex = [];
         let targetDataResultRankAll = [];
 
-        // 정렬
-        matches.sort(function (a, b) {
+        // 모든 게임 시간대별 정렬
+        const sortedData = matches.sort(function (a, b) {
           return b.gameCreation - a.gameCreation;
         });
+        setTotalData1(sortedData);
 
         // console.log(matches);
-        matches.map((gameNumber, index) => {
+        const sortedWinLoseData = matches.map((gameNumber, index1) => {
           let count = 0;
 
-          Object.entries(gameNumber.participantsList).map((item, index) => {
-            const root = item[1];
-            const myName = root.summonerName;
-            const myPosition = root.position;
-            const myChampName = root.championName;
-            const myChampId = root.championId;
-            const gameResult = root.win;
-            const myDeaths = root.deaths;
-            const mykills = root.kills;
-            const myAssists = root.assists;
+          const data1 = Object.entries(gameNumber.participantsList).map(
+            (item, index2) => {
+              // console.log(gameNumber);
 
-            if (myName == targetUserName) {
-              targetDataResultRankAll = targetDataResultRankAll.concat({
-                info: {
-                  champName: myChampName,
-                  champId: myChampId,
-                  position: myPosition,
-                  k: mykills,
-                  d: myDeaths,
-                  a: myAssists,
-                  win: gameResult,
-                },
-              });
+              const root = item[1];
+              const myName = root.summonerName;
+              const myPosition = root.position;
+              const myChampName = root.championName;
+              const myChampId = root.championId;
+              const gameResult = root.win;
+              const myDeaths = root.deaths;
+              const mykills = root.kills;
+              const myAssists = root.assists;
 
-              targetDataResultRankAll.sort(function (a, b) {
-                return b.info.champId - a.info.champId;
-              });
+              // 나의 데이터 도출
+              if (myName == targetUserName) {
+                console.log(`찯음 ${index1}게임의 ${index2}번째임`);
+                if (matches.clearInterval == index1) {
+                  console.log("끝");
+                }
+                // if (index == matches.length - 1) {
+                //   console.log("end");
+                // }
+
+                // 같은 champId값 순서로 정렬.
+                // targetDataResultRankAll.sort(function (a, b) {
+                //   return b.info.champId - a.info.champId;
+                // });
+              }
             }
-          });
-        });
-        // Object.entries(matches).participantsList.map((item, index) => {
-        // console.log("뇽뇽", item.summonerName);
-        // console.log(item.summonerName);
-        // if (item.summonerName == targetUserName) {
-        //   const targetData = [
-        //     (index = {
-        //       championName: item.championName,
-        //       championId: item.championId,
-        //       position: item.position,
-        //       win: item.win,
-        //       queueId: item.queueId,
-        //       kills: item.kills,
-        //       deaths: item.deaths,
-        //       assists: item.assists,
-        //     }),
-        //   ];
-        //   targetDataResultRankAll.push(index);
-        // } else if (item.queueId == "420") {
-        //   const targetData = [
-        //     (index = {
-        //       championName: item.championName,
-        //       championId: item.championId,
-        //       position: item.position,
-        //       win: item.win,
-        //       queueId: item.queueId,
-        //       kills: item.kills,
-        //       deaths: item.deaths,
-        //       assists: item.assists,
-        //     }),
-        //   ];
-        //   targetDataResultRankSolo.push(index);
-        // } else if (item.queueId == "440") {
-        //   const targetData = [
-        //     (index = {
-        //       championName: item.championName,
-        //       championId: item.championId,
-        //       position: item.position,
-        //       win: item.win,
-        //       queueId: item.queueId,
-        //       kills: item.kills,
-        //       deaths: item.deaths,
-        //       assists: item.assists,
-        //     }),
-        //   ];
-        //   targetDataResultRankFlex.push(index);
-        // }
-        //   const data = Object.entries(item);
-        //   // console.log(data);
-        //   data[0][1].map((user, index2) => {
-        //     if (user.summonerName == targetUserName) {
-        //       const gameIndex = user.gameCreation;
-        //       const targetData = [
-        //         (index = {
-        //           gameIndex: gameIndex,
-        //           championName: user.championName,
-        //           championId: user.championId,
-        //           position: user.position,
-        //           win: user.win,
-        //           queueId: user.queueId,
-        //           kills: user.kills,
-        //           deaths: user.deaths,
-        //           assists: user.assists,
-        //         }),
-        //       ];
-        //       targetDataResultRankAll.push(index);
-        //     } else if (
-        //       user.summonerName == targetUserName &&
-        //       user.queueId == "420"
-        //     ) {
-        //       // 솔랭
-        //       const targetData = [
-        //         (index = {
-        //           championName: user.championName,
-        //           championId: user.championId,
-        //           position: user.position,
-        //           win: user.win,
-        //           queueId: user.queueId,
-        //           kills: user.kills,
-        //           deaths: user.deaths,
-        //           assists: user.assists,
-        //         }),
-        //       ];
-        //       targetDataResultRankSolo.push(index);
-        //     } else if (
-        //       user.summonerName == targetUserName &&
-        //       user.queueId == "440"
-        //     ) {
-        //       // 자랭
-        //       const targetData = [
-        //         (index = {
-        //           championName: user.championName,
-        //           championId: user.championId,
-        //           position: user.position,
-        //           win: user.win,
-        //           queueId: user.queueId,
-        //           kills: user.kills,
-        //           deaths: user.deaths,
-        //           assists: user.assists,
-        //         }),
-        //       ];
-        //       targetDataResultRankFlex.push(index);
-        //     }
-        //   });
-        // });
+          ); //data1완료
 
-        console.log("뇽2", targetDataResultRankAll);
+          // return data1;
+        }); //gameNumber map;
+
+        console.log("뇽2", sortedWinLoseData);
         // const result = targetDataResultRankAll.sort(function(a,b) {
         //   return a.gameIndex < b.gameIndex ? -1 : 1
         // })
-        setMyTotalDataAll(targetDataResultRankAll);
+        setMyTotalDataAll(sortedWinLoseData);
         setMyTotalDataSolo(targetDataResultRankSolo);
         setMyTotalDataFlex(targetDataResultRankFlex);
         // console.log('모든 최근 전적 -',targetDataResultRankAll, );
 
-        setTotalData1(matches);
         setUserInfo(data);
         setTotalLoding(false);
         setSearchLoading(false);
