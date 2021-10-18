@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { UserListContext } from "../App";
@@ -8,6 +8,29 @@ import "../assets/scss/signup.scss";
 const Signup = ({ props, history }) => {
   let { onChangeHandle, userName } = useContext(UserListContext);
   const [loading, setLoading] = useState(false);
+  const [checkPinNumber, setCheckPinNumber] = useState(false);
+  const [nextStep, setNextStep] = useState(false);
+  // const pinlength = 6;
+  const testPinNumber = 12345;
+
+  // 핀번호 상태값
+  const [pinNumber, setPinNumber] = useState({
+    pin1: "",
+    pin2: "",
+    pin3: "",
+    pin4: "",
+    pin5: "",
+  });
+
+  const { pin1, pin2, pin3, pin4, pin5 } = pinNumber;
+
+  const onChange = (e) => {
+    const { value, name } = e.target;
+    setPinNumber({
+      ...pinNumber,
+      [name]: value,
+    });
+  };
 
   const goBack = () => {
     history.goBack();
@@ -25,6 +48,15 @@ const Signup = ({ props, history }) => {
     const emailRule =
       /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i;
     if (!emailRule.test(target)) {
+      return true;
+    } else {
+      //   setEmailState(true);
+      return false;
+    }
+  }
+  function idRuleTest(target) {
+    const idRule = /^([a-zA-Z])[-a-zA-Z0-9_.]{5,11}$/;
+    if (!idRule.test(target) || target.includes("admin")) {
       return true;
     } else {
       //   setEmailState(true);
@@ -51,6 +83,74 @@ const Signup = ({ props, history }) => {
     }
   }
 
+  const listRef = useRef();
+
+  const inputRef1 = useRef();
+  const inputRef2 = useRef();
+  const inputRef3 = useRef();
+  const inputRef4 = useRef();
+  const inputRef5 = useRef();
+
+  function focusMove(e, number) {
+    const targetInput = e.target;
+    function doneCheck() {
+      if (
+        pinNumber.pin1 &&
+        pinNumber.pin2 &&
+        pinNumber.pin3 &&
+        pinNumber.pin4 &&
+        pinNumber.pin5
+      ) {
+        console.log("ok");
+        let dataList12 = []; //문자열 변환 리스트
+        const data = Object.entries(pinNumber).map((item, index) => {
+          // let dataList = [];
+          dataList12 += item[1];
+
+          if (index == 4) {
+            return console.log(dataList12);
+          }
+        });
+        console.log("result = ", dataList12.toString());
+
+        if (dataList12.toString() == testPinNumber) {
+          setNextStep(true);
+        } else {
+          console.log("틀렸음");
+        }
+      } else {
+        console.log("no");
+      }
+    }
+    // if(testPinNumber == )
+    switch (number) {
+      case 1:
+        doneCheck();
+        inputRef2.current.focus();
+        break;
+      case 2:
+        doneCheck();
+        inputRef3.current.focus();
+        break;
+      case 3:
+        doneCheck();
+        inputRef4.current.focus();
+        break;
+      case 4:
+        doneCheck();
+        inputRef5.current.focus();
+        break;
+      case 5:
+        doneCheck();
+    }
+  }
+
+  // console.log(inputRef1.current.attributes);
+
+  // inputRef1.
+
+  for (let i = 0; i < 6; i++) {}
+
   return (
     <div className="signup">
       <div className="signup__wrapper">
@@ -61,7 +161,7 @@ const Signup = ({ props, history }) => {
           <div className="signup__content">
             <form>
               <div
-                className={`member_input__box ${
+                className={`member_input__box member_input__box--info ${
                   userName.user_email ? "input_value--true" : ""
                 }`}
               >
@@ -71,6 +171,7 @@ const Signup = ({ props, history }) => {
                   autoComplete="off"
                   autoFocus
                   onChange={onChangeHandle}
+                  disabled={checkPinNumber}
                   value={userName.user_email}
                 />
                 <label htmlFor="member-input--email">이메일 주소</label>
@@ -91,6 +192,192 @@ const Signup = ({ props, history }) => {
                   )}
                 </div>
               </div>
+              {checkPinNumber ? (
+                <div className="member_input__box member_input__box--pin">
+                  <ul className="pin_group" ref={listRef}>
+                    <li className="pin_item">
+                      <input
+                        onKeyUp={(e) => focusMove(e, 1)}
+                        ref={inputRef1}
+                        name="pin1"
+                        autoComplete="off"
+                        pattern={"10-9*"}
+                        inputMode={"numeric"}
+                        disabled={nextStep}
+                        onChange={onChange}
+                        maxLength="1"
+                        value={pinNumber.pin1}
+                      />
+                    </li>
+                    <li className="pin_item">
+                      <input
+                        onKeyUp={(e) => focusMove(e, 2)}
+                        ref={inputRef2}
+                        name="pin2"
+                        autoComplete="off"
+                        pattern={"10-9*"}
+                        inputMode={"numeric"}
+                        disabled={nextStep}
+                        onChange={onChange}
+                        maxLength="1"
+                        value={pinNumber.pin2}
+                      />
+                    </li>
+                    <li className="pin_item">
+                      <input
+                        onKeyUp={(e) => focusMove(e, 3)}
+                        ref={inputRef3}
+                        name="pin3"
+                        autoComplete="off"
+                        pattern={"10-9*"}
+                        inputMode={"numeric"}
+                        disabled={nextStep}
+                        onChange={onChange}
+                        maxLength="1"
+                        value={pinNumber.pin3}
+                      />
+                    </li>
+                    <li className="pin_item">
+                      <input
+                        onKeyUp={(e) => focusMove(e, 4)}
+                        ref={inputRef4}
+                        name="pin4"
+                        autoComplete="off"
+                        pattern={"10-9*"}
+                        inputMode={"numeric"}
+                        disabled={nextStep}
+                        onChange={onChange}
+                        maxLength="1"
+                        value={pinNumber.pin4}
+                      />
+                    </li>
+                    <li className="pin_item">
+                      <input
+                        onKeyUp={(e) => focusMove(e, 5)}
+                        ref={inputRef5}
+                        name="pin5"
+                        autoComplete="off"
+                        pattern={"10-9*"}
+                        inputMode={"numeric"}
+                        disabled={nextStep}
+                        onChange={onChange}
+                        maxLength="1"
+                        value={pinNumber.pin5}
+                      />
+                    </li>
+                  </ul>
+                  {/* 시간 디스카운트 노출되야함 */}
+                  {/* <span>{pinNumber.pin1}</span>
+                  <span>{pinNumber.pin2}</span>
+                  <span>{pinNumber.pin3}</span>
+                  <span>{pinNumber.pin4}</span>
+                  <span>{pinNumber.pin5}</span>
+                  <span>{pinNumber.pin6}</span> */}
+                </div>
+              ) : (
+                ""
+              )}
+              {nextStep ? (
+                <div>
+                  <div
+                    className={`add_info__section ${nextStep ? "active" : ""}`}
+                  >
+                    <div
+                      className={`member_input__box member_input__box--info ${
+                        userName.user_id ? "input_value--true" : ""
+                      }`}
+                    >
+                      <input
+                        id="member-input--id"
+                        name="user_id"
+                        autoComplete="off"
+                        autoFocus
+                        onChange={onChangeHandle}
+                        value={userName.user_id}
+                      />
+                      <label htmlFor="member-input--id">아이디</label>
+
+                      <div className="rule_wrap">
+                        {userName.user_id ? (
+                          <div>
+                            {idRuleTest(userName.user_id) ? (
+                              <span>
+                                "영문 + 숫자 또는 영문만 6~12자를 입력해주세요"
+                              </span>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      className={`member_input__box member_input__box--info ${
+                        userName.user_password ? "input_value--true" : ""
+                      }`}
+                    >
+                      <input
+                        id="member-input--password"
+                        name="user_password"
+                        autoComplete="new-password"
+                        onChange={onChangeHandle}
+                        value={userName.user_password}
+                        type="password"
+                      />
+                      <label htmlFor="member-input--password">비밀번호</label>
+                      <div className="rule_wrap">
+                        {userName.user_password ? (
+                          <div>
+                            {passwordRuleTest(userName.user_password) ? (
+                              <span>
+                                "숫자와 문자 포함 형태의 6~12자리 이내의 암호
+                                정규식"
+                              </span>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      className={`member_input__box member_input__box--info ${
+                        userName.user_nickname ? "input_value--true" : ""
+                      }`}
+                    >
+                      <input
+                        id="member-input--nickname"
+                        name="user_nickname"
+                        autoComplete="off"
+                        onChange={onChangeHandle}
+                        value={userName.user_nickname}
+                      />
+                      <label htmlFor="member-input--nickname">닉네임</label>
+                      <div className="rule_wrap">
+                        {userName.user_nickname ? (
+                          <div>
+                            {nicknameRuleTest(userName.user_nickname) ? (
+                              <span>
+                                "2자리 이상, 20자 미만으로 작성하세요."
+                              </span>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
               {/* <div
                 className={`member_input__box ${
                   userName.user_password ? "input_value--true" : ""
@@ -170,6 +457,7 @@ const Signup = ({ props, history }) => {
                       })
                       .then((res) => {
                         setLoading(false);
+                        // setCheckPinNumber(true);
                         // 핀값 받기
                         console.log(res.data.pin);
                         // if (!res.data.success) {
@@ -177,6 +465,7 @@ const Signup = ({ props, history }) => {
                         // }
                       })
                       .catch((e) => {
+                        setCheckPinNumber(true);
                         console.log(e);
                       });
                   }}
@@ -187,13 +476,13 @@ const Signup = ({ props, history }) => {
                 </button>
                 {/* </Link> */}
               </div>
-              <div className="signup__link">
-                이미 회원 이신가요?{" "}
-                <Link to="/login" className="link__login">
-                  로그인
-                </Link>
-              </div>
             </form>
+          </div>
+          <div className="signup__link">
+            이미 회원 이신가요?{" "}
+            <Link to="/login" className="link__login">
+              로그인
+            </Link>
           </div>
         </div>
       </div>

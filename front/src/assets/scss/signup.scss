@@ -54,19 +54,23 @@ html {
   color: #268aee;
 }
 
-.member_input__box input {
+.member_input__box.member_input__box--info input {
   margin-top: 45px;
   width: 100%;
   height: 50px;
   border: none;
   font-size: 1.25rem;
   border-bottom: 1px solid #ccc;
+  // transition: border .5s ease-in-out;
 }
-.member_input__box input:focus + label {
+.member_input__box.member_input__box--info input:disabled {
+  border: 2px solid green;
+}
+.member_input__box.member_input__box--info input:focus + label {
   transform: scale(0.75) translateY(-50px);
 }
 
-.member_input__box label {
+.member_input__box.member_input__box--info label {
   position: absolute;
   bottom: 40px;
   left: 0;
@@ -129,4 +133,44 @@ html {
 
 .signup__link .link__login {
   color: #268aee;
+}
+
+// pin style
+.member_input__box.member_input__box--pin {
+  margin: 0 auto;
+  width: 80%;
+  height: 50px;
+}
+.pin_group {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.pin_item {
+  width: 15%;
+  height: 100%;
+
+  input {
+    width: 100%;
+    height: 100%;
+    border-color: #ccc;
+    border-radius: 5px;
+    text-align: center;
+
+    &:disabled {
+      border: 2px solid green;
+    }
+  }
+}
+
+// next Step div style
+.add_info__section {
+  opacity: 0;
+  transition: 2s 2s linear;
+
+  &.active {
+    opacity: 1;
+  }
 }
