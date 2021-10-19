@@ -10,6 +10,7 @@ const Signup = ({ props, history }) => {
   const [loading, setLoading] = useState(false);
   const [checkPinNumber, setCheckPinNumber] = useState(false);
   const [nextStep, setNextStep] = useState(false);
+  const [countDown, setCountDown] = useState({ minutes: "", seconds: "" });
   // const pinlength = 6;
   const testPinNumber = 12345;
 
@@ -83,6 +84,38 @@ const Signup = ({ props, history }) => {
     }
   }
 
+  function startTimer(duration, display) {
+    let timer = duration,
+      minutes,
+      seconds;
+    let interval = setInterval(function () {
+      minutes = parseInt(timer / 60, 10);
+      seconds = parseInt(timer % 60, 10);
+
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      let view = minutes + ":" + seconds;
+      setCountDown({
+        minutes: minutes,
+        seconds: seconds,
+      });
+      console.log(view);
+
+      if (--timer < 0) {
+        return (timer = duration);
+      }
+      if (timer === 0) {
+        clearInterval(interval);
+        return "세션 만료!";
+      }
+      if (timer === "done") {
+        clearInterval(interval);
+        return "인증완료";
+      }
+    }, 1000);
+  }
+
   const listRef = useRef();
 
   const inputRef1 = useRef();
@@ -115,6 +148,7 @@ const Signup = ({ props, history }) => {
 
         if (dataList12.toString() == testPinNumber) {
           setNextStep(true);
+          startTimer("done");
         } else {
           console.log("틀렸음");
         }
@@ -158,6 +192,7 @@ const Signup = ({ props, history }) => {
           <div className="signup__header">
             <span>Demacia Logo</span>
           </div>
+          이메일 인증 : {nextStep ? "완료." : "대기중!"}
           <div className="signup__content">
             <form>
               <div
@@ -267,18 +302,16 @@ const Signup = ({ props, history }) => {
                     </li>
                   </ul>
                   {/* 시간 디스카운트 노출되야함 */}
-                  {/* <span>{pinNumber.pin1}</span>
-                  <span>{pinNumber.pin2}</span>
-                  <span>{pinNumber.pin3}</span>
-                  <span>{pinNumber.pin4}</span>
-                  <span>{pinNumber.pin5}</span>
-                  <span>{pinNumber.pin6}</span> */}
+                  {nextStep
+                    ? ""
+                    : `시간 ${countDown.minutes}: ${countDown.seconds}`}
                 </div>
               ) : (
                 ""
               )}
               {nextStep ? (
                 <div>
+                  <h2 style={{ margin: "50px 0 0" }}>추가 정보입력</h2>
                   <div
                     className={`add_info__section ${nextStep ? "active" : ""}`}
                   >
@@ -378,63 +411,6 @@ const Signup = ({ props, history }) => {
               ) : (
                 ""
               )}
-              {/* <div
-                className={`member_input__box ${
-                  userName.user_password ? "input_value--true" : ""
-                }`}
-              >
-                <input
-                  id="member-input--password"
-                  name="user_password"
-                  autoComplete="new-password"
-                  onChange={onChangeHandle}
-                  value={userName.user_password}
-                  type="password"
-                />
-                <label htmlFor="member-input--password">비밀번호</label>
-                <div className="rule_wrap">
-                  {userName.user_password ? (
-                    <div>
-                      {passwordRuleTest(userName.user_password) ? (
-                        <span>
-                          "숫자와 문자 포함 형태의 6~12자리 이내의 암호 정규식"
-                        </span>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </div> */}
-              {/* <div
-                className={`member_input__box ${
-                  userName.user_nickname ? "input_value--true" : ""
-                }`}
-              >
-                <input
-                  id="member-input--nickname"
-                  name="user_nickname"
-                  autoComplete="off"
-                  onChange={onChangeHandle}
-                  value={userName.user_nickname}
-                />
-                <label htmlFor="member-input--nickname">닉네임</label>
-                <div className="rule_wrap">
-                  {userName.user_nickname ? (
-                    <div>
-                      {nicknameRuleTest(userName.user_nickname) ? (
-                        <span>"2자리 이상, 20자 미만으로 작성하세요."</span>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </div> */}
 
               <div className="signup__button signup__button--group">
                 <button
@@ -445,35 +421,83 @@ const Signup = ({ props, history }) => {
                   취소
                 </button>
                 {/* <Link to={`/confirmed_email/${userName.user_email}`}> */}
-                <button
-                  type="submit"
-                  className="signup__button signup__button--point"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setLoading(true);
-                    axios
-                      .post("http://localhost:8080/signup", {
-                        email: userName.user_email,
-                      })
-                      .then((res) => {
-                        setLoading(false);
-                        // setCheckPinNumber(true);
-                        // 핀값 받기
-                        console.log(res.data.pin);
-                        // if (!res.data.success) {
-                        //   return alert("오류");
-                        // }
-                      })
-                      .catch((e) => {
+                {!nextStep ? (
+                  <button
+                    type="submit"
+                    className="signup__button signup__button--point"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setLoading(true);
+                      // axios
+                      //   .post("http://localhost:8080/signup", {
+                      //     email: userName.user_email,
+                      //   })
+                      //   .then((res) => {
+                      //     setLoading(false);
+                      //     // setCheckPinNumber(true);
+                      //     // 핀값 받기
+                      //     console.log(res.data.pin);
+                      //     // if (!res.data.success) {
+                      //     //   return alert("오류");
+                      //     // }
+                      //   })
+                      //   .catch((e) => {
+                      //     setCheckPinNumber(true);
+                      //     console.log(e);
+                      //   });
+                      setTimeout(() => {
                         setCheckPinNumber(true);
-                        console.log(e);
-                      });
-                  }}
-                  disabled={!emailRuleTest(userName.user_email) ? false : true}
-                >
-                  이메일 인증
-                  {loading ? "대기중이빈다." : ""}
-                </button>
+                        setLoading(false);
+                        startTimer(60 * 5 - 1);
+                      }, 1000);
+                    }}
+                    disabled={
+                      !emailRuleTest(userName.user_email) ? false : true
+                    }
+                  >
+                    이메일 인증
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="signup__button signup__button--point"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setLoading(true);
+                      // axios
+                      //   .post("http://localhost:8080/signup", {
+                      //     email: userName.user_email,
+                      //   })
+                      //   .then((res) => {
+                      //     setLoading(false);
+                      //     // setCheckPinNumber(true);
+                      //     // 핀값 받기
+                      //     console.log(res.data.pin);
+                      //     // if (!res.data.success) {
+                      //     //   return alert("오류");
+                      //     // }
+                      //   })
+                      //   .catch((e) => {
+                      //     setCheckPinNumber(true);
+                      //     console.log(e);
+                      //   });
+                      setTimeout(() => {
+                        setCheckPinNumber(true);
+                        setLoading(false);
+                      }, 1000);
+                    }}
+                    disabled={
+                      !idRuleTest(userName.user_id) &&
+                      !passwordRuleTest(userName.user_password) &&
+                      !nicknameRuleTest(userName.user_nickname)
+                        ? false
+                        : true
+                    }
+                  >
+                    가입하기
+                  </button>
+                )}
+
                 {/* </Link> */}
               </div>
             </form>
