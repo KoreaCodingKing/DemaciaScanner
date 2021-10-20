@@ -79,6 +79,7 @@ function User({ user, state, runningTime, numb, revisionData }) {
 
   // console.log("유저 데이터", user);
   const myName = user.name;
+  console.log(user);
 
   if (!user.state) {
     // return false; //하면 게임중이지 않은 리스트가 사라짐 (사용할 수 있을듯)
@@ -123,18 +124,16 @@ function User({ user, state, runningTime, numb, revisionData }) {
         )}
       </div>
       <div className="user_block__info">
-        <span className="user_block__name">
-          ({user.name} {champInfoName ? `/ ${champInfoName}` : ""} )
-        </span>
-        <span className={`state ${state ? "state--true" : "state--false"}`}>
-          {/* {state
-            ? `게임중 - ${
-                user.gameMode !== "소환사의 협곡"
-                  ? user.gameMode
-                  : `${user.gameMode} - ${user.gameType}`
-              }`
-            : `대기중 - 몇분전 체크 해야함`} */}
-        </span>
+        <div className="user_block__wrap">
+          <p className="user_block__name">{user.name}</p>
+          <p className="user_block__name champ">
+            {champInfoName ? `${champInfoName}` : "-"}
+          </p>
+          <p className="user_block__memo">
+            메모메모메모메모메모메모메모메모메모메모
+            메모메모메모메모메모메모메모메모메모메모
+          </p>
+        </div>
       </div>
 
       <div className="user_block__symbol">
