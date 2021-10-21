@@ -209,11 +209,11 @@
 // skeleton component
 @keyframes loading {
   0% {
-    transform: translateX(-50px);
+    transform: translateX(-10%);
   }
   50%,
   100% {
-    transform: translateX(250px);
+    transform: translateX(200%);
   }
 }
 
@@ -252,10 +252,10 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 30px;
+  width: 50%;
   height: 100%;
-  background: linear-gradient(to right, #e0e0e0, #ddd, #e0e0e0);
-  animation: loading 2s infinite linear;
+  background: linear-gradient(90deg, #bbb, #eee, #bbb);
+  animation: loading 0.75s infinite linear;
 }
 
 .skeleton-item {
