@@ -8,10 +8,20 @@ import "../assets/scss/signup.scss";
 const Signup = ({ props, history }) => {
   let { onChangeHandle, userName } = useContext(UserListContext);
   const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState(1);
+  const [progressPercent, setProgressPercent] = useState(20);
 
   const goBack = () => {
     history.goBack();
   };
+
+  const getIcons = () => {
+    const icons = [];
+    for(let i=0; i<4; i++) {
+      icons.push(<i className={i === 0 ? 'step first_step' : 'step'} style={step >= i ? {left : `${i*33}%`, width: '20px'} : {left : `${i*33}%`}}></i>);
+    }
+    return icons;
+  }
 
   useEffect(() => {
     // console.log(history);
@@ -57,6 +67,10 @@ const Signup = ({ props, history }) => {
         <div className="signup__layer">
           <div className="signup__header">
             <span>Demacia Logo</span>
+          </div>
+          <div className="signup__step_container">
+            <div className="step_progress" style={step > 0 ? {width: `${step * 33}%`} : {}} ></div>
+            { getIcons() }
           </div>
           <div className="signup__content">
             <form>
@@ -170,6 +184,7 @@ const Signup = ({ props, history }) => {
                       })
                       .then((res) => {
                         setLoading(false);
+                        
                         // 핀값 받기
                         console.log(res.data.pin);
                         // if (!res.data.success) {
@@ -177,6 +192,7 @@ const Signup = ({ props, history }) => {
                         // }
                       })
                       .catch((e) => {
+                        setStep(2);
                         console.log(e);
                       });
                   }}

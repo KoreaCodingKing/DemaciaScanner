@@ -41,6 +41,44 @@ html {
   font-weight: bold;
 }
 
+// step progress
+.signup__step_container {
+  position: relative;
+  margin: 0 80px;
+}
+
+.step_progress {
+  width : 0;
+  height: 5px;
+  background-color: #268aee;
+  transition: width .4s ease-in-out;
+}
+
+.step {
+  display: inline-block;
+  position: absolute;
+  top: -9px;
+  width: 0;
+  height: 20px;
+  border-radius: 10px;
+  background-color: #268aee;
+  transition: width .4s ease-in-out;
+  transition-delay: 0.35s;
+
+  &.first_step {
+    width: 20px;
+  }
+}
+
+.step:after {
+  position: absolute;
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 1px solid #268aee;
+  border-radius: 10px;
+}
+
 // content
 .signup__content {
 }
