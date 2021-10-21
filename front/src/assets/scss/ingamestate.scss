@@ -55,16 +55,16 @@
 
 .user_block {
   position: relative;
-  opacity: 0;
+  opacity: 1;
   width: 100%;
   height: 30%;
   padding: 2% 0;
   margin: 1% 0;
-  background-color: #e0e0e0;
-  animation-name: test;
-  animation-duration: 0.2s;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
+  background-color: #555;
+  // animation-name: test;
+  // animation-duration: 0.6s;
+  // animation-timing-function: linear;
+  // animation-fill-mode: forwards;
 
   &:hover .user_block__info {
     transition: 0.1s linear;
@@ -74,7 +74,7 @@
 
   &.state_false {
     opacity: 0.4;
-    transition: 0.6 linear;
+    // transition: 0.6 linear;
 
     &:after {
       content: "";
@@ -150,7 +150,7 @@
 }
 
 .user_block__img {
-  z-index: -1;
+  z-index: 0;
   position: absolute;
   top: 0;
   left: 0;
@@ -163,7 +163,10 @@
 
 // 게임 진행중일때 시각 노출
 .state_true .user_block__symbol {
-  margin-left: 10px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  // margin-left: 10px;
   display: inline-block;
   padding: 4px 0px;
   width: 50px;
@@ -192,9 +195,11 @@
   0% {
     opacity: 0;
     // padding-left: 4%;
+    transform: translateY(20px);
   }
   30% {
     // padding-left: 2%;
+    transform: translateY(0px);
   }
   100% {
     opacity: 1;

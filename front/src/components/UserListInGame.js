@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Loading from "../components/Loading";
+import "../assets/scss/loading.scss";
 import "../assets/scss/ingamestate.scss";
 
 function TimeView({ gameTime, gameLength }) {
@@ -110,7 +112,7 @@ function User({ user, state, runningTime, numb, revisionData }) {
   return (
     <div
       className={`user_block card state_${user.state}`}
-      style={{ animationDelay: `0.${numb}s` }}
+      // style={{ animationDelay: `0.${numb}s` }}
     >
       <div className="user_block__img">
         {champInfoId ? (
@@ -152,7 +154,7 @@ function User({ user, state, runningTime, numb, revisionData }) {
   );
 }
 
-function UserListInGame({ users, userList }) {
+function UserListInGame({ users, userList, loading }) {
   // console.log(userList);
   useEffect(() => {
     // users.map((user) => {
@@ -165,16 +167,20 @@ function UserListInGame({ users, userList }) {
 
   return (
     <div className="ingame_view__content ingame_view__content--card">
-      {users.map((user, index) => (
-        <User
-          user={user}
-          key={index}
-          numb={index}
-          state={user.state}
-          revisionData={userList[index]}
-          runningTime={user.currentTimeStamp}
-        />
-      ))}
+      {loading ? (
+        <Loading userList={userList} />
+      ) : (
+        users.map((user, index) => (
+          <User
+            user={user}
+            key={index}
+            numb={index}
+            state={user.state}
+            revisionData={userList[index]}
+            runningTime={user.currentTimeStamp}
+          />
+        ))
+      )}
     </div>
   );
 }

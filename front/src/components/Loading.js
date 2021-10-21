@@ -8,7 +8,7 @@ function LayoutSkeleton({ count }) {
     //   <div className="skeleton-item"></div>
     // </div>
 
-    <div className="user_block card">
+    <div className="user_block card" style={{ opacity: 0.5 }}>
       <div className="user_block__img"></div>
       <div className="user_block__info">
         <div className="skeleton-item id"></div>
@@ -31,7 +31,10 @@ function Loading({ userList }) {
   };
 
   return (
-    <div className="ingame_view__content ingame_view__content--card">
+    <div
+      className="ingame_view__content ingame_view__content--card"
+      style={{ width: "100%" }}
+    >
       {rendering()}
     </div>
   );

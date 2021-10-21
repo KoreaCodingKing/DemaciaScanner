@@ -47,15 +47,12 @@ const InGameStateView = (props) => {
       </div>
 
       <div className="view__container">
-        {props.loading ? (
-          <Loading userList={userList} />
-        ) : (
-          <UserListInGame
-            users={users}
-            userList={userList}
-            totalData={totalData1}
-          />
-        )}
+        <UserListInGame
+          loading={props.loading}
+          users={users}
+          userList={userList}
+          totalData={totalData1}
+        />
       </div>
     </>
   );
