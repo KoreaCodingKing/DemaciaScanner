@@ -148,11 +148,6 @@ function User({ user, state, runningTime, numb, revisionData }) {
           <span>{state ? `${user.gameType}` : `대기중`}</span>
         </div>
       </div>
-      {/* <div className="user_block__symbol user_block__state">
-        
-      </div> */}
-
-      {/* {state ? <TimeView gameTime={runningTime} /> : <span></span>} */}
     </div>
   );
 }
