@@ -71,7 +71,7 @@ function TimeView({ gameTime, gameLength }) {
   );
 }
 
-function User({ user, state, runningTime, numb, revisionData }) {
+function User({ user, state, runningTime, viewState, numb, revisionData }) {
   const [show, setShow] = useState(false);
   const [gameStart, setGameStart] = useState(false);
   const [champInfoId, setChampInfoId] = useState();
@@ -111,7 +111,7 @@ function User({ user, state, runningTime, numb, revisionData }) {
 
   return (
     <div
-      className={`user_block card state_${user.state}`}
+      className={`user_block ${viewState} state_${user.state}`}
       // style={{ animationDelay: `0.${numb}s` }}
     >
       <div className="user_block__img">
@@ -154,7 +154,7 @@ function User({ user, state, runningTime, numb, revisionData }) {
   );
 }
 
-function UserListInGame({ users, userList, loading }) {
+function UserListInGame({ users, userList, loading, viewState }) {
   // console.log(userList);
   useEffect(() => {
     // users.map((user) => {
@@ -166,12 +166,13 @@ function UserListInGame({ users, userList, loading }) {
   const numb = users.length;
 
   return (
-    <div className="ingame_view__content ingame_view__content--card">
+    <div className={`ingame_view__content ingame_view__content--${viewState}`}>
       {loading ? (
-        <Loading userList={userList} />
+        <Loading userList={userList} viewState={viewState} />
       ) : (
         users.map((user, index) => (
           <User
+            viewState={viewState}
             user={user}
             key={index}
             numb={index}

@@ -52,6 +52,79 @@
     }
   }
 }
+// 리스트 버전 경우
+.ingame_view__content.ingame_view__content--list {
+  .user_block {
+    display: flex;
+    // padding: inherit;
+
+    &:hover .user_block__name.champ:after {
+      transition: width 0.2s ease-in-out;
+      width: 100px;
+    }
+  }
+  //depth1
+  .user_block__img {
+    flex: 0.1;
+    position: inherit;
+    overflow: hidden;
+    margin: 0 2%;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+  }
+
+  //depth1
+  .user_block__info {
+    flex: 0.8;
+    position: inherit;
+    height: 100%;
+    background-color: transparent;
+  }
+  //depth1
+  .user_block__symbol {
+    flex: 0.1;
+    right: 10px;
+    position: inherit;
+    top: inherit;
+    left: inherit;
+  }
+
+  //depth2
+  .user_block__wrap {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: inherit;
+  }
+  //depth3
+  .user_block__wrap .user_block__name {
+    margin: inherit;
+    width: 180px;
+    text-align: left;
+  }
+  //depth3
+  .user_block__wrap .user_block__name.champ {
+    width: 180px;
+    text-align: left;
+
+    &:after {
+      left: 0;
+      transform: inherit;
+      bottom: -10px;
+    }
+  }
+  //depth3
+  .user_block__wrap .user_block__memo {
+    position: absolute;
+    left: 170px; //180px
+    width: 250px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: inherit;
+    text-align: left;
+  }
+}
 
 .user_block {
   position: relative;
@@ -66,7 +139,7 @@
   // animation-timing-function: linear;
   // animation-fill-mode: forwards;
 
-  &:hover .user_block__info {
+  &.card:hover .user_block__info {
     transition: 0.1s linear;
     height: 43%;
     background-color: rgba(000, 000, 000, 0.9);
@@ -87,6 +160,11 @@
       opacity: 0.7;
     }
   }
+}
+
+.user_block.list {
+  width: 100%;
+  height: 50px;
 }
 
 .user_block.card {
@@ -217,47 +295,102 @@
   }
 }
 
-.skeleton-item {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  padding: 1% 0;
-  background-color: #bbb;
-
-  &.id {
-    top: 25px;
-    width: 30%;
-    height: 15px;
-  }
-
-  &.champ_name {
-    top: 53px;
-    width: 30%;
-    height: 10px;
-  }
-  &.memo {
+.user_block.card {
+  .skeleton-item {
     position: absolute;
-    top: 95px;
-    width: 86%;
-    height: 35px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    padding: 1% 0;
+    background-color: #bbb;
+
+    &.id {
+      top: 25px;
+      width: 30%;
+      height: 15px;
+    }
+
+    &.champ_name {
+      top: 53px;
+      width: 30%;
+      height: 10px;
+    }
+    &.memo {
+      position: absolute;
+      top: 95px;
+      width: 86%;
+      height: 35px;
+    }
+  }
+
+  .skeleton-item::before {
+    z-index: 10;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, #bbb, #eee, #bbb);
+    animation: loading 0.75s infinite linear;
+  }
+
+  .skeleton-item {
+    overflow: hidden;
   }
 }
 
-.skeleton-item::before {
-  z-index: 10;
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(90deg, #bbb, #eee, #bbb);
-  animation: loading 0.75s infinite linear;
-}
+.user_block.list {
+  .skeleton-item {
+    position: absolute;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    padding: 1% 0;
+    background-color: #bbb;
 
-.skeleton-item {
-  overflow: hidden;
+    &.img {
+    }
+
+    &.id {
+      top: 0;
+      left: 0;
+      transform: inherit;
+      width: 30%;
+      height: 10px;
+    }
+
+    &.champ_name {
+      top: 30px;
+      width: 30%;
+      height: 10px;
+    }
+    &.memo {
+      position: absolute;
+      top: 3px;
+      right: 10px;
+      width: 56%;
+      height: 35px;
+    }
+  }
+
+  .skeleton-item::before {
+    z-index: 10;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, #bbb, #eee, #bbb);
+    animation: loading 0.75s infinite linear;
+  }
+
+  .skeleton-item {
+    overflow: hidden;
+  }
 }

@@ -7,6 +7,9 @@ import "../assets/scss/signup.scss";
 
 const Signup = ({ props, history }) => {
   let { onChangeHandle, userName } = useContext(UserListContext);
+
+  const [stepIndex, setStepIndex] = useState(1);
+
   const [loading, setLoading] = useState(false);
   const [checkPinNumber, setCheckPinNumber] = useState(false);
   const [nextStep, setNextStep] = useState(false);
@@ -149,6 +152,7 @@ const Signup = ({ props, history }) => {
         if (dataList12.toString() == testPinNumber) {
           setNextStep(true);
           startTimer("done");
+          setStepIndex(2);
         } else {
           console.log("틀렸음");
         }
@@ -193,6 +197,7 @@ const Signup = ({ props, history }) => {
             <span>Demacia Logo</span>
           </div>
           이메일 인증 : {nextStep ? "완료." : "대기중!"}
+          stepIndex 값 : {stepIndex}
           <div className="signup__content">
             <form>
               <div
@@ -464,6 +469,7 @@ const Signup = ({ props, history }) => {
                     onClick={(e) => {
                       e.preventDefault();
                       setLoading(true);
+                      setStepIndex(3);
                       // axios
                       //   .post("http://localhost:8080/signup", {
                       //     email: userName.user_email,
