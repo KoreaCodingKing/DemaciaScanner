@@ -51,6 +51,7 @@ function App() {
     user_password,
     user_nickname,
   } = userName;
+  const [searchedName, setSearchedName] = useState("");
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -232,14 +233,15 @@ function App() {
     const data = userData;
     // 유저 이름
     const targetUserName = data.name;
-    // console.log("받은 데이터", targetUserName);
+    console.log("받은 데이터", targetUserName);
+    setSearchedName(targetUserName);
 
     setTotalLoding(true);
 
     const resultData = getUserTotalData(data)
       .then((result) => {
         const matches = result.data;
-        console.log("결과", matches);
+        // console.log("결과", matches);
         let targetDataResultRankSolo = [];
         let targetDataResultRankFlex = [];
         let targetDataResultRankAll = [];
@@ -569,6 +571,7 @@ function App() {
             myTotalDataSolo,
             myTotalDataFlex,
             myTotalDataAll,
+            searchedName,
           }}
         >
           <ApiTest />

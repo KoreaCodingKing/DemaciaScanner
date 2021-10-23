@@ -26,7 +26,7 @@ const InGameStateView = (props) => {
     if (user.state) {
       count += 1;
     }
-    console.log(`index-> ${index} / users.length-> ${users.length - 1} `);
+    // console.log(`index-> ${index} / users.length-> ${users.length - 1} `);
     if (index == users.length + 1) {
       return count;
     }
@@ -36,30 +36,30 @@ const InGameStateView = (props) => {
   return (
     <>
       <div className="ingame_view__header">
-        <div className="ingame_view__wrap" style={{ display: "flex" }}>
+        <div
+          className="ingame_view__wrap"
+          style={{ display: "flex", justifyContent: "space-between" }}
+        >
           <div className="ingame_view__list_info">
             <span>리스트 총 갯수 - {userList.length}/20 </span>
             <span>
               게임중 {count}/{userList.length}
             </span>
           </div>
-          <div
-            className={`view_state view_state--${viewState}`}
-            style={{ marginLeft: "100px" }}
-          >
+          <div className={`view_state view_state--${viewState}`}>
             <button
               type="button"
               onClick={() => setViewState("card")}
               className="view_state__btn card"
             >
-              card
+              <span className="blind">card</span>
             </button>
             <button
               type="button"
               onClick={() => setViewState("list")}
               className="view_state__btn list"
             >
-              list
+              <span className="blind">list</span>
             </button>
           </div>
         </div>

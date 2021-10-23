@@ -34,6 +34,32 @@
   height: 100%;
 }
 
+// view 버전wrap
+.view_state {
+  display: flex;
+  justify-content: space-between;
+  width: 50px;
+}
+.view_state__btn {
+  justify-self: center;
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background-color: transparent;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+
+  &.card {
+    background-image: url("../images/view-state--card.png");
+  }
+  &.list {
+    background-image: url("../images/view-state--list.png");
+  }
+}
+
 // 카드 버전 경우
 .ingame_view__content.ingame_view__content--card {
   flex-direction: inherit;
@@ -56,16 +82,21 @@
 .ingame_view__content.ingame_view__content--list {
   .user_block {
     display: flex;
+    background-color: rgba($color: #000000, $alpha: 0.7);
     // padding: inherit;
+
+    &:hover {
+      // transition: 0.2s ease-in-out;
+    }
 
     &:hover .user_block__name.champ:after {
       transition: width 0.2s ease-in-out;
-      width: 100px;
+      width: 100%;
     }
   }
   //depth1
   .user_block__img {
-    flex: 0.1;
+    // flex: 0.1;
     position: inherit;
     overflow: hidden;
     margin: 0 2%;
@@ -76,14 +107,15 @@
 
   //depth1
   .user_block__info {
-    flex: 0.8;
+    // flex: 0.8;
+    display: flex;
     position: inherit;
     height: 100%;
     background-color: transparent;
   }
   //depth1
   .user_block__symbol {
-    flex: 0.1;
+    // flex: 0.1;
     right: 10px;
     position: inherit;
     top: inherit;
@@ -92,20 +124,20 @@
 
   //depth2
   .user_block__wrap {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    // display: flex;
+    // flex-direction: column;
+    // flex-wrap: wrap;
     padding: inherit;
   }
   //depth3
   .user_block__wrap .user_block__name {
     margin: inherit;
-    width: 180px;
+    // width: 180px;
     text-align: left;
   }
   //depth3
   .user_block__wrap .user_block__name.champ {
-    width: 180px;
+    // width: 180px;
     text-align: left;
 
     &:after {
@@ -124,6 +156,11 @@
     margin: inherit;
     text-align: left;
   }
+
+  // .user_block .user_block__spell {
+  //   position: absolute;
+  //   l
+  // }
 }
 
 .user_block {
@@ -345,9 +382,6 @@
 .user_block.list {
   .skeleton-item {
     position: absolute;
-    // top: 50%;
-    // left: 50%;
-    // transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
     padding: 1% 0;

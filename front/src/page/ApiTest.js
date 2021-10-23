@@ -45,6 +45,7 @@ function ApiTest(props) {
     totalData,
     userInfo,
     addUserList,
+    searchedName,
   } = useContext(UserListContext);
 
   useState(() => {
@@ -106,6 +107,7 @@ function ApiTest(props) {
         <div className="contents__wrap total_view">
           <div>
             <SearchTotal
+              searchedName={searchedName}
               users={userList}
               onTotalData={onTotalData}
               totalData={totalData}

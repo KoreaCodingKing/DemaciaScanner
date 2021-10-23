@@ -81,7 +81,7 @@ function User({ user, state, runningTime, viewState, numb, revisionData }) {
 
   // console.log("유저 데이터", user);
   const myName = user.name;
-  console.log(user);
+  // console.log(user);
 
   if (!user.state) {
     // return false; //하면 게임중이지 않은 리스트가 사라짐 (사용할 수 있을듯)
