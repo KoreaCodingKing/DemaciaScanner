@@ -8,15 +8,16 @@ import "../assets/scss/signup.scss";
 const Signup = ({ props, history }) => {
   let { onChangeHandle, userName } = useContext(UserListContext);
 
-  const [stepIndex, setStepIndex] = useState(1);
+  const [stepIndex, setStepIndex] = useState(0);
   const [step, setStep] = useState(0); //영록
 
+  const location = 33;
   const [loading, setLoading] = useState(false);
   const [checkPinNumber, setCheckPinNumber] = useState(false);
   const [nextStep, setNextStep] = useState(false);
   const [countDown, setCountDown] = useState({ minutes: "", seconds: "" });
   // const pinlength = 6;
-  const recivedPinNumber = "";
+  const [recivedPinNumber, setRecivePinNumber] = useState("");
 
   // 핀번호 상태값
   const [pinNumber, setPinNumber] = useState({
@@ -25,9 +26,10 @@ const Signup = ({ props, history }) => {
     pin3: "",
     pin4: "",
     pin5: "",
+    pin6: "",
   });
 
-  const { pin1, pin2, pin3, pin4, pin5 } = pinNumber;
+  const { pin1, pin2, pin3, pin4, pin5, pin6 } = pinNumber;
 
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -50,7 +52,7 @@ const Signup = ({ props, history }) => {
         <i
           className={i === 0 ? "step first_step" : "step"}
           style={
-            step >= i
+            stepIndex >= i
               ? { left: `${i * 33}%`, width: "20px" }
               : { left: `${i * 33}%` }
           }
@@ -146,6 +148,7 @@ const Signup = ({ props, history }) => {
   const inputRef3 = useRef();
   const inputRef4 = useRef();
   const inputRef5 = useRef();
+  const inputRef6 = useRef();
 
   function focusMove(e, number) {
     const targetInput = e.target;
@@ -155,21 +158,24 @@ const Signup = ({ props, history }) => {
         pinNumber.pin2 &&
         pinNumber.pin3 &&
         pinNumber.pin4 &&
-        pinNumber.pin5
+        pinNumber.pin5 &&
+        pinNumber.pin6
       ) {
-        console.log("ok");
+        // console.log("ok");
         let dataList12 = []; //문자열 변환 리스트
         const data = Object.entries(pinNumber).map((item, index) => {
           // let dataList = [];
           dataList12 += item[1];
 
-          if (index == 4) {
+          if (index == 5) {
             return console.log(dataList12);
           }
         });
-        console.log("result = ", dataList12.toString());
+        // console.log("result = ", dataList12.toString());
+        console.log("우리꺼 ->", dataList12);
+        console.log("받은거 ->", recivedPinNumber);
 
-        if (dataList12.toString() == recivedPinNumber) {
+        if (dataList12.toString() === recivedPinNumber) {
           setNextStep(true);
           startTimer("done");
           setStepIndex(2);
@@ -200,6 +206,10 @@ const Signup = ({ props, history }) => {
         break;
       case 5:
         doneCheck();
+        inputRef6.current.focus();
+        break;
+      case 6:
+        doneCheck();
     }
   }
 
@@ -219,7 +229,7 @@ const Signup = ({ props, history }) => {
           <div className="signup__step_container">
             <div
               className="step_progress"
-              style={step > 0 ? { width: `${step * 33}%` } : {}}
+              style={stepIndex > 0 ? { width: `${stepIndex * location}%` } : {}}
             ></div>
             {getIcons()}
           </div>
@@ -328,6 +338,22 @@ const Signup = ({ props, history }) => {
                         onChange={onChange}
                         maxLength="1"
                         value={pinNumber.pin5}
+                      />
+                    </li>
+
+                    {/* 추가 */}
+                    <li className="pin_item">
+                      <input
+                        onKeyUp={(e) => focusMove(e, 6)}
+                        ref={inputRef6}
+                        name="pin6"
+                        autoComplete="off"
+                        pattern={"10-9*"}
+                        inputMode={"numeric"}
+                        disabled={nextStep}
+                        onChange={onChange}
+                        maxLength="1"
+                        value={pinNumber.pin6}
                       />
                     </li>
                   </ul>
@@ -468,20 +494,12 @@ const Signup = ({ props, history }) => {
                           startTimer(60 * 5 - 1);
                           setCheckPinNumber(true);
                           // 핀값 받기
-                          recivedPinNumber = res.data.pin;
-                          // if (!res.data.success) {
-                          //   return alert("오류");
-                          // }
+                          setRecivePinNumber(res.data.pin);
                         })
                         .catch((e) => {
                           setCheckPinNumber(true);
                           console.log(e);
                         });
-                      // setTimeout(() => {
-                      //   setCheckPinNumber(true);
-                      //   setLoading(false);
-                      //   startTimer(60 * 5 - 1);
-                      // }, 1000);
                     }}
                     disabled={
                       !emailRuleTest(userName.user_email) ? false : true
@@ -497,27 +515,26 @@ const Signup = ({ props, history }) => {
                       e.preventDefault();
                       setLoading(true);
                       setStepIndex(3);
-                      // axios
-                      //   .post("http://localhost:8080/signup", {
-                      //     email: userName.user_email,
-                      //   })
-                      //   .then((res) => {
-                      //     setLoading(false);
-                      //     // setCheckPinNumber(true);
-                      //     // 핀값 받기
-                      //     console.log(res.data.pin);
-                      //     // if (!res.data.success) {
-                      //     //   return alert("오류");
-                      //     // }
-                      //   })
-                      //   .catch((e) => {
-                      //     setCheckPinNumber(true);
-                      //     console.log(e);
-                      //   });
-                      setTimeout(() => {
-                        setCheckPinNumber(true);
-                        setLoading(false);
-                      }, 1000);
+                      axios
+                        .post("http://localhost:8080/signup/confirmed", {
+                          email: userName.user_email,
+                          id: userName.user_id,
+                          pw: userName.user_password,
+                          lol_id: userName.user_nickname,
+                        })
+                        .then((res) => {
+                          setLoading(false);
+                          // setCheckPinNumber(true);
+                          // 핀값 받기
+                          // console.log(res.data.pin);
+                          // if (!res.data.success) {
+                          //   return alert("오류");
+                          // }
+                        })
+                        .catch((e) => {
+                          setCheckPinNumber(true);
+                          console.log(e);
+                        });
                     }}
                     disabled={
                       !idRuleTest(userName.user_id) &&
