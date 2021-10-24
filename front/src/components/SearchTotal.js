@@ -57,20 +57,25 @@ function UserTotalView({
                       src={`http://ddragon.leagueoflegends.com/cdn/11.19.1/img/champion/${user.championName}.png`}
                       alt="champion img"
                     />
-                    <p className="user_block__name champ">
+                    <p
+                      className="user_block__name champ"
+                      style={{ textAlign: "center" }}
+                    >
                       {user.championName}
                     </p>
                   </div>
                   <div
                     className="user_block__wrap"
                     style={{
-                      marginLeft: "3%",
                       display: "flex",
+                      marginLeft: "10px",
                       flexDirection: "column",
+                      justifyContent: "space-between",
+                      height: "70px",
                     }}
                   >
                     <img
-                      width="35px"
+                      width="30px"
                       src={
                         user.summoner1Id
                           ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner1Id}.png`
@@ -79,7 +84,7 @@ function UserTotalView({
                       alt="champion img"
                     />
                     <img
-                      width="35px"
+                      width="30px"
                       src={
                         user.summoner2Id
                           ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner2Id}.png`
@@ -102,7 +107,7 @@ function UserTotalView({
                 <div className="temp__wrap">
                   {/* 아이템 */}
                   <div
-                    className="user_block__wrap"
+                    className="user_block__wrap user_block__wrap--item"
                     style={{
                       width: "140px",
                       marginLeft: "3%",
@@ -301,7 +306,8 @@ function UserTotalView({
               src={`http://ddragon.leagueoflegends.com/cdn/11.19.1/img/champion/${user.championName}.png`}
               alt="champion img"
             />
-            {user.summonerName}
+            <span>{user.summonerName}</span>
+
             {/* <p>
               <img
                 width="25px"
@@ -383,7 +389,7 @@ function UserTotalView({
         <div
           // sortState = all;
           id={`queue_id ${gameQueueId}`}
-          className={`user_state__block queue_${sortState}`}
+          className={`user_state__block user_state__block--${gameResult} queue_${sortState}`}
           style={
             gameQueueId == sortState || sortState == "all"
               ? { display: "block" }

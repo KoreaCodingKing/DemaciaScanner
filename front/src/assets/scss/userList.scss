@@ -70,6 +70,9 @@
   flex: 0.5;
   text-align: center;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* 말줄임 적용 */
 }
 
 .user__title .memo {
@@ -89,10 +92,21 @@
 
 .user_state__block {
   display: block;
-  width: 550px;
-  background: rgb(255, 179, 0);
+  width: 100%;
+  // background: rgb(255, 179, 0);
   outline: 1px solid #222;
   box-sizing: border-box;
+
+  &--WIN {
+    background: rgb(151, 186, 192);
+  }
+  &--LOSE {
+    background: rgb(192, 151, 151);
+  }
+
+  & + & {
+    margin-top: 30px;
+  }
 }
 
 .user_state__item {
@@ -100,11 +114,12 @@
   outline: 1px solid #222;
   box-sizing: border-box;
   font-weight: 600;
+  background: #ccc;
 
   &--WIN {
-    background: rgb(17, 154, 31);
+    background: rgb(151, 186, 192);
   }
   &--LOSE {
-    background: rgb(221, 5, 5);
+    background: rgb(192, 151, 151);
   }
 }

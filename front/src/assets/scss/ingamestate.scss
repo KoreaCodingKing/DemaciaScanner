@@ -114,24 +114,40 @@
     background-color: transparent;
   }
 
-  // 작은 list info style
+  // 전적 리스트 info style
   .user_block__info.simple {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    max-width: 290px;
+    max-width: 220px;
     width: 100%;
-    height: 140px;
+    height: 115px;
   }
 
   .user_block__info.simple li {
+    // overflow: hidden;
+    display: flex;
     padding: 0;
-    font-size: 12px;
+    max-width: 100px;
+    width: 100%;
+    height: 23px;
   }
 
   .user_block__info.simple li img {
-    width: 20px;
+    display: block;
+    width: 23px;
   }
+  .user_block__info.simple li span {
+    overflow: hidden;
+    display: block;
+    margin-left: 5px;
+    align-self: center;
+    white-space: nowrap;
+    text-overflow: ellipsis; /* 말줄임 적용 */
+    font-size: 12px;
+  }
+
+  // 전적 리스트 info style
 
   //depth1
   .user_block__symbol {
@@ -144,16 +160,33 @@
 
   //depth2
   .user_block__wrap {
-    // display: flex;
-    // flex-direction: column;
-    // flex-wrap: wrap;
     padding: inherit;
+  }
+  .user_block__wrap.user_block__wrap--item {
+    height: 70px;
+  }
+  .user_block__wrap.user_block__wrap--item div img {
+    border-radius: 5px;
+  }
+  .user_block__wrap.user_block__wrap--item div + div {
+    align-self: center;
+    margin-left: 6px;
+  }
+  .user_block__wrap.user_block__wrap--item div:nth-child(n + 5) {
+    margin-top: 5px;
+  }
+  .user_block__wrap.user_block__wrap--item div:nth-child(5) {
+    margin-left: 0;
   }
   //depth3
   .user_block__wrap .user_block__name {
     margin: inherit;
-    // width: 180px;
+    max-width: 150px;
+    width: 100%;
     text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 말줄임 적용 */
   }
   //depth3
   .user_block__wrap .user_block__name.champ {
@@ -169,7 +202,7 @@
   //depth3
   .user_block__wrap .user_block__memo {
     position: absolute;
-    left: 170px; //180px
+    left: 180px; //180px
     width: 250px;
     top: 50%;
     transform: translateY(-50%);
@@ -181,7 +214,7 @@
   //   position: absolute;
   //   l
   // }
-}
+} // 리스트 버전 경우
 
 .user_block {
   position: relative;
@@ -253,6 +286,9 @@
   font-size: 20px;
   font-weight: 900;
   letter-spacing: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* 말줄임 적용 */
 }
 
 .user_block__name.champ {
