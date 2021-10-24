@@ -9,13 +9,14 @@ const Signup = ({ props, history }) => {
   let { onChangeHandle, userName } = useContext(UserListContext);
 
   const [stepIndex, setStepIndex] = useState(1);
+  const [step, setStep] = useState(0); //영록
 
   const [loading, setLoading] = useState(false);
   const [checkPinNumber, setCheckPinNumber] = useState(false);
   const [nextStep, setNextStep] = useState(false);
   const [countDown, setCountDown] = useState({ minutes: "", seconds: "" });
   // const pinlength = 6;
-  const testPinNumber = 12345;
+  const recivedPinNumber = "";
 
   // 핀번호 상태값
   const [pinNumber, setPinNumber] = useState({
@@ -36,8 +37,27 @@ const Signup = ({ props, history }) => {
     });
   };
 
+  // const [progressPercent, setProgressPercent] = useState(20);
+
   const goBack = () => {
     history.goBack();
+  };
+
+  const getIcons = () => {
+    const icons = [];
+    for (let i = 0; i < 4; i++) {
+      icons.push(
+        <i
+          className={i === 0 ? "step first_step" : "step"}
+          style={
+            step >= i
+              ? { left: `${i * 33}%`, width: "20px" }
+              : { left: `${i * 33}%` }
+          }
+        ></i>
+      );
+    }
+    return icons;
   };
 
   useEffect(() => {
@@ -149,7 +169,7 @@ const Signup = ({ props, history }) => {
         });
         console.log("result = ", dataList12.toString());
 
-        if (dataList12.toString() == testPinNumber) {
+        if (dataList12.toString() == recivedPinNumber) {
           setNextStep(true);
           startTimer("done");
           setStepIndex(2);
@@ -196,8 +216,13 @@ const Signup = ({ props, history }) => {
           <div className="signup__header">
             <span>Demacia Logo</span>
           </div>
-          이메일 인증 : {nextStep ? "완료." : "대기중!"}
-          stepIndex 값 : {stepIndex}
+          <div className="signup__step_container">
+            <div
+              className="step_progress"
+              style={step > 0 ? { width: `${step * 33}%` } : {}}
+            ></div>
+            {getIcons()}
+          </div>
           <div className="signup__content">
             <form>
               <div
@@ -433,28 +458,30 @@ const Signup = ({ props, history }) => {
                     onClick={(e) => {
                       e.preventDefault();
                       setLoading(true);
-                      // axios
-                      //   .post("http://localhost:8080/signup", {
-                      //     email: userName.user_email,
-                      //   })
-                      //   .then((res) => {
-                      //     setLoading(false);
-                      //     // setCheckPinNumber(true);
-                      //     // 핀값 받기
-                      //     console.log(res.data.pin);
-                      //     // if (!res.data.success) {
-                      //     //   return alert("오류");
-                      //     // }
-                      //   })
-                      //   .catch((e) => {
-                      //     setCheckPinNumber(true);
-                      //     console.log(e);
-                      //   });
-                      setTimeout(() => {
-                        setCheckPinNumber(true);
-                        setLoading(false);
-                        startTimer(60 * 5 - 1);
-                      }, 1000);
+                      axios
+                        .post("http://localhost:8080/signup", {
+                          email: userName.user_email,
+                        })
+                        .then((res) => {
+                          setLoading(false);
+                          //핀번호 값
+                          startTimer(60 * 5 - 1);
+                          setCheckPinNumber(true);
+                          // 핀값 받기
+                          recivedPinNumber = res.data.pin;
+                          // if (!res.data.success) {
+                          //   return alert("오류");
+                          // }
+                        })
+                        .catch((e) => {
+                          setCheckPinNumber(true);
+                          console.log(e);
+                        });
+                      // setTimeout(() => {
+                      //   setCheckPinNumber(true);
+                      //   setLoading(false);
+                      //   startTimer(60 * 5 - 1);
+                      // }, 1000);
                     }}
                     disabled={
                       !emailRuleTest(userName.user_email) ? false : true
