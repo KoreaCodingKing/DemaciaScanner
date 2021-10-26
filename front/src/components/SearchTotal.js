@@ -54,7 +54,7 @@ function UserTotalView({
                     <img
                       style={{ borderRadius: "50px" }}
                       width="50px"
-                      src={`http://ddragon.leagueoflegends.com/cdn/11.19.1/img/champion/${user.championName}.png`}
+                      src={`http://ddragon.leagueoflegends.com/cdn/11.21.1/img/champion/${user.championName}.png`}
                       alt="champion img"
                     />
                     <p
@@ -78,7 +78,7 @@ function UserTotalView({
                       width="30px"
                       src={
                         user.summoner1Id
-                          ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner1Id}.png`
+                          ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/spell/${user.summoner1Id}.png`
                           : "https://via.placeholder.com/25/444444"
                       }
                       alt="champion img"
@@ -87,7 +87,7 @@ function UserTotalView({
                       width="30px"
                       src={
                         user.summoner2Id
-                          ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner2Id}.png`
+                          ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/spell/${user.summoner2Id}.png`
                           : "https://via.placeholder.com/25/444444"
                       }
                       alt="champion img"
@@ -120,10 +120,10 @@ function UserTotalView({
                         width="30px"
                         src={
                           user.item0
-                            ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item0}.png`
+                            ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item0}.png`
                             : "https://via.placeholder.com/25/444444"
                         }
-                        alt="champion img"
+                        alt="x"
                       />
                     </div>
                     <div>
@@ -131,10 +131,10 @@ function UserTotalView({
                         width="30px"
                         src={
                           user.item1
-                            ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item1}.png`
+                            ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item1}.png`
                             : "https://via.placeholder.com/25/444444"
                         }
-                        alt="champion img"
+                        alt="x"
                       />
                     </div>
                     <div>
@@ -142,10 +142,10 @@ function UserTotalView({
                         width="30px"
                         src={
                           user.item2
-                            ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item2}.png`
+                            ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item2}.png`
                             : "https://via.placeholder.com/25/444444"
                         }
-                        alt="champion img"
+                        alt="x"
                       />
                     </div>
                     <div>
@@ -153,10 +153,10 @@ function UserTotalView({
                         width="30px"
                         src={
                           user.item3
-                            ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item6}.png`
+                            ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item6}.png`
                             : "https://via.placeholder.com/25/444444"
                         }
-                        alt="champion img"
+                        alt="x"
                       />
                     </div>
                     <div>
@@ -164,10 +164,10 @@ function UserTotalView({
                         width="30px"
                         src={
                           user.item4
-                            ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item4}.png`
+                            ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item4}.png`
                             : "https://via.placeholder.com/25/444444"
                         }
-                        alt="champion img"
+                        alt="x"
                       />
                     </div>
                     <div>
@@ -175,10 +175,10 @@ function UserTotalView({
                         width="30px"
                         src={
                           user.item5
-                            ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item5}.png`
+                            ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item5}.png`
                             : "https://via.placeholder.com/25/444444"
                         }
-                        alt="champion img"
+                        alt="x"
                       />
                     </div>
                     <div>
@@ -186,10 +186,10 @@ function UserTotalView({
                         width="30px"
                         src={
                           user.item6
-                            ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item3}.png`
+                            ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item3}.png`
                             : "https://via.placeholder.com/25/444444"
                         }
-                        alt="champion img"
+                        alt="x"
                       />
                     </div>
                   </div>
@@ -199,7 +199,7 @@ function UserTotalView({
                 <img
                   style={{ borderRadius: "50px" }}
                   width="25px"
-                  src={`http://ddragon.leagueoflegends.com/cdn/11.19.1/img/champion/${user.championName}.png`}
+                  src={`http://ddragon.leagueoflegends.com/cdn/11.21.1/img/champion/${user.championName}.png`}
                   alt="champion img"
                 />
               </div> */}
@@ -222,7 +222,7 @@ function UserTotalView({
                     width="25px"
                     src={
                       user.summoner1Id
-                        ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner1Id}.png`
+                        ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/spell/${user.summoner1Id}.png`
                         : "https://via.placeholder.com/25/444444"
                     }
                     alt="champion img"
@@ -231,7 +231,7 @@ function UserTotalView({
                     width="25px"
                     src={
                       user.summoner2Id
-                        ? `https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner2Id}.png`
+                        ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/spell/${user.summoner2Id}.png`
                         : "https://via.placeholder.com/25/444444"
                     }
                     alt="champion img"
@@ -303,7 +303,7 @@ function UserTotalView({
             {user.assists} - {user.win} / 포지션 : {user.position} */}
             <img
               width="25px"
-              src={`http://ddragon.leagueoflegends.com/cdn/11.19.1/img/champion/${user.championName}.png`}
+              src={`http://ddragon.leagueoflegends.com/cdn/11.21.1/img/champion/${user.championName}.png`}
               alt="champion img"
             />
             <span>{user.summonerName}</span>
@@ -311,14 +311,14 @@ function UserTotalView({
             {/* <p>
               <img
                 width="25px"
-                src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner1Id}.png`}
+                src={`https://ddragon.leagueoflegends.com/cdn/11.21.1/img/spell/${user.summoner1Id}.png`}
                 alt="champion img"
               />
             </p>
             <p>
               <img
                 width="25px"
-                src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/spell/${user.summoner2Id}.png`}
+                src={`https://ddragon.leagueoflegends.com/cdn/11.21.1/img/spell/${user.summoner2Id}.png`}
                 alt="champion img"
               />
             </p> */}
@@ -326,49 +326,49 @@ function UserTotalView({
               <p>
                 <img
                   width="25px"
-                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item0}.png`}
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item0}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
                   width="25px"
-                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item1}.png`}
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item1}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
                   width="25px"
-                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item2}.png`}
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item2}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
                   width="25px"
-                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item3}.png`}
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item3}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
                   width="25px"
-                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item4}.png`}
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item4}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
                   width="25px"
-                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item5}.png`}
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item5}.png`}
                   alt="champion img"
                 />
               </p>
               <p>
                 <img
                   width="25px"
-                  src={`https://ddragon.leagueoflegends.com/cdn/11.19.1/img/item/${user.item6}.png`}
+                  src={`https://ddragon.leagueoflegends.com/cdn/11.21.1/img/item/${user.item6}.png`}
                   alt="champion img"
                 />
               </p>
@@ -456,7 +456,7 @@ const UserDetail = ({
         <div className="search_total__content user_infomation">
           <div className="info_thumb">
             <img
-              src={`http://ddragon.leagueoflegends.com/cdn/11.19.1/img/profileicon/${userInfo.profileIconId}.png`}
+              src={`http://ddragon.leagueoflegends.com/cdn/11.21.1/img/profileicon/${userInfo.profileIconId}.png`}
               alt=""
             />
           </div>
