@@ -123,3 +123,50 @@
     background: rgb(192, 151, 151);
   }
 }
+
+.totalview__all .user_state__item {
+  padding: 0;
+  .user_block {
+    display: flex;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+  }
+  .user_block.list {
+    height: 50px;
+  }
+  .user_block__info {
+    display: flex;
+    position: inherit;
+    justify-content: space-between;
+    // padding-left: 2%;
+    align-items: center;
+    height: 100%;
+  }
+  .user_block__wrap {
+    padding: 2px;
+  }
+  .user_block__wrap--item {
+    display: flex; //추가
+  }
+  .user_block__wrap--champ--img {
+    width: 30px;
+  }
+  .user_block__wrap .user_block__img.champ {
+    width: 30px;
+  }
+  .user_block__name {
+    margin-top: 0;
+    font-size: 12px;
+  }
+  .user_block__name.champ1 {
+    display: none;
+  }
+  .user_block__name.champ2 {
+    // margin-top: ;
+  }
+
+  .user_block__wrap--spell img {
+    width: 20px;
+  }
+}
