@@ -310,7 +310,10 @@ function UserTotalView({
                   alignItems: "center",
                 }}
               >
-                <div className="temp__wrap" style={{ display: "flex" }}>
+                <div
+                  className="temp__wrap"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
                   <div className="user_block__wrap user_block__wrap--champ--img">
                     <p className="user_block__img champ">
                       <img
@@ -335,7 +338,7 @@ function UserTotalView({
                           ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/spell/${user.summoner1Id}.png`
                           : "https://via.placeholder.com/25/444444"
                       }
-                      alt="champion img"
+                      alt="x"
                     />
                     <img
                       width="30px"
@@ -344,7 +347,7 @@ function UserTotalView({
                           ? `https://ddragon.leagueoflegends.com/cdn/11.21.1/img/spell/${user.summoner2Id}.png`
                           : "https://via.placeholder.com/25/444444"
                       }
-                      alt="champion img"
+                      alt="x"
                     />
                   </div>
 

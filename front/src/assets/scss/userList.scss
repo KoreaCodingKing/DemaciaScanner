@@ -153,16 +153,29 @@
     width: 30px;
   }
   .user_block__wrap .user_block__img.champ {
+    position: inherit;
     width: 30px;
+  }
+  .user_block__wrap--item {
+    margin-left: 10px;
   }
   .user_block__name {
     margin-top: 0;
+    text-align: left;
     font-size: 12px;
+  }
+  .user_block__wrap--info-name {
+    width: 70px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 말줄임 적용 */
   }
   .user_block__name.champ1 {
     display: none;
   }
   .user_block__name.champ2 {
+    text-align: left;
     // margin-top: ;
   }
 
