@@ -272,9 +272,9 @@ function App() {
 
               // 나의 데이터 도출
               if (myName == targetUserName) {
-                console.log(`찯음 ${index1}게임의 ${index2}번째임`);
+                // console.log(`찯음 ${index1}게임의 ${index2}번째임`);
                 if (matches.clearInterval == index1) {
-                  console.log("끝");
+                  // console.log("끝");
                 }
                 // if (index == matches.length - 1) {
                 //   console.log("end");
@@ -291,7 +291,7 @@ function App() {
           // return data1;
         }); //gameNumber map;
 
-        console.log("뇽2", sortedWinLoseData);
+        // console.log("뇽2", sortedWinLoseData);
         // const result = targetDataResultRankAll.sort(function(a,b) {
         //   return a.gameIndex < b.gameIndex ? -1 : 1
         // })

@@ -46,6 +46,7 @@ function ApiTest(props) {
     userInfo,
     addUserList,
     searchedName,
+    totalLoading,
   } = useContext(UserListContext);
 
   useState(() => {
@@ -98,24 +99,23 @@ function ApiTest(props) {
   };
 
   return (
-    <div className="contents" style={{ overflow: "hidden" }}>
+    <div className="contents" style={{ overflow: "hidden", height: "1600px" }}>
       <div className="contents__wrap">
         <UserList users={userList} />
         <InGameStateView state={userState} loading={loading} />
       </div>
       {userInfo ? (
         <div className="contents__wrap total_view">
-          <div>
-            <SearchTotal
-              searchedName={searchedName}
-              users={userList}
-              onTotalData={onTotalData}
-              totalData={totalData}
-            />
-          </div>
+          <SearchTotal
+            searchedName={searchedName}
+            users={userList}
+            onTotalData={onTotalData}
+            totalData={totalData}
+            totalLoading={totalLoading}
+          />
         </div>
       ) : (
-        ""
+        <div className="contents__wrap total_view">첫화면</div>
       )}
     </div>
   );

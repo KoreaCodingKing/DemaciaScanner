@@ -92,9 +92,11 @@
 
 .user_state__block {
   display: block;
-  width: 100%;
+  margin: 0 auto;
+  width: 96%;
+  margin-top: 15px;
   // background: rgb(255, 179, 0);
-  outline: 1px solid #222;
+  // outline: 1px solid #222;
   box-sizing: border-box;
 
   &--WIN {
@@ -102,10 +104,6 @@
   }
   &--LOSE {
     background: rgb(192, 151, 151);
-  }
-
-  & + & {
-    margin-top: 30px;
   }
 }
 
@@ -124,6 +122,7 @@
   }
 }
 
+// 전적영역 스타일
 .totalview__all .user_state__item {
   padding: 0;
   .user_block {
