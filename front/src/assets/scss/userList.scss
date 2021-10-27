@@ -139,9 +139,9 @@
     display: flex;
     position: inherit;
     justify-content: space-between;
-    // padding-left: 2%;
     align-items: center;
     height: 100%;
+    background: rgba(000, 000, 000, 0.3);
   }
   .user_block__wrap {
     padding: 2px;
@@ -165,7 +165,7 @@
     font-size: 12px;
   }
   .user_block__wrap--info-name {
-    width: 70px;
+    width: 100px;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
