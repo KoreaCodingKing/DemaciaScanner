@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext, useRef, useMemo } from "react";
 import { UserListContext } from "../App";
 import "../assets/scss/searchtotal.scss";
 
@@ -251,6 +251,8 @@ function UserTotalView({
         const test2 = new Date(user.gameCreation) - new Date();
         const itemLength = 6;
 
+        //리렌더링이 바로바로 필요가 없음
+
         // 상단 노출용 simple result
         simpleResult.push(
           <li
@@ -290,6 +292,7 @@ function UserTotalView({
 
         if (tempState1) {
           // 디테일 포함 모든 전적
+          console.log(index1, "-번째 전적의 자세한 정보 노출");
           result.push(
             <li
               className={`user_state__item user_state__item--${user.win}`}
@@ -537,11 +540,22 @@ function UserTotalView({
               );
             })}
           </div>
+          {/* 
+            자세한 전적 보여주는 부분. 
+          */}
           {!tempState1 ? (
             <div className={`totalview__all ${index1}`}></div>
           ) : (
             <div className={`totalview__all ${index1}`}>
-              {selectNumb == index1 ? <ul>{result2}</ul> : <ul></ul>}
+              <ul
+                style={
+                  selectNumb == index1
+                    ? { display: "block" }
+                    : { display: "none" }
+                }
+              >
+                {result2}
+              </ul>
             </div>
           )}
         </div>
@@ -550,9 +564,16 @@ function UserTotalView({
     return gameNumber;
   };
 
+  const rendered = useMemo(
+    () => rendering(userTotal),
+    [searchedName, userTotal, sortState, tempState1, selectNumb]
+  );
+
+  // const renderingFunc = useMemo(rendering(s), [])
+
   return (
     <div style={{ overflowY: "auto", height: "1000px" }} className={``}>
-      <div style={{}}>{rendering(userTotal)}</div>
+      <div style={{}}>{rendered}</div>
     </div>
   );
 }
