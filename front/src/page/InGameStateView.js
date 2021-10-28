@@ -50,6 +50,7 @@ const InGameStateView = (props) => {
             <button
               type="button"
               onClick={() => setViewState("card")}
+              style={viewState === "card" ? { opacity: "1" } : {}}
               className="view_state__btn card"
             >
               <span className="blind">card</span>
@@ -57,6 +58,7 @@ const InGameStateView = (props) => {
             <button
               type="button"
               onClick={() => setViewState("list")}
+              style={viewState === "list" ? { opacity: "1" } : {}}
               className="view_state__btn list"
             >
               <span className="blind">list</span>

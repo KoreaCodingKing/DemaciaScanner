@@ -45,6 +45,7 @@
   width: 50px;
 }
 .view_state__btn {
+  opacity: 0.3;
   justify-self: center;
   display: block;
   width: 20px;
@@ -55,6 +56,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   cursor: pointer;
+  // transition: opacity 0.2s linear;
 
   &.card {
     background-image: url("../images/view-state--card.png");

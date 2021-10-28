@@ -564,12 +564,12 @@ function UserTotalView({
     return gameNumber;
   };
 
+  // 불필요한 렌더 방지 useMemo()
+  // useMemo(()=> 사용할 함수, [사용할 함수의 의존적 데이터들])
   const rendered = useMemo(
     () => rendering(userTotal),
     [searchedName, userTotal, sortState, tempState1, selectNumb]
   );
-
-  // const renderingFunc = useMemo(rendering(s), [])
 
   return (
     <div style={{ overflowY: "auto", height: "1000px" }} className={``}>
