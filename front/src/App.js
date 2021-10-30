@@ -15,6 +15,8 @@ import ApiTest from "./page/ApiTest";
 import CurrentMyState from "./page/CurrentMyState";
 import HeaderSearch from "./components/HeaderSearch";
 
+import {getRotationChamp} from "./util/rotationChamp";
+
 import dotenv from "dotenv";
 
 import "./assets/scss/common.scss";
@@ -69,6 +71,7 @@ function App() {
   const [myTotalDataAll, setMyTotalDataAll] = useState("");
 
   useEffect(() => {
+    getRotationChamp();
     const sessionStorageValue = sessionStorage.userList || null;
 
     if (sessionStorageValue) {

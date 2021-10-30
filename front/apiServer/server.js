@@ -185,6 +185,15 @@ app.post("/searchuser", async (req, res) => {
   return res.json(data);
 });
 
+app.post("/rotationchamp", async(req, res) => {
+  const champions = await axios.get(
+    `https://kr.api.riotgames.com/lol/platform/v3/champion-rotations?api_key=${riotApiKey}`
+  ).then((response) => {
+    console.log('1', response.data.freeChampionIds);
+    return response.freeChampionIds;
+  }).catch((err) => {console.log('에러', err)});
+})
+
 app.post("/userstatus", async (req, res) => {
   const userList = req.body.users;
   let asdList = [];
