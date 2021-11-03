@@ -34,7 +34,8 @@ let isPause = false;
 
 function App() {
   const [userList, setUserList] = useState([]);
-  // const [userName, setUserName] = useState("");
+
+  // 소환사 검색, 회원_이메일, 회원_아이디, 회원_패스워드, 회원_닉네임, 게임중인 아이디 처시
   const [userName, setUserName] = useState({
     current_game_name: "",
     search_name: "",
@@ -43,6 +44,8 @@ function App() {
     user_password: "",
     user_nickname: "",
   });
+
+  // 바로 사용할 수 있도록 정의
   const {
     current_game_name,
     search_name,
@@ -51,7 +54,10 @@ function App() {
     user_password,
     user_nickname,
   } = userName;
+
+  // 감색 상태
   const [searchedName, setSearchedName] = useState("");
+
   const [userState, setUserState] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -61,9 +67,13 @@ function App() {
   const [championValue, setChampionValue] = useState("");
   const [totalData1, setTotalData1] = useState([]);
   const [totalLoading, setTotalLoding] = useState(false);
+
   const [userInfo, setUserInfo] = useState();
+
+  // 최상단 헤더 상태
   const [headerState, setHeaderState] = useState(false);
 
+  // 전적 데이터 솔랭, 자유, 모두
   const [myTotalDataSolo, setMyTotalDataSolo] = useState("");
   const [myTotalDataFlex, setMyTotalDataFlex] = useState("");
   const [myTotalDataAll, setMyTotalDataAll] = useState("");
